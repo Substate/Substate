@@ -1,4 +1,4 @@
-import Structure
+import Substate
 
 public protocol FollowupAction: Action {
 

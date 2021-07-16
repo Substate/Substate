@@ -1,7 +1,7 @@
 import XCTest
-@testable import Structure
+import Substate
 
-final class StructureTests: XCTestCase {
+final class SubstateTests: XCTestCase {
     func testExample() throws {
         
     }

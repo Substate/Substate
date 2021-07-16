@@ -1,84 +1,129 @@
-# Structure
+# Substate
 
-Structure is a Redux-style library for Swift.
-
-IDEA: States are generic WRT the action type and the stort automatically sends actions only to substates that can handle the current action. Actions could then either be structs or enums.
-```
-// Stricter, handle all known cases
-enum SettingsAction: Action {
-    case sort(Sort)
-    case filter(Filter)
-}
-
-// Looser, handle actions from other modules, easily tag types for processing in middleware
-protocol SettingsAction: Action {}
-struct UpdateSort: SettingsAction { let sort: Sort }
-struct UpdateFilter: SettingsAction { let filter: Filter }
-```
-
-IDEA: Should reducer composition work deepest-substate-first? Then parents can make use of already-updated child state.
+Substate is a state management library for Swift.
 
 ## Example
 
+Create an overall model representing the app’s state and actions, containing sub-states.
+
 ```swift
-import Structure
+import Foundation
+import Substate
 
-struct Increment: Action {}
-struct Decrement: Action {}
+struct App: State {
+    var isActive = false
 
-struct AppState {
-    var counter = 0
-}
+    var todos = Todos() // Auto-detected as a sub-state
+    var settings = Settings() // Auto-detected as a sub-state
 
-extension AppState: State {
+    struct AppDidEnterForeground: Action {}
+    struct AppDidEnterBackground: Action {}
+
     mutating func update(action: Action) {
         switch action {
-        case is Increment: counter += 1
-        case is Decrement: counter -= 1
+
+        case is AppDidEnterForeground:
+            isActive = true
+
+        case is AppDidEnterBackground:
+            isActive = false
+
+        default: ()
+        }
+    }
+}
+```
+
+Define sub-states with their own actions and update routines.
+
+```swift
+struct Todos: State {
+    var list: [Todo] = []
+
+    struct CreateTodo: Action {
+        let body: String
+    }
+
+    struct DestroyTodo: Action {
+        let index: Int
+    }
+
+    mutating func update(action: Action) {
+        switch action {
+
+        case let action as CreateTodo:
+            list.append(Todo(date: Date(), body: action.body))
+
+        case let action as DestroyTodo:
+            list.remove(at: action.index)
+
         default: ()
         }
     }
 }
 
-struct Todos: State {
-    var list: [Todo] = []
-}
-
 struct Settings: State {
-    var sort: Sort = .date
-    var filter: Filter = .none   
+    var title = "My To-Do List"
 
-    enum Sort { case date, title }
-    enum Filter { case none, contains(String) }
-    
+    struct ChangeTitle: Action {
+        let title: String
+    }
+
     mutating func update(action: Action) {
-        switch action {
-        
+        if let action = action as? ChangeTitle {
+            title = action.title
         }
     }
 }
-
 ```
 
-## Reducer Composition
+Set up the root view.
 
-- Existing libraries require manual composition of child reducers
-- Flite uses a convention where states specify their own reducer — not as pure but much more ergonomic as all the state:reducer mappings don’t need to be specified manually
-- Flite then uses Swift’s type system to walk your app’s state struct, and automatically identify sub-states which it can then reduce
-- You can manually specify reducers and reducer order for more control (?)
- 
-## Substate Selection
+```swift
+import SwiftUI
+import Substate
 
-mention redux-selector from JS.
-similar approach can work fine in Swift, narrowing app state to desired state for views.
-but 
+@main struct TodosApp: App {
+    let store = Store(state: Root())
 
+    var body: some Scene {
+        WindowGroup {
+            AppView().environmentObject(store)
+        }
+    }
+}
+```
 
+## Views
 
+```swift
+struct TodosView: View {
+    var body: some View {
+        Container(for: Todos.self) { state, dispatch in
+            ForEach(state.list) { todo in
+                // ...
+            }
+        }
+    }
+}
+```
 
+## Previews
 
+Pass in only the required sub-states to a store attached to the preview view — no need to pass in the full root state (especially useful if your sub-state/view is in a Swift package). Extend your states with mock data and pass that in for convenience.
 
+```swift
+extension Todos {
+    static let full = Todos(/* ... */)
+    static let empty = Todos(/* ... */)
+}
 
-
-
-
+struct TodosViewPreview: PreviewProvider {
+    static var previews: some View {
+        Group {
+            TodosView().environmentObject(Store(state: Todos.full))
+            TodosView().environmentObject(Store(state: Todos.empty))
+        }
+    }
+}
+```
