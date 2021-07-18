@@ -23,9 +23,9 @@ public class Store: ObservableObject {
     // ConnectedView, we can give child ConnectedViews a non-optional `state` property.
     // If the required state isn’t found, we could just show an empty view instead as a failure
     // mode (and log the error!)
-    public func select<StateType:State>(state: StateType.Type) -> StateType? {
+    public func substate<StateType:State>(_ type: StateType.Type) -> StateType? {
         // TODO: Don’t do this search every time, cache in init!
-        find(state: state, in: self.state)
+        find(state: type, in: self.state)
     }
 
     private func find<StateType:State>(state: StateType.Type, in object: Any) -> StateType? {

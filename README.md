@@ -1,129 +1,233 @@
 # Substate
 
-Substate is a state management library for Swift.
+Substate is a Redux-inspired state management library for Swift.
 
-## Example
+## States
 
-Create an overall model representing the app’s state and actions, containing sub-states.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-import Foundation
-import Substate
+struct Counter: State {
+    var value = 0
+}
+```
 
-struct App: State {
-    var isActive = false
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore. Mention ability to separate actions by module/package, or share them by making some actions public.
 
-    var todos = Todos() // Auto-detected as a sub-state
-    var settings = Settings() // Auto-detected as a sub-state
+No need to put the actions under the state type’s namespace, but it’s a nice convention because within the type you can refer to the actions concisely without qualifying the namespace, but outside you must use the full name (eg. `Counter.Increment()`) which clarifies intent elsewhere.
 
-    struct AppDidEnterForeground: Action {}
-    struct AppDidEnterBackground: Action {}
+```swift
+extension Counter {
+    struct Increment: Action {}
+    struct Decrement: Action {}
+    struct Reset: Action {}
+}
+```
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+extension Counter {
     mutating func update(action: Action) {
         switch action {
-
-        case is AppDidEnterForeground:
-            isActive = true
-
-        case is AppDidEnterBackground:
-            isActive = false
-
+        case is Increment: value += 1
+        case is Decrement: value -= 1
+        case is Reset: value = 0
         default: ()
         }
     }
 }
 ```
 
-Define sub-states with their own actions and update routines.
+## Sub-States
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-struct Todos: State {
-    var list: [Todo] = []
-
-    struct CreateTodo: Action {
-        let body: String
-    }
-
-    struct DestroyTodo: Action {
-        let index: Int
-    }
+struct Counter: State {
+    var value = 0
+    var subCounter = SubCounter()
 
     mutating func update(action: Action) {
-        switch action {
-
-        case let action as CreateTodo:
-            list.append(Todo(date: Date(), body: action.body))
-
-        case let action as DestroyTodo:
-            list.remove(at: action.index)
-
-        default: ()
-        }
-    }
-}
-
-struct Settings: State {
-    var title = "My To-Do List"
-
-    struct ChangeTitle: Action {
-        let title: String
-    }
-
-    mutating func update(action: Action) {
-        if let action = action as? ChangeTitle {
-            title = action.title
-        }
+        // ...
     }
 }
 ```
 
-Set up the root view.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore. Mention all sub-states of any depth are picked up and their update functions run automatically, with no manual composing of 'reducers' as in other libraries.
 
 ```swift
-import SwiftUI
-import Substate
+struct SubCounter: State {
+    var value = 0
 
-@main struct TodosApp: App {
-    let store = Store(state: Root())
-
-    var body: some Scene {
-        WindowGroup {
-            AppView().environmentObject(store)
-        }
+    mutating func update(action: Action) {
+        // ...
     }
 }
 ```
+
+Mention ability to put sub-states in different packages with no mutual access.
 
 ## Views
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
 ```swift
-struct TodosView: View {
+struct CounterView: View {
     var body: some View {
-        Container(for: Todos.self) { state, dispatch in
-            ForEach(state.list) { todo in
-                // ...
-            }
+        Substate(Counter.self) { counter, dispatch in
+            Text("Counter Value: \(counter.value)")
+            Button("Increment") { dispatch(Counter.Increment()) }
+            Button("Decrement") { dispatch(Counter.Decrement()) }
         }
     }
 }
 ```
 
-## Previews
-
-Pass in only the required sub-states to a store attached to the preview view — no need to pass in the full root state (especially useful if your sub-state/view is in a Swift package). Extend your states with mock data and pass that in for convenience.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-extension Todos {
-    static let full = Todos(/* ... */)
-    static let empty = Todos(/* ... */)
-}
-
-struct TodosViewPreview: PreviewProvider {
-    static var previews: some View {
-        Group {
-            TodosView().environmentObject(Store(state: Todos.full))
-            TodosView().environmentObject(Store(state: Todos.empty))
+struct SubCounterView: View {
+    var body: some View {
+        Substate(SubCounter.self) { subCounter, dispatch in
+            Text("Sub-Counter Value: \(subCounter.value)")
+            Button("Increment") { dispatch(SubCounter.Increment()) }
+            Button("Decrement") { dispatch(SubCounter.Decrement()) }
         }
     }
+}
+```
+
+Mention that because the view helper automatically fetches the specified sub-state, views don’t need to know about types higher up in the state tree, and therefore can be nicely separated into packages without any knowledge of other unrelated state types.
+
+## Previews
+
+Extend your models with convenience methods for states that you want to visualise in view previews.
+
+```swift
+extension Counter {
+    static let zero = Counter(value: 0)
+    static let random = Counter(value: .random(in: 1...100))
+    static func with(value: Int) { Counter(value: value) }
+}
+```
+
+Pass in your predefined states to the `substate()` view modifier. (This is just an optional shorthand for `environmentObject(Store(state:))`).
+
+```swift
+struct CounterViewPreviews: PreviewProvider {
+    static var previews {
+        Group {
+            CounterView().substate(Counter.zeroed)
+            CounterView().substate(Counter.random)
+            CounterView().substate(Counter.with(value: 100))
+        }
+    }
+}
+```
+
+## Services
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+class NumberFetcher {
+    func fetch(within range: Range<Int>) -> AnyPublisher<Int, Error> {
+        // ...
+    }
+}
+```
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+extension NumberFetcher: Service {
+    func handle(action: Action) -> AnyPublisher<Action, Never>? {
+        guard let action = action as? Numbers.Fetch else {
+            return nil
+        }
+
+        return fetch(within: action.range)
+            .map(Numbers.FetchDidSuceed.init(number:))
+            .catch(Numbers.FetchDidFail.init(error:))
+            .eraseToAnyPublisher()
+    }
+}
+```
+
+## Stores
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+let store = Store(state: Counter(), services: [...])
+```
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+struct CounterApp: App {
+    let store = Store(state: Counter(), services: [...])
+
+    var scene: some Scene {
+        CounterView().environmentObject(store)
+    }
+}
+```
+
+To retrieve sub-states directly from a store, call its `substate()` method and pass the desired sub-state type. If no sub-state of the given type is present in the store’s state tree, `nil` is returned.
+
+```swift
+let store = Store(state: Counter())
+
+store.substate(Counter.self) // => Optional<Counter>
+store.substate(SubCounter.self) // => Optional<SubCounter>
+```
+
+## Testing
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+func testCounter() throws {
+    let store = Store(state: Counter())
+    XCTAssertEqual(store.substate(Counter.self)?.value, 0)
+    XCTAssertEqual(store.substate(SubCounter.self)?.value, 0)
+
+    store.dispatch(Counter.Increment())
+    XCTAssertEqual(store.substate(Counter.self)?.value, 1)
+
+    store.dispatch(SubCounter.Increment())
+    XCTAssertEqual(store.substate(SubCounter.self)?.value, 1)
+}
+```
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+class FixedNumberFetcher: Service {
+    func handle(action: Action) -> AnyPublisher<Action, Never> {
+        Just(Numbers.FetchDidSucceed(number: 10)).eraseToAnyPublisher()
+    }
+}
+
+class FailingNumberFetcher: Service {
+    enum NumberFetcherError { case test }
+    func handle(action: Action) -> AnyPublisher<Action, Never> {
+        Just(Numbers.FetchDidFail(error: NumberFetcherError.test)).eraseToAnyPublisher()
+    }
+}
+
+let store = Store(state: Counter(), services: [FixedNumberFetcher()])
+let store = Store(state: Counter(), services: [FailingNumberFetcher()])
+```
+
+## Swift Concurrency Support
+
+TODO.
+
+```swift
+protocol Service {
+    func handle(action: Action) async -> Action // Or AsyncSequence?
 }
 ```

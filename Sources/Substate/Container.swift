@@ -13,7 +13,7 @@ public struct Container<Substate:State, Content:View>: View {
     }
 
     public var body: some View {
-        store.select(state: substate).map { state in
+        store.substate(substate).map { state in
             content(state, store.dispatch)
         }
     }
