@@ -20,11 +20,14 @@ Next, add some actions to trigger state changes. They can be defined in any name
 extension Counter {
     struct Increment: Action {}
     struct Decrement: Action {}
-    struct Reset: Action {}
+
+    struct Reset: Action {
+        let toValue: Int
+    }
 }
 ```
 
-Then, conform your state to `State` by adding an `update(action:)` method. Define how the value should change when actions are received.
+Then, conform to `State` by adding an `update(action:)` method. Define how the value should change when actions are received.
 
 ```swift
 extension Counter: State {
@@ -32,7 +35,7 @@ extension Counter: State {
         switch action {
         case is Increment: value += 1
         case is Decrement: value -= 1
-        case is Reset: value = 0
+        case let action as Reset: value = action.toValue
         default: ()
         }
     }
@@ -77,6 +80,7 @@ struct CounterView: View {
             Text("Counter Value: \(counter.value)")
             Button("Increment") { dispatch(Counter.Increment()) }
             Button("Decrement") { dispatch(Counter.Decrement()) }
+            Button("Reset") { dispatch(Counter.Reset(toValue: 0)) }
         }
     }
 }
@@ -91,6 +95,7 @@ struct SubCounterView: View {
             Text("Sub-Counter Value: \(subCounter.value)")
             Button("Increment") { dispatch(SubCounter.Increment()) }
             Button("Decrement") { dispatch(SubCounter.Decrement()) }
+            Button("Reset") { dispatch(Counter.Reset(toValue: 0)) }
         }
     }
 }
@@ -98,7 +103,7 @@ struct SubCounterView: View {
 
 ## 🌟 Previews
 
-Extend your state with convenience methods to see different data in previews.
+Extend your state with convenience methods for different preview data.
 
 ```swift
 extension Counter {
@@ -184,27 +189,30 @@ store.dispatch(Counter.Increment())
 
 ## 📦 Packages
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+- List benefits of automatic sub-state selection for separating components into packages
+- Views don’t need to know about any parent types from the tree so they can be in their own packages if desired
+- Can make some of a component’s actions public and some private to the package
+- Can create full component view previews with just the state in a package and no external top-down setup
 
 ## ✅ Testing
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+Test states and sub-states by creating a store and dispatching actions to it. Use the store’s `state` method to query values.
 
 ```swift
 func testCounter() throws {
     let store = Store(state: Counter())
-    XCTAssertEqual(store.substate(Counter.self)?.value, 0)
-    XCTAssertEqual(store.substate(SubCounter.self)?.value, 0)
+    XCTAssertEqual(store.state(Counter.self)?.value, 0)
+    XCTAssertEqual(store.state(SubCounter.self)?.value, 0)
 
     store.dispatch(Counter.Increment())
-    XCTAssertEqual(store.substate(Counter.self)?.value, 1)
+    XCTAssertEqual(store.state(Counter.self)?.value, 1)
 
     store.dispatch(SubCounter.Increment())
-    XCTAssertEqual(store.substate(SubCounter.self)?.value, 1)
+    XCTAssertEqual(store.state(SubCounter.self)?.value, 1)
 }
 ```
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+Pass in alternate services to provide behaviour appropriate for your tests. Anything goes — no need to subclass or otherwise hijack your production services unless you want to.
 
 ```swift
 class FixedNumberFetcher: Service {
@@ -224,7 +232,11 @@ let store = Store(state: Counter(), services: [FixedNumberFetcher()])
 let store = Store(state: Counter(), services: [FailingNumberFetcher()])
 ```
 
----
+## 💣 Escape
+
+- List escape hatches for code that uses global state
+- Get and set state manually when needed
+- Subscribe via callback to the store
 
 ## Swift Concurrency Support
 

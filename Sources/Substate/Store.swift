@@ -5,16 +5,22 @@ public class Store: ObservableObject {
 
     // No point in this being public since underlying type isn’t available
     // Need to use select(state:), and make that more ergonomic
+    // Don’t really need this to be published, can handle the single objectWillChange() call manually?
     @Published private var state: State
+    private var services: [Service]
 
-    public init(state: State) {
+    // TODO: Provide a publisher/AsyncSequence for easy subscription to state changes
+
+    public init(state: State, services: [Service] = []) {
         self.state = state
+        self.services = services
 
         // TODO: Build up a list of substate type -> path segment mappings
         // Then at runtime use Mirror.descendant(a, b, c) to grab the value, rather than iterating every time
     }
 
     public func dispatch(_ action: Action) {
+        precondition(Thread.isMainThread, "Actions must be dispatched on the main thread!")
         dump(action)
         state = reduce(state: state, action: action)
     }
@@ -23,7 +29,7 @@ public class Store: ObservableObject {
     // ConnectedView, we can give child ConnectedViews a non-optional `state` property.
     // If the required state isn’t found, we could just show an empty view instead as a failure
     // mode (and log the error!)
-    public func substate<StateType:State>(_ type: StateType.Type) -> StateType? {
+    public func state<StateType:State>(_ type: StateType.Type) -> StateType? {
         // TODO: Don’t do this search every time, cache in init!
         find(state: type, in: self.state)
     }
