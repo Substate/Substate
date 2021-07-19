@@ -14,7 +14,7 @@ struct Counter {
 }
 ```
 
-Next, add some actions to trigger state changes. They can be defined in any namespace, but it’s neat to keep them inside the state.
+Next, add some `Action`s to trigger state changes. They can be defined in any namespace, but it’s neat to keep them inside the state.
 
 ```swift
 extension Counter {
@@ -27,7 +27,7 @@ extension Counter {
 }
 ```
 
-Then, conform to `State` by adding an `update(action:)` method. Define how the value should change when actions are received.
+Then, conform to `State` by adding an `update` method. Define how the value should change when actions are received.
 
 ```swift
 extension Counter: State {
@@ -51,21 +51,17 @@ struct Counter: State {
     var value = 0
     var subCounter = SubCounter()
 
-    mutating func update(action: Action) {
-        // ...
-    }
+    mutating func update(action: Action) { ... }
 }
 ```
 
-The child states are automatically detected and updated using their own `update(action:)` method. 
+The child states are automatically detected and updated using their own `update` methods.
 
 ```swift
 struct SubCounter: State {
     var value = 0
 
-    mutating func update(action: Action) {
-        // ...
-    }
+    mutating func update(action: Action) { ... }
 }
 ```
 
@@ -80,7 +76,6 @@ struct CounterView: View {
             Text("Counter Value: \(counter.value)")
             Button("Increment") { dispatch(Counter.Increment()) }
             Button("Decrement") { dispatch(Counter.Decrement()) }
-            Button("Reset") { dispatch(Counter.Reset(toValue: 0)) }
         }
     }
 }
@@ -93,9 +88,7 @@ struct SubCounterView: View {
     var body: some View {
         Substate(SubCounter.self) { subCounter, dispatch in
             Text("Sub-Counter Value: \(subCounter.value)")
-            Button("Increment") { dispatch(SubCounter.Increment()) }
-            Button("Decrement") { dispatch(SubCounter.Decrement()) }
-            Button("Reset") { dispatch(Counter.Reset(toValue: 0)) }
+            Button("Reset") { dispatch(SubCounter.Reset(toValue: 0)) }
         }
     }
 }
@@ -109,7 +102,6 @@ Extend your state with convenience methods for different preview data.
 extension Counter {
     static let zero = Counter(value: 0)
     static let random = Counter(value: .random(in: 1...100))
-    static func with(value: Int) { Counter(value: value) }
 }
 ```
 
@@ -121,7 +113,6 @@ struct CounterViewPreviews: PreviewProvider {
         Group {
             CounterView().state(Counter.zero)
             CounterView().state(Counter.random)
-            CounterView().state(Counter.with(value: 100))
         }
     }
 }
