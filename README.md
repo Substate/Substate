@@ -96,7 +96,7 @@ struct SubCounterView: View {
 
 ## 🌟 Previews
 
-Extend your state with convenience methods for different preview data.
+Extend your state with convenience properties for different preview data.
 
 ```swift
 extension Counter {
@@ -105,7 +105,7 @@ extension Counter {
 }
 ```
 
-Pass in your predefined states to the `state` view modifier (an optional shorthand for `environmentObject(Store(state:))`).
+Pass in your predefined states to the `state` view modifier.
 
 ```swift
 struct CounterViewPreviews: PreviewProvider {
@@ -115,6 +115,8 @@ struct CounterViewPreviews: PreviewProvider {
     }
 }
 ```
+
+> The `state` view modifier is an optional shorthand for `environmentObject(Store(state:))`.
 
 ## 👷 Services
 
@@ -147,7 +149,7 @@ extension NumberFetcher: Service {
 
 ## 🗄 Stores
 
-To bootstrap the program, pass in your root state and a list of services to the `store` view modifier (an optional shorthand for `enviromentObject(Store(state:services:))`).
+To bootstrap the program, pass in your root state and a list of services to the `store` view modifier.
 
 ```swift
 struct CounterApp: App {
@@ -156,6 +158,8 @@ struct CounterApp: App {
     }
 }
 ```
+
+> The `store` view modifier is an optional shorthand for `enviromentObject(Store(state:services:))`.
 
 For more control, create a store separately and retain it elsewhere.
 
