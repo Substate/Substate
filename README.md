@@ -67,15 +67,15 @@ struct SubCounter: State {
 
 ## ⭐️ Views
 
-Use the `Substate` helper to grab your state inside views. Trigger actions by passing one into `dispatch`. 
+Use the `Substate` helper to grab your state inside views. Trigger actions by passing one into `send`. 
 
 ```swift
 struct CounterView: View {
     var body: some View {
-        Substate(Counter.self) { counter, dispatch in
+        Substate(Counter.self) { counter, send in
             Text("Counter Value: \(counter.value)")
-            Button("Increment") { dispatch(Counter.Increment()) }
-            Button("Decrement") { dispatch(Counter.Decrement()) }
+            Button("Increment") { send(Counter.Increment()) }
+            Button("Decrement") { send(Counter.Decrement()) }
         }
     }
 }
@@ -86,9 +86,9 @@ Pass in another type to retrieve any sub-state you like from the tree.
 ```swift
 struct SubCounterView: View {
     var body: some View {
-        Substate(SubCounter.self) { subCounter, dispatch in
+        Substate(SubCounter.self) { subCounter, send in
             Text("Sub-Counter Value: \(subCounter.value)")
-            Button("Reset") { dispatch(SubCounter.Reset(toValue: 0)) }
+            Button("Reset") { send(SubCounter.Reset(toValue: 0)) }
         }
     }
 }
@@ -110,10 +110,8 @@ Pass in your predefined states to the `state` view modifier (an optional shortha
 ```swift
 struct CounterViewPreviews: PreviewProvider {
     static var previews {
-        Group {
-            CounterView().state(Counter.zero)
-            CounterView().state(Counter.random)
-        }
+        CounterView().state(Counter.zero)
+        CounterView().state(Counter.random)
     }
 }
 ```
@@ -172,10 +170,10 @@ store.state(Counter.self) // => Optional<Counter>
 store.state(SubCounter.self) // => Optional<SubCounter>
 ```
 
-To dispatch actions directly to the store, call its `dispatch` method and pass in the desired action.
+To trigger actions directly from the store, call its `send` method and pass in the desired action.
 
 ```swift
-store.dispatch(Counter.Increment())
+store.send(Counter.Increment())
 ```
 
 ## 📦 Packages
@@ -187,7 +185,7 @@ store.dispatch(Counter.Increment())
 
 ## ✅ Testing
 
-Test states and sub-states by creating a store and dispatching actions to it. Use the store’s `state` method to query values.
+Test states and sub-states by creating a store and sending actions to it. Use the store’s `state` method to query values.
 
 ```swift
 func testCounter() throws {
@@ -195,10 +193,10 @@ func testCounter() throws {
     XCTAssertEqual(store.state(Counter.self)?.value, 0)
     XCTAssertEqual(store.state(SubCounter.self)?.value, 0)
 
-    store.dispatch(Counter.Increment())
+    store.send(Counter.Increment())
     XCTAssertEqual(store.state(Counter.self)?.value, 1)
 
-    store.dispatch(SubCounter.Increment())
+    store.send(SubCounter.Increment())
     XCTAssertEqual(store.state(SubCounter.self)?.value, 1)
 }
 ```

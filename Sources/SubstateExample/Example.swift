@@ -1,7 +1,7 @@
 import Foundation
 import Substate
 
-struct App: State {
+struct Root: State {
     var isActive = false
 
     var todos = Todos() // Auto-detected as a sub-state
@@ -71,4 +71,3 @@ struct Todo: Identifiable {
 
     var id: Date { date }
 }
-

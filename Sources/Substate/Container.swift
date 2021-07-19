@@ -7,14 +7,14 @@ public struct Container<Substate:State, Content:View>: View {
 
     @EnvironmentObject private var store: Store
 
-    public init(for substate: Substate.Type, @ViewBuilder content: @escaping (Substate, @escaping (Action) -> Void) -> Content) {
+    public init(_ substate: Substate.Type, @ViewBuilder content: @escaping (Substate, @escaping (Action) -> Void) -> Content) {
         self.substate = substate
         self.content = content
     }
 
     public var body: some View {
         store.state(substate).map { state in
-            content(state, store.dispatch)
+            content(state, store.send)
         }
     }
 

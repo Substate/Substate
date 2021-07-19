@@ -19,7 +19,7 @@ public class Store: ObservableObject {
         // Then at runtime use Mirror.descendant(a, b, c) to grab the value, rather than iterating every time
     }
 
-    public func dispatch(_ action: Action) {
+    public func send(_ action: Action) {
         precondition(Thread.isMainThread, "Actions must be dispatched on the main thread!")
         dump(action)
         state = reduce(state: state, action: action)

@@ -1,7 +1,7 @@
 import XCTest
 import Substate
 
-final class SubstateTests: XCTestCase {
+final class LogicTests: XCTestCase {
 
     struct Counter: State {
         var value = 0
@@ -28,15 +28,15 @@ final class SubstateTests: XCTestCase {
 
         XCTAssertEqual(store.state(Counter.self)?.value, 0)
 
-        store.dispatch(Counter.Increment())
+        store.send(Counter.Increment())
         XCTAssertEqual(store.state(Counter.self)?.value, 1)
 
-        store.dispatch(Counter.Decrement())
-        store.dispatch(Counter.Decrement())
+        store.send(Counter.Decrement())
+        store.send(Counter.Decrement())
         XCTAssertEqual(store.state(Counter.self)?.value, -1)
 
-        store.dispatch(Counter.Reset(toValue: 100))
+        store.send(Counter.Reset(toValue: 100))
         XCTAssertEqual(store.state(Counter.self)?.value, 100)
     }
-    
+
 }
