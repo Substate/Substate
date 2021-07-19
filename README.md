@@ -2,7 +2,7 @@
 
 # Substate
 
-Substate is a Redux-inspired state management library for Swift.
+Substate is a state management library for Swift.
 
 ## 🎚 States
 
