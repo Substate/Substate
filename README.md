@@ -1,20 +1,20 @@
+![Substate Icon](https://www.datocms-assets.com/15979/1626704059-substate-icon.svg)
+
 # Substate
 
 Substate is a Redux-inspired state management library for Swift.
 
-## States
+## 🎚 States
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+Let’s create a self-contained component. Describe the state you need using a simple value type.
 
 ```swift
-struct Counter: State {
+struct Counter {
     var value = 0
 }
 ```
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore. Mention ability to separate actions by module/package, or share them by making some actions public.
-
-No need to put the actions under the state type’s namespace, but it’s a nice convention because within the type you can refer to the actions concisely without qualifying the namespace, but outside you must use the full name (eg. `Counter.Increment()`) which clarifies intent elsewhere.
+Next, add some actions to trigger state changes. They can be defined in any namespace, but it’s neat to keep them inside the state.
 
 ```swift
 extension Counter {
@@ -24,10 +24,10 @@ extension Counter {
 }
 ```
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+Then, conform your state to `State` by adding an `update(action:)` method. Define how the value should change when actions are received.
 
 ```swift
-extension Counter {
+extension Counter: State {
     mutating func update(action: Action) {
         switch action {
         case is Increment: value += 1
@@ -39,9 +39,9 @@ extension Counter {
 }
 ```
 
-## Sub-States
+## 🎛 Sub-States
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+Add sub-states alongside plain values to compose a state tree for your program.
 
 ```swift
 struct Counter: State {
@@ -54,7 +54,7 @@ struct Counter: State {
 }
 ```
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore. Mention all sub-states of any depth are picked up and their update functions run automatically, with no manual composing of 'reducers' as in other libraries.
+The child states are automatically detected and updated using their own `update(action:)` method. 
 
 ```swift
 struct SubCounter: State {
@@ -66,11 +66,9 @@ struct SubCounter: State {
 }
 ```
 
-Mention ability to put sub-states in different packages with no mutual access.
+## ⭐️ Views
 
-## Views
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+Use the `Substate` helper to grab your state inside views. Trigger actions by passing one into `dispatch`. 
 
 ```swift
 struct CounterView: View {
@@ -84,7 +82,7 @@ struct CounterView: View {
 }
 ```
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+Pass in another type to retrieve any sub-state you like from the tree.
 
 ```swift
 struct SubCounterView: View {
@@ -98,11 +96,9 @@ struct SubCounterView: View {
 }
 ```
 
-Mention that because the view helper automatically fetches the specified sub-state, views don’t need to know about types higher up in the state tree, and therefore can be nicely separated into packages without any knowledge of other unrelated state types.
+## 🌟 Previews
 
-## Previews
-
-Extend your models with convenience methods for states that you want to visualise in view previews.
+Extend your state with convenience methods to see different data in previews.
 
 ```swift
 extension Counter {
@@ -112,21 +108,21 @@ extension Counter {
 }
 ```
 
-Pass in your predefined states to the `substate()` view modifier. (This is just an optional shorthand for `environmentObject(Store(state:))`).
+Pass in your predefined states to the `state` view modifier (an optional shorthand for `environmentObject(Store(state:))`).
 
 ```swift
 struct CounterViewPreviews: PreviewProvider {
     static var previews {
         Group {
-            CounterView().substate(Counter.zeroed)
-            CounterView().substate(Counter.random)
-            CounterView().substate(Counter.with(value: 100))
+            CounterView().state(Counter.zero)
+            CounterView().state(Counter.random)
+            CounterView().state(Counter.with(value: 100))
         }
     }
 }
 ```
 
-## Services
+## 👷 Services
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
@@ -155,36 +151,42 @@ extension NumberFetcher: Service {
 }
 ```
 
-## Stores
+## 🗄 Stores
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+To bootstrap the program, pass in your root state and a list of services to the `store` view modifier (an optional shorthand for `enviromentObject(Store(state:services:))`).
+
+```swift
+struct CounterApp: App {
+    var scene: some Scene {
+        CounterView().store(state: Counter(), services: [...])
+    }
+}
+```
+
+For more control, create a store separately and retain it elsewhere.
 
 ```swift
 let store = Store(state: Counter(), services: [...])
 ```
 
+To retrieve sub-states directly from the store, call its `state` method and pass the desired type.
+
+```swift
+store.state(Counter.self) // => Optional<Counter>
+store.state(SubCounter.self) // => Optional<SubCounter>
+```
+
+To dispatch actions directly to the store, call its `dispatch` method and pass in the desired action.
+
+```swift
+store.dispatch(Counter.Increment())
+```
+
+## 📦 Packages
+
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
-```swift
-struct CounterApp: App {
-    let store = Store(state: Counter(), services: [...])
-
-    var scene: some Scene {
-        CounterView().environmentObject(store)
-    }
-}
-```
-
-To retrieve sub-states directly from a store, call its `substate()` method and pass the desired sub-state type. If no sub-state of the given type is present in the store’s state tree, `nil` is returned.
-
-```swift
-let store = Store(state: Counter())
-
-store.substate(Counter.self) // => Optional<Counter>
-store.substate(SubCounter.self) // => Optional<SubCounter>
-```
-
-## Testing
+## ✅ Testing
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
@@ -221,6 +223,8 @@ class FailingNumberFetcher: Service {
 let store = Store(state: Counter(), services: [FixedNumberFetcher()])
 let store = Store(state: Counter(), services: [FailingNumberFetcher()])
 ```
+
+---
 
 ## Swift Concurrency Support
 
