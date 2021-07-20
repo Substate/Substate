@@ -4,13 +4,13 @@
 
 [![Build Status](https://github.com/substate/substate/actions/workflows/swift.yml/badge.svg)](https://github.com/Substate/Substate/actions)
 
-Substate is a state management library for Swift. Start by importing the package.
+Substate is a state management library for Swift.
+
+## 🎚 States
 
 ```swift
 import Substate
 ```
-
-## 🎚 States
 
 Let’s create a self-contained component. Describe the state you need using a simple value type.
 
@@ -68,8 +68,6 @@ struct SubCounter: State {
 
 ## ⭐️ Views
 
-First, import Substate’s UI helpers.
-
 ```swift
 import SubstateUI
 ```
@@ -124,7 +122,20 @@ struct CounterViewPreviews: PreviewProvider {
 
 > The `state` view modifier is an optional shorthand for `environmentObject(Store(state:))`.
 
-## 👷 Services
+## 👷 Middleware
+
+```swift
+import SubstateMiddleware
+```
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+SubstateLoggableMiddleware(state: AppState.self)
+SubstateAsyncMiddleware()
+SubstateDelayedMiddleware()
+SubstateFollowupMiddleware()
+```
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
