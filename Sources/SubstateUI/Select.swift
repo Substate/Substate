@@ -15,7 +15,7 @@ public struct Select<StateType:Substate.State, Content:View>: View {
 
     public var body: some View {
         store.select(type).map { state in
-            content(state, store.send)
+            content(state, store.update)
         }
     }
 

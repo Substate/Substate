@@ -28,14 +28,14 @@ final class LogicTests: XCTestCase {
 
         XCTAssertEqual(store.select(Counter.self)?.value, 0)
 
-        store.send(Counter.Increment())
+        store.update(Counter.Increment())
         XCTAssertEqual(store.select(Counter.self)?.value, 1)
 
-        store.send(Counter.Decrement())
-        store.send(Counter.Decrement())
+        store.update(Counter.Decrement())
+        store.update(Counter.Decrement())
         XCTAssertEqual(store.select(Counter.self)?.value, -1)
 
-        store.send(Counter.Reset(toValue: 100))
+        store.update(Counter.Reset(toValue: 100))
         XCTAssertEqual(store.select(Counter.self)?.value, 100)
     }
 

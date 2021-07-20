@@ -72,14 +72,14 @@ struct SubCounter: State {
 import SubstateUI
 ```
 
-Use the `Select` container to fetch your state inside views. Trigger actions by passing one into `send`.
+Use the `Select` container to fetch your state inside views. Trigger actions by passing one into `update`.
 
 ```swift
 struct CounterView: View {
     var body: some View {
-        Select(Counter.self) { counter, send in
+        Select(Counter.self) { counter, update in
             Text("Counter Value: \(counter.value)")
-            Button("Increment") { send(Counter.Increment()) }
+            Button("Increment") { update(Counter.Increment()) }
         }
     }
 }
@@ -90,9 +90,9 @@ Pass in another type to retrieve any sub-state you like from the tree.
 ```swift
 struct SubCounterView: View {
     var body: some View {
-        Select(SubCounter.self) { subCounter, send in
+        Select(SubCounter.self) { subCounter, update in
             Text("Sub-Counter Value: \(subCounter.value)")
-            Button("Decrement") { send(Counter.Decrement()) }
+            Button("Decrement") { update(Counter.Decrement()) }
         }
     }
 }
@@ -166,7 +166,7 @@ extension NumberFetcher: Service {
 
 ## 🗄 Stores
 
-To bootstrap the program, pass in your root state and a list of services to the `store` view modifier.
+Bootstrap your program by passing in your root state and a list of services to the `store` view modifier.
 
 ```swift
 struct CounterApp: App {
@@ -184,17 +184,17 @@ For more control, create a store separately and retain it elsewhere.
 let store = Store(state: Counter(), services: [...])
 ```
 
-To retrieve sub-states directly from the store, call its `select` method and pass the desired type.
+Retrieve sub-states directly from the store using its `select` method, passing in the desired type.
 
 ```swift
 store.select(Counter.self) // => Optional<Counter>
 store.select(SubCounter.self) // => Optional<SubCounter>
 ```
 
-To trigger actions directly from the store, call its `send` method and pass in the desired action.
+Trigger actions directly from the store using its `update` method, passing in the desired action.
 
 ```swift
-store.send(Counter.Increment())
+store.update(Counter.Increment())
 ```
 
 ## 📦 Packaging
@@ -213,10 +213,10 @@ func testCounter() throws {
     let store = Store(state: Counter())
     XCTAssertEqual(store.select(Counter.self)?.value, 0)
 
-    store.send(Counter.Increment())
+    store.update(Counter.Increment())
     XCTAssertEqual(store.select(Counter.self)?.value, 1)
 
-    store.send(SubCounter.Increment())
+    store.update(SubCounter.Increment())
     XCTAssertEqual(store.select(SubCounter.self)?.value, 1)
 }
 ```
