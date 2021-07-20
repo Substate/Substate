@@ -1,5 +1,5 @@
 import Foundation
 
-public protocol DelayedAction {
+public protocol DelayableAction {
     var delay: DispatchTimeInterval { get }
 }

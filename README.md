@@ -276,3 +276,4 @@ Substate’s novelty is in using Swift’s type system to automatically select c
 
 - [SwiftUIFlux](https://github.com/Dimillian/SwiftUIFlux)
 - [ReSwift](https://github.com/ReSwift/ReSwift)
+- [Fluxor](https://fluxor.dev)
