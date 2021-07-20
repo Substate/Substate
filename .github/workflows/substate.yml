@@ -2,6 +2,7 @@ name: Substate
 
 on:
   push:
+    tags: ["*"]
     branches: [main]
   pull_request:
     branches: ["*"]
@@ -12,7 +13,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup Swift
+        uses: fwal/setup-swift@v1
+        with: { swift-version: "5.5" }
       - name: Build
-        run: swift build -v
+        run: swift build
       - name: Test
-        run: swift test -v
+        run: swift test
