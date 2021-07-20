@@ -2,6 +2,8 @@
 
 # Substate
 
+![Build Status](https://github.com/substate/substate/actions/workflows/swift.yml/badge.svg)
+
 Substate is a state management library for Swift.
 
 ## 🎚 States

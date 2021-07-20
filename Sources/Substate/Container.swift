@@ -1,3 +1,5 @@
+#if canImport(SwiftUI)
+
 import SwiftUI
 
 public struct Container<Substate:State, Content:View>: View {
@@ -19,3 +21,5 @@ public struct Container<Substate:State, Content:View>: View {
     }
 
 }
+
+#endif

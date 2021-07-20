@@ -1,3 +1,5 @@
+#if canImport(SwiftUI)
+
 import SwiftUI
 
 extension View {
@@ -14,3 +16,5 @@ private struct Modifier: ViewModifier {
         content.environmentObject(Store(state: state, services: services))
     }
 }
+
+#endif
