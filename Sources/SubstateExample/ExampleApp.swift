@@ -13,6 +13,6 @@ struct TodosApp: App {
 
 struct AppView: View {
     var body: some View {
-        fatalError()
+        Text("App View")
     }
 }
