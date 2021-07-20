@@ -2,10 +2,10 @@ name: Swift
 
 on:
   push:
-    tags: ["*"]
-    branches: [main]
+    tags: [none]
+    branches: [none]
   pull_request:
-    branches: ["*"]
+    branches: [none]
 
 jobs:
   test:
