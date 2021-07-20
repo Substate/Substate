@@ -11,6 +11,10 @@ jobs:
   test:
     runs-on: macos-latest
     steps:
+      - name: Swift
+        uses: fwal/setup-swift@v1
+      - name: Print Swift Version
+        run: swift --version
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
