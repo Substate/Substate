@@ -2,7 +2,7 @@ import SwiftUI
 import Substate
 
 extension View {
-    public func store(_ state: Substate.State, services: [Service]) -> some View {
+    public func store(state: Substate.State, services: [Service]) -> some View {
         modifier(Modifier(state: state, services: services))
     }
 }

@@ -130,38 +130,76 @@ import SubstateMiddleware
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
-```swift
-LoggableMiddleware(filter: true)
-SubstateAsyncMiddleware()
-SubstateDelayedMiddleware()
-SubstateFollowupMiddleware()
-```
+### 📝 Logger
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+### ⏱ Delayer
+
+### 🪄 Effects
 
 ```swift
+// Better name?
+EffectHandler(effects: [
+    .init(for: Counter.Reset.self, capture: true, counterService.fetch),
+    .init(for: Counter.Reset.self, capture: true) { reset in
+        counterService
+            .fetch(number: reset.toValue)
+            .retry(3)
+            .map(CounterService.FetchDidComplete.init)
+    }
+    .init(state: Counter.self, action: Counter.Increment.self) { counter, increment in
+        Counter.Reset(toValue: counter.value + 2) // Increment by 2 instead
+    }
+    .init(state: Counter.self, action: Counter.Increment.self, capture true) { counter, increment in
+        print(counter.value) // Just print, return void and swallow action
+    }
+])
+
+// Easily adapt any service type object for use with the effect handler
+protocol EffectProvider {
+    var effects: [Effect] { get } // Provide a list of effects
+}
+
 class NumberFetcher {
-    func fetch(within range: Range<Int>) -> AnyPublisher<Int, Error> {
-        // ...
+    func fetch(number: Int) -> AnyPublisher<Int, Error>
+}
+
+// A bit verbose still? But pretty good.
+extension NumberFetcher: EffectProvider {
+    struct RequestDidComplete: Action {
+        let value: Int
     }
+
+    let effects: [Effect] = [
+        .init(state: Counter.self, action: Counter.Increment.self, capture: true) { counter, increment in
+            fetch(number: counter.value)
+                .map(RequestDidComplete.init(value:))
+        }
+    ]
 }
 ```
+
+---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-extension NumberFetcher: Service {
-    func handle(action: Action) -> AnyPublisher<Action, Never>? {
-        guard let action = action as? Numbers.Fetch else {
-            return nil
-        }
 
-        return fetch(within: action.range)
-            .map(Numbers.FetchDidSuceed.init(number:))
-            .catch(Numbers.FetchDidFail.init(error:))
-            .eraseToAnyPublisher()
-    }
-}
+StatePublisher() // PublishedState
+ActionPublisher() // PublishedAction
+
+StateLogger() // LoggedState
+ActionLogger() // LoggedAction
+
+StateRecorder() // RecordedState
+ActionRecorder() // RecordedAction
+
+ActionDelayer() // DelayedAction
+ActionDebouncer() // DebouncedAction
+ActionExecutor() // ExecutableAction
+ActionTrigger() // TriggeringAction, MultipleTriggeringAction // Better name?
+
+StateSaver(path: URL, throttle: TimeInterval) // SavedState
+
 ```
 
 ## 🗄 Stores
