@@ -3,16 +3,16 @@ import SubstateUI
 
 struct TodosView: View {
     var body: some View {
-        Container(Todos.self) { state, dispatch in
+        Select(Todos.self) { todos, send in
             List {
-                ForEach(state.list) { todo in
+                ForEach(todos.list) { todo in
                     HStack {
                         Text(todo.date, style: .time)
                         Text(todo.body)
                     }
                 }
 
-                if state.list.isEmpty {
+                if todos.list.isEmpty {
                     Text("No Todos").foregroundColor(.secondary)
                 }
             }
@@ -24,7 +24,7 @@ struct TodosView: View {
 
 extension Todos {
     static let empty = Todos(list: [])
-    static let testSample = Todos(list: [
+    static let sample = Todos(list: [
         .init(date: Date(), body: "Lorem ipsum."),
         .init(date: Date.distantFuture, body: "Dolor sit amet."),
         .init(date: Date.distantPast, body: "Consectetur adipiscing.")
@@ -34,6 +34,6 @@ extension Todos {
 struct TodosViewPreviews: PreviewProvider {
     static var previews: some View {
         TodosView().state(Todos.empty)
-        TodosView().state(Todos.testSample)
+        TodosView().state(Todos.sample)
     }
 }

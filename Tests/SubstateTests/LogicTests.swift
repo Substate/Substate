@@ -26,17 +26,17 @@ final class LogicTests: XCTestCase {
     func testCounter() throws {
         let store = Store(state: Counter())
 
-        XCTAssertEqual(store.state(Counter.self)?.value, 0)
+        XCTAssertEqual(store.select(Counter.self)?.value, 0)
 
         store.send(Counter.Increment())
-        XCTAssertEqual(store.state(Counter.self)?.value, 1)
+        XCTAssertEqual(store.select(Counter.self)?.value, 1)
 
         store.send(Counter.Decrement())
         store.send(Counter.Decrement())
-        XCTAssertEqual(store.state(Counter.self)?.value, -1)
+        XCTAssertEqual(store.select(Counter.self)?.value, -1)
 
         store.send(Counter.Reset(toValue: 100))
-        XCTAssertEqual(store.state(Counter.self)?.value, 100)
+        XCTAssertEqual(store.select(Counter.self)?.value, 100)
     }
 
 }

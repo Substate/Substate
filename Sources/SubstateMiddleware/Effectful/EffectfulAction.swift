@@ -1,3 +1,3 @@
 public protocol EffectfulAction {
-    func perform() {}
+    func perform()
 }

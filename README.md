@@ -45,7 +45,7 @@ extension Counter: State {
 
 ## 🎛 Sub-States
 
-Add sub-states alongside plain values to compose a state tree for your program.
+Add other states alongside plain values to compose a state tree for your program.
 
 ```swift
 struct Counter: State {
@@ -56,7 +56,7 @@ struct Counter: State {
 }
 ```
 
-The child states are automatically detected and updated using their own `update` methods.
+Sub-states states are automatically detected and updated using their own `update` methods.
 
 ```swift
 struct SubCounter: State {
@@ -72,12 +72,12 @@ struct SubCounter: State {
 import SubstateUI
 ```
 
-Use the `Substate` helper to grab your state inside views. Trigger actions by passing one into `send`.
+Use the `Select` container to fetch your state inside views. Trigger actions by passing one into `send`.
 
 ```swift
 struct CounterView: View {
     var body: some View {
-        Substate(Counter.self) { counter, send in
+        Select(Counter.self) { counter, send in
             Text("Counter Value: \(counter.value)")
             Button("Increment") { send(Counter.Increment()) }
         }
@@ -90,7 +90,7 @@ Pass in another type to retrieve any sub-state you like from the tree.
 ```swift
 struct SubCounterView: View {
     var body: some View {
-        Substate(SubCounter.self) { subCounter, send in
+        Select(SubCounter.self) { subCounter, send in
             Text("Sub-Counter Value: \(subCounter.value)")
             Button("Decrement") { send(Counter.Decrement()) }
         }
@@ -184,11 +184,11 @@ For more control, create a store separately and retain it elsewhere.
 let store = Store(state: Counter(), services: [...])
 ```
 
-To retrieve sub-states directly from the store, call its `state` method and pass the desired type.
+To retrieve sub-states directly from the store, call its `select` method and pass the desired type.
 
 ```swift
-store.state(Counter.self) // => Optional<Counter>
-store.state(SubCounter.self) // => Optional<SubCounter>
+store.select(Counter.self) // => Optional<Counter>
+store.select(SubCounter.self) // => Optional<SubCounter>
 ```
 
 To trigger actions directly from the store, call its `send` method and pass in the desired action.
@@ -206,19 +206,18 @@ store.send(Counter.Increment())
 
 ## ✅ Testing
 
-Test states and sub-states by creating a store and sending actions to it. Use the store’s `state` method to query values.
+Test states and sub-states by creating a store and sending actions to it. Use the store’s `select` method to query values.
 
 ```swift
 func testCounter() throws {
     let store = Store(state: Counter())
-    XCTAssertEqual(store.state(Counter.self)?.value, 0)
-    XCTAssertEqual(store.state(SubCounter.self)?.value, 0)
+    XCTAssertEqual(store.select(Counter.self)?.value, 0)
 
     store.send(Counter.Increment())
-    XCTAssertEqual(store.state(Counter.self)?.value, 1)
+    XCTAssertEqual(store.select(Counter.self)?.value, 1)
 
     store.send(SubCounter.Increment())
-    XCTAssertEqual(store.state(SubCounter.self)?.value, 1)
+    XCTAssertEqual(store.select(SubCounter.self)?.value, 1)
 }
 ```
 
