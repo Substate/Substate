@@ -1,0 +1,18 @@
+name: Substate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [*]
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: swift build -v
+      - name: Test
+        run: swift test -v
