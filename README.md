@@ -72,7 +72,7 @@ struct SubCounter: State {
 import SubstateUI
 ```
 
-Use the `Substate` helper to grab your state inside views. Trigger actions by passing one into `send`. 
+Use the `Substate` helper to grab your state inside views. Trigger actions by passing one into `send`.
 
 ```swift
 struct CounterView: View {
@@ -131,7 +131,7 @@ import SubstateMiddleware
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-SubstateLoggableMiddleware(state: AppState.self)
+LoggableMiddleware(filter: true)
 SubstateAsyncMiddleware()
 SubstateDelayedMiddleware()
 SubstateFollowupMiddleware()
@@ -197,7 +197,7 @@ To trigger actions directly from the store, call its `send` method and pass in t
 store.send(Counter.Increment())
 ```
 
-## 📦 Packages
+## 📦 Packaging
 
 - List benefits of automatic sub-state selection for separating components into packages
 - Views don’t need to know about any parent types from the tree so they can be in their own packages if desired
@@ -242,13 +242,13 @@ let store = Store(state: Counter(), services: [FixedNumberFetcher()])
 let store = Store(state: Counter(), services: [FailingNumberFetcher()])
 ```
 
-## 💣 Escape
+## 💣 Escaping
 
 - List escape hatches for code that uses global state
 - Get and set state manually when needed
 - Subscribe via callback to the store
 
-## 💾 Installation
+## 💾 Installation
 
 Install using Swift Package Manager with this repository’s URL
 
@@ -265,3 +265,14 @@ protocol Service {
     func handle(action: Action) async -> Action // Or AsyncSequence?
 }
 ```
+
+## 🙏 Acknowledgements
+
+Substate’s novelty is in using Swift’s type system to automatically select child states. The rest is inspired by and lifted from a variety of other wonderful projects. In no particular order:
+
+- [Elm](https://elm-lang.org)
+- [Redux](https://redux.js.org)
+- [TCA](https://www.pointfree.co/collections/composable-architecture)
+
+- [SwiftUIFlux](https://github.com/Dimillian/SwiftUIFlux)
+- [ReSwift](https://github.com/ReSwift/ReSwift)
