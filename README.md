@@ -248,6 +248,14 @@ let store = Store(state: Counter(), services: [FailingNumberFetcher()])
 - Get and set state manually when needed
 - Subscribe via callback to the store
 
+## 💾 Installation
+
+Install using Swift Package Manager with this repository’s URL
+
+```
+https://github.com/Substate/Substate.git
+```
+
 ## Swift Concurrency Support
 
 TODO.
