@@ -109,7 +109,7 @@ Pass in your predefined states to the `state` view modifier.
 
 ```swift
 struct CounterViewPreviews: PreviewProvider {
-    static var previews {
+    static var previews: some View {
         CounterView().state(Counter.zero)
         CounterView().state(Counter.random)
     }
