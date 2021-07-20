@@ -1,9 +1,7 @@
 import SwiftUI
-import Substate
+import SubstateUI
 
 struct TodosApp: App {
-    let store = Store(state: Root())
-
     var body: some Scene {
         WindowGroup {
             AppView().store(Root(), services: [])

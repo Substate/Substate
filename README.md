@@ -2,9 +2,13 @@
 
 # Substate
 
-![Build Status](https://github.com/substate/substate/actions/workflows/swift.yml/badge.svg)
+[![Build Status](https://github.com/substate/substate/actions/workflows/swift.yml/badge.svg)](https://github.com/Substate/Substate/actions)
 
-Substate is a state management library for Swift.
+Substate is a state management library for Swift. Start by importing the package.
+
+```swift
+import Substate
+```
 
 ## 🎚 States
 
@@ -22,10 +26,6 @@ Next, add some `Action`s to trigger state changes. They can be defined in any na
 extension Counter {
     struct Increment: Action {}
     struct Decrement: Action {}
-
-    struct Reset: Action {
-        let toValue: Int
-    }
 }
 ```
 
@@ -37,7 +37,6 @@ extension Counter: State {
         switch action {
         case is Increment: value += 1
         case is Decrement: value -= 1
-        case let action as Reset: value = action.toValue
         default: ()
         }
     }
@@ -69,6 +68,12 @@ struct SubCounter: State {
 
 ## ⭐️ Views
 
+First, import Substate’s UI helpers.
+
+```swift
+import SubstateUI
+```
+
 Use the `Substate` helper to grab your state inside views. Trigger actions by passing one into `send`. 
 
 ```swift
@@ -77,7 +82,6 @@ struct CounterView: View {
         Substate(Counter.self) { counter, send in
             Text("Counter Value: \(counter.value)")
             Button("Increment") { send(Counter.Increment()) }
-            Button("Decrement") { send(Counter.Decrement()) }
         }
     }
 }
@@ -90,7 +94,7 @@ struct SubCounterView: View {
     var body: some View {
         Substate(SubCounter.self) { subCounter, send in
             Text("Sub-Counter Value: \(subCounter.value)")
-            Button("Reset") { send(SubCounter.Reset(toValue: 0)) }
+            Button("Decrement") { send(Counter.Decrement()) }
         }
     }
 }

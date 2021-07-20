@@ -1,19 +1,17 @@
-#if canImport(SwiftUI)
-
 import SwiftUI
+import Substate
 
 extension View {
-    public func state(_ state: State) -> some View {
+    public func state(_ state: Substate.State) -> some View {
         modifier(Modifier(state: state))
     }
 }
 
 private struct Modifier: ViewModifier {
-    let state: State
+    let state: Substate.State
 
     func body(content: Content) -> some View {
         content.environmentObject(Store(state: state))
     }
 }
 
-#endif

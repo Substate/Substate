@@ -13,6 +13,7 @@ let package = Package(
         .library(name: "Substate", targets: ["Substate"]),
         .library(name: "SubstateExample", targets: ["SubstateExample"]),
         .library(name: "SubstateMiddleware", targets: ["SubstateMiddleware"]),
+        .library(name: "SubstateUI", targets: ["SubstateUI"]),
     ],
 
     dependencies: [
@@ -21,8 +22,9 @@ let package = Package(
 
     targets: [
         .target(name: "Substate", dependencies: ["Runtime"]),
-        .target(name: "SubstateExample", dependencies: ["Substate"]),
+        .target(name: "SubstateExample", dependencies: ["SubstateUI"]),
         .target(name: "SubstateMiddleware", dependencies: ["Substate"]),
+        .target(name: "SubstateUI", dependencies: ["Substate"]),
 
         .testTarget(name: "SubstateTests", dependencies: ["Substate"]),
     ]

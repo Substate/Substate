@@ -1,5 +1,5 @@
 import SwiftUI
-import Substate
+import SubstateUI
 
 struct TodosView: View {
     var body: some View {
