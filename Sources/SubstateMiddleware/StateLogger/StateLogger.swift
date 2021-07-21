@@ -11,6 +11,8 @@ public class StateLogger: Middleware {
         self.output = output
     }
 
+    public static let initialInternalState: Substate.State? = nil
+
     public func setup(store: Store) {
         fire(store: store)
     }
@@ -27,7 +29,7 @@ public class StateLogger: Middleware {
     private func fire(store: Store) {
         if filter {
             store.allStates
-                .filter { $0 is LoggableState }
+                .filter { $0 is LoggedState }
                 .forEach { output(format(state: $0)) }
         } else {
             output(format(state: store.rootState))

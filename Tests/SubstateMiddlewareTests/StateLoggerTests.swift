@@ -15,12 +15,12 @@ final class StateLoggerTests: XCTestCase {
         mutating func update(action: Action) {}
     }
 
-    struct Component2: State, LoggableState {
+    struct Component2: State, LoggedState {
         var property = 456
         mutating func update(action: Action) {}
     }
 
-    struct Component3: State, LoggableState {
+    struct Component3: State, LoggedState {
         mutating func update(action: Action) {}
     }
 
@@ -90,6 +90,13 @@ final class StateLoggerTests: XCTestCase {
     func testRealConsoleOutput() throws {
         let store = Store(state: Component1(), middleware: [StateLogger()])
         store.update(Action1())
+    }
+
+    func testStoreInternalStateIsNotLeaked() throws {
+        var output = ""
+        let logger = StateLogger { output.append($0) }
+        _ = Store(state: Component1(), middleware: [logger])
+        XCTAssertFalse(output.contains("InternalState"))
     }
 
 }

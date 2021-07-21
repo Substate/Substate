@@ -5,18 +5,18 @@ import SubstateMiddleware
 final class ActionLoggerTests: XCTestCase {
 
     struct Action1: Action {}
-    struct Action2: Action, LoggableAction { let property: Int }
-    struct Action3: Action, LoggableAction { let property: Int }
+    struct Action2: Action, LoggedAction { let property: Int }
+    struct Action3: Action, LoggedAction { let property: Int }
 
     struct Component: State {
         mutating func update(action: Action) {}
     }
 
-    func testNoOutputIsProducedOnInit() throws {
+    func testStartActionIsLoggedDuringSetup() throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
         _ = Store(state: Component(), middleware: [logger])
-        XCTAssertEqual(output, "")
+        XCTAssert(output.contains("ActionLogger.Start"))
     }
 
     func testAllActionsAreLoggedByDefault() throws {
@@ -76,6 +76,32 @@ final class ActionLoggerTests: XCTestCase {
         store.update(Action1())
         store.update(Action2(property: 1))
         store.update(Action3(property: 2))
+    }
+
+    func testStopActionDisablesOutput() throws {
+        var output = ""
+        let logger = ActionLogger { output.append($0) }
+        let store = Store(state: Component(), middleware: [logger])
+        store.update(ActionLogger.Stop())
+        output = ""
+        store.update(Action1())
+        XCTAssertEqual(output, "")
+    }
+
+    func testStartActionReenablesOutput() throws {
+        var output = ""
+        let logger = ActionLogger { output.append($0) }
+        let store = Store(state: Component(), middleware: [logger])
+        store.update(ActionLogger.Stop())
+        output = ""
+        store.update(ActionLogger.Start())
+        store.update(Action1())
+        XCTAssertNotEqual(output, "")
+    }
+
+    func testLoggerStateIsAvailable() throws {
+        let store = Store(state: Component(), middleware: [ActionLogger()])
+        XCTAssertNotNil(store.select(ActionLogger.State.self))
     }
 
 }

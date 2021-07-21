@@ -185,7 +185,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ```swift
 struct Increment: Action {}
-struct Decrement: Action, LoggableAction {}
+struct Decrement: Action, LoggedAction {}
 
 let store = Store(state: Counter(), middleware: [ActionLogger(filter: true)]
 
@@ -195,6 +195,16 @@ store.update(Counter.Decrement())
 
 ```
 - Substate.Action: Counter.Decrement
+```
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+Select(ActionLogger.State.self) { logger, update in
+    Text("Logging: \(logger.isActive)")
+    Button("Start") { update(ActionLogger.Start()) }
+    Button("Stop") { update(ActionLogger.Stop()) }
+}
 ```
 
 ### ⏱ Timing
@@ -273,6 +283,9 @@ ActionRecorder() // RecordedAction
 
 ActionDelayer() // DelayedAction
 ActionDebouncer() // DebouncedAction
+ActionThrottler() // ThrottledAction
+ActionTimer() // TimedAction
+
 ActionExecutor() // ExecutableAction
 ActionTrigger() // TriggeringAction, MultipleTriggeringAction // Better name?
 

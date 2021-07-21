@@ -3,17 +3,27 @@ import Runtime
 
 public class Store: ObservableObject {
 
+    struct InternalState: State {
+        var middlewareStates: [State]
+        var appState: State
+        func update(action: Action) {}
+    }
+
     // No point in this being public since underlying type isn’t available
     // Need to use select(state:), and make that more ergonomic
     // Don’t really need this to be published, can handle the single objectWillChange() call manually?
-    @Published private var state: State
+    @Published private var state: InternalState
     private let middleware: [Middleware]
     private var updateFunction: UpdateFunction!
 
     // TODO: Provide a publisher/AsyncSequence for easy subscription to state changes
 
     public init(state: State, middleware: [Middleware] = []) {
-        self.state = state
+        self.state = InternalState(
+            middlewareStates: middleware.compactMap { type(of: $0).initialInternalState },
+            appState: state
+        )
+
         self.middleware = middleware
 
         self.updateFunction = self.middleware
@@ -30,11 +40,12 @@ public class Store: ObservableObject {
     }
 
     public func update(_ action: Action) {
-        precondition(Thread.isMainThread, "Actions must be dispatched on the main thread!")
+        precondition(Thread.isMainThread, "Update must be called on the main thread!")
         updateFunction(action)
     }
 
     private func performUpdate(action: Action) {
+        precondition(Thread.isMainThread, "Update must be called on the main thread!")
         state = reduce(state: state, action: action)
     }
 
@@ -49,7 +60,7 @@ public class Store: ObservableObject {
 
     // TODO: Better naming
     public var rootState: State {
-        state
+        state.appState
     }
 
     // TODO: Better naming
@@ -65,7 +76,7 @@ public class Store: ObservableObject {
 
     private func flatten(object: Any) -> [Any] {
         let mirror = Mirror(reflecting: object)
-        return [object] + mirror.children.map(\.value)
+        return [object] + mirror.children.map(\.value).flatMap(flatten(object:))
     }
 
     /// TODO: Clean this up, remove dependency on Runtime library
@@ -81,17 +92,22 @@ public class Store: ObservableObject {
         }
 
         let mirror = Mirror(reflecting: state)
-        for child in mirror.children {
+        for (index, child) in mirror.children.enumerated() {
             if let childValue = child.value as? State {
 
                 // Try and mutate the member
 
                 let reducedChildValue = reduce(state: childValue, action: action)
 
-                let info = try! typeInfo(of: type(of: state as Any))
-                let property = try! info.property(named: child.label!)
-                try! property.set(value: reducedChildValue, on: &state)
-
+                if var state = state as? [State] {
+                    // Child is a collection member; set by index
+                    state[index] = reducedChildValue
+                } else {
+                    // Child is a property; set by mirror label
+                    let info = try! typeInfo(of: type(of: state as Any))
+                    let property = try! info.property(named: child.label!)
+                    try! property.set(value: reducedChildValue, on: &state)
+                }
             }
         }
 

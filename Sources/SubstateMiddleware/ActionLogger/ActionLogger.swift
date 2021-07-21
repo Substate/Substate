@@ -11,16 +11,22 @@ public class ActionLogger: Middleware {
         self.output = output
     }
 
-    public func setup(store: Store) {}
+    public static let initialInternalState: Substate.State? = ActionLogger.State()
+
+    public func setup(store: Store) {
+        store.update(Start())
+    }
 
     public func update(store: Store) -> (@escaping UpdateFunction) -> UpdateFunction {
         return { next in
             return { [self] action in
-                if (filter && action is LoggableAction) || !filter {
+                next(action)
+
+                let isActive = store.select(ActionLogger.State.self)?.isActive ?? false
+
+                if isActive && (!filter || (filter && action is LoggedAction)) {
                     output(format(action: action))
                 }
-
-                next(action)
             }
         }
     }

@@ -14,6 +14,8 @@ public class ActionTimer: Middleware {
         self.filter = filter
     }
 
+    public static let initialInternalState: Substate.State? = nil
+
     // TODO: Plain numeric values with a custom print formatter
     private struct Values {
         let action: String
@@ -36,7 +38,7 @@ public class ActionTimer: Middleware {
     public func update(store: Store) -> (@escaping UpdateFunction) -> UpdateFunction {
         return { next in
             return { [self] action in
-                if (filter && action is TimeableAction) || !filter {
+                if (filter && action is TimedAction) || !filter {
                     let start = Date()
                     next(action)
                     let elapsed = Date().timeIntervalSince(start)
