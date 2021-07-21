@@ -7,21 +7,34 @@ public class Store: ObservableObject {
     // Need to use select(state:), and make that more ergonomic
     // Don’t really need this to be published, can handle the single objectWillChange() call manually?
     @Published private var state: State
-    private var services: [Service]
+    private let middleware: [Middleware]
+    private var updateFunction: UpdateFunction!
 
     // TODO: Provide a publisher/AsyncSequence for easy subscription to state changes
 
-    public init(state: State, services: [Service] = []) {
+    public init(state: State, middleware: [Middleware] = []) {
         self.state = state
-        self.services = services
+        self.middleware = middleware
 
+        self.updateFunction = self.middleware
+            .reversed()
+            .reduce({ action in
+                self.performUpdate(action: action)
+            }, { update, middleware in
+                return middleware.update(store: self)(update)
+            })
+
+        self.middleware.forEach { $0.setup(store: self) }
         // TODO: Build up a list of substate type -> path segment mappings
         // Then at runtime use Mirror.descendant(a, b, c) to grab the value, rather than iterating every time
     }
 
     public func update(_ action: Action) {
         precondition(Thread.isMainThread, "Actions must be dispatched on the main thread!")
-        dump(action)
+        updateFunction(action)
+    }
+
+    private func performUpdate(action: Action) {
         state = reduce(state: state, action: action)
     }
 
@@ -32,6 +45,17 @@ public class Store: ObservableObject {
     public func select<StateType:State>(_ type: StateType.Type) -> StateType? {
         // TODO: Don’t do this search every time, cache in init!
         find(state: type, in: self.state)
+    }
+
+    // TODO: Better naming
+    public var rootState: State {
+        state
+    }
+
+    // TODO: Better naming
+    // TODO: Optimise, bigtime!
+    public var allStates: [State] {
+        flatten(object: self.state).compactMap { $0 as? State }
     }
 
     private func find<StateType:State>(state: StateType.Type, in object: Any) -> StateType? {

@@ -27,5 +27,6 @@ let package = Package(
         .target(name: "SubstateUI", dependencies: ["Substate"]),
 
         .testTarget(name: "SubstateTests", dependencies: ["Substate"]),
+        .testTarget(name: "SubstateMiddlewareTests", dependencies: ["Substate", "SubstateMiddleware"]),
     ]
 )

@@ -1,7 +1,7 @@
 import XCTest
 import Substate
 
-final class LogicTests: XCTestCase {
+final class StoreTests: XCTestCase {
 
     struct Counter: State {
         var value = 0

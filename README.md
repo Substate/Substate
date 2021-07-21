@@ -122,6 +122,39 @@ struct CounterViewPreviews: PreviewProvider {
 
 > The `state` view modifier is an optional shorthand for `environmentObject(Store(state:))`.
 
+## 🗄 Stores
+
+Bootstrap your program by passing in your root state and a list of middleware to the `store` view modifier.
+
+```swift
+struct CounterApp: App {
+    var scene: some Scene {
+        CounterView().store(state: Counter(), middleware: [...])
+    }
+}
+```
+
+> The `store` view modifier is an optional shorthand for `enviromentObject(Store(state:middleware:))`.
+
+For more control, create a store separately and retain it elsewhere.
+
+```swift
+let store = Store(state: Counter(), middleware: [...])
+```
+
+Retrieve sub-states directly from the store using its `select` method, passing in the desired type.
+
+```swift
+store.select(Counter.self) // => Optional<Counter>
+store.select(SubCounter.self) // => Optional<SubCounter>
+```
+
+Trigger actions directly from the store using its `update` method, passing in the desired action.
+
+```swift
+store.update(Counter.Increment())
+```
+
 ## 👷 Middleware
 
 ```swift
@@ -130,11 +163,49 @@ import SubstateMiddleware
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
-### 📝 Logger
+### 📝 Logging
 
-### ⏱ Delayer
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+let store = Store(state: Counter(), middleware: [ActionLogger(), StateLogger()])
+store.update(Counter.Reset(to: 100))
+```
+
+```
+▿ Substate.State: Counter
+  - value: 0
+▿ Substate.Action: Counter.Reset
+  - to: 100
+▿ Substate.State: Counter
+  - value: 100
+```
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+
+```swift
+struct Increment: Action {}
+struct Decrement: Action, LoggableAction {}
+
+let store = Store(state: Counter(), middleware: [ActionLogger(filter: true)]
+
+store.update(Counter.Increment())
+store.update(Counter.Decrement())
+```
+
+```
+- Substate.Action: Counter.Decrement
+```
+
+### ⏱ Timing
+
+- ActionDelayer
+- ActionDebouncer
+- ActionTimer
 
 ### 🪄 Effects
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
 // Better name?
@@ -161,6 +232,13 @@ protocol EffectProvider {
 
 class NumberFetcher {
     func fetch(number: Int) -> AnyPublisher<Int, Error>
+}
+
+struct Effect<StateType:State> {
+    // How are we going to get something that can be thrown in an array but can return different things from its handler?
+    // Custom return type? Was that what they had in Fluxor?
+    init(for action: Action, capturing state: StateType, passthrough: Bool = true, handler: (StateType?, Action) -> Void) {}
+    init(for action: Action, capturing state: StateType, passthrough: Bool = true, handler: (StateType?, Action) -> AnyPublisher<where to get the success type?, where to get the error type?>) {}
 }
 
 // A bit verbose still? But pretty good.
@@ -200,39 +278,6 @@ ActionTrigger() // TriggeringAction, MultipleTriggeringAction // Better name?
 
 StateSaver(path: URL, throttle: TimeInterval) // SavedState
 
-```
-
-## 🗄 Stores
-
-Bootstrap your program by passing in your root state and a list of services to the `store` view modifier.
-
-```swift
-struct CounterApp: App {
-    var scene: some Scene {
-        CounterView().store(state: Counter(), services: [...])
-    }
-}
-```
-
-> The `store` view modifier is an optional shorthand for `enviromentObject(Store(state:services:))`.
-
-For more control, create a store separately and retain it elsewhere.
-
-```swift
-let store = Store(state: Counter(), services: [...])
-```
-
-Retrieve sub-states directly from the store using its `select` method, passing in the desired type.
-
-```swift
-store.select(Counter.self) // => Optional<Counter>
-store.select(SubCounter.self) // => Optional<SubCounter>
-```
-
-Trigger actions directly from the store using its `update` method, passing in the desired action.
-
-```swift
-store.update(Counter.Increment())
 ```
 
 ## 📦 Packaging

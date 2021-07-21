@@ -4,7 +4,7 @@ import SubstateUI
 struct TodosApp: App {
     var body: some Scene {
         WindowGroup {
-            AppView().store(state: Root(), services: [])
+            AppView().store(state: Root(), middleware: [])
         }
     }
 }
