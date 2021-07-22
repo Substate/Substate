@@ -168,7 +168,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-let store = Store(state: Counter(), middleware: [ActionLogger(), StateLogger()])
+let store = Store(state: Counter(), middleware: [StateLogger(), ActionLogger()])
 store.update(Counter.Reset(to: 100))
 ```
 

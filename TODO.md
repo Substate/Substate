@@ -18,6 +18,11 @@ Store
 Middleware
 
 - Middleware that runs a server and enables a client 'substate inspector' type companion app
+
+- Undo manager!
+  - Tag actions as undoable
+  - Different undo contexts (also specified on the actions)
+
 - Could have some kind of migration logic available to the StateSaver
   - eg. MyState: State, SavedState, MigratedState { let usedToBe: OtherState }
   - Or a VersionedState? With something like func migrate(from oldVersion: StateVersion, to newVersion: StateVersion) -> Self

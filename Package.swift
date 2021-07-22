@@ -1,4 +1,4 @@
-// swift-tools-version:5.4
+// swift-tools-version:5.5
 
 import PackageDescription
 
@@ -11,7 +11,6 @@ let package = Package(
 
     products: [
         .library(name: "Substate", targets: ["Substate"]),
-        .library(name: "SubstateExample", targets: ["SubstateExample"]),
         .library(name: "SubstateMiddleware", targets: ["SubstateMiddleware"]),
         .library(name: "SubstateUI", targets: ["SubstateUI"]),
     ],
@@ -22,7 +21,6 @@ let package = Package(
 
     targets: [
         .target(name: "Substate", dependencies: ["Runtime"]),
-        .target(name: "SubstateExample", dependencies: ["SubstateUI"]),
         .target(name: "SubstateMiddleware", dependencies: ["Substate"]),
         .target(name: "SubstateUI", dependencies: ["Substate"]),
 

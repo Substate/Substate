@@ -3,15 +3,15 @@ import Substate
 
 extension View {
     public func state(_ state: Substate.State) -> some View {
-        modifier(Modifier(state: state))
+        modifier(Modifier(store: Store(state: state)))
     }
 }
 
 private struct Modifier: ViewModifier {
-    let state: Substate.State
+    let store: Substate.Store
 
     func body(content: Content) -> some View {
-        content.environmentObject(Store(state: state))
+        content.environmentObject(store)
     }
 }
 

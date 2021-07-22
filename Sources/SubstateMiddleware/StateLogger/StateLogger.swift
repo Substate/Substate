@@ -20,8 +20,8 @@ public class StateLogger: Middleware {
     public func update(store: Store) -> (@escaping UpdateFunction) -> UpdateFunction {
         return { next in
             return { [self] action in
-                fire(store: store)
                 next(action)
+                fire(store: store)
             }
         }
     }
