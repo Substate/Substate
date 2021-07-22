@@ -91,6 +91,9 @@ public class Store: ObservableObject {
             }
         }
 
+        // TODO: This isn’t actually recursive yet! Only recurses through `State` children.
+        // TODO: Factor out this helper, it’s complex and needs its own tests.
+
         let mirror = Mirror(reflecting: state)
         for (index, child) in mirror.children.enumerated() {
             if let childValue = child.value as? State {

@@ -3,6 +3,16 @@ Store
 - Maybe go back to `send()` for sending actions, easier to refer to 'sending' in the docs. Keep `update()` for models and middleware
 - Optimise state selection by computing a full tree on init
 - Provide some kind of helper on the store to create bindings for SwiftUI that take a setter action
+  - Could this actually be done within the `State`s with property wrappers or something so that the view is super clean?
+  - ie. view call site would just look like Toggle(value: counter.$isActive)
+  - Somewhere else you would link Counter.isActive and Counter.SetActive(Bool) to create the binding
+  - Might be possible to use property wrappers and generics to link a struct (action) with a single init param and the variable you want the binding for?
+  - eg. @AutoBinding(SetActive.self) var isActive: Bool = false
+  - Otherwise, a list of mappings elsewhere? Add the $ properties dynamically with dynamic method dispatch?
+  - Tag actions? eg. struct SetActive: Action, SetterAction { let setterKeyPath = \Counter.isActive }
+  - Auto binding for a sub-state as a whole?
+    eg. struct MyComponent: State, AutoBindingState { let setter: ... }
+    too coarse-grained? Provide map of bindable props? { bindableList = [\.isActive : SetActive.self, ...] }
 - Remove dependency on the Runtime library
 
 Middleware
