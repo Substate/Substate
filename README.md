@@ -201,9 +201,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ```swift
 Select(ActionLogger.State.self) { logger, update in
-    Text("Logging: \(logger.isActive)")
-    Button("Start") { update(ActionLogger.Start()) }
-    Button("Stop") { update(ActionLogger.Stop()) }
+    Text("Logging Actions: \(logger.isActive)")
+    Button("Toggle") { update(ActionLogger.Toggle())  }
 }
 ```
 

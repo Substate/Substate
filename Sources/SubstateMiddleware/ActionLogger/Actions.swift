@@ -31,4 +31,8 @@ extension ActionLogger {
         public init() {}
     }
 
+    public struct Toggle: Action {
+        public init() {}
+    }
+
 }

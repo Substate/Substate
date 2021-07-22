@@ -24,6 +24,7 @@ extension ActionLogger {
             switch action {
             case is Start: isActive = true
             case is Stop: isActive = false
+            case is Toggle: isActive.toggle()
             default: ()
             }
         }
