@@ -31,6 +31,12 @@ extension ActionLogger {
         public init() {}
     }
 
+    /// Dispatch `LoggedAction.Toggle` from anywhere in your application to toggle action logging.
+    ///
+    /// ```swift
+    /// store.update(ActionLogger.Toggle())
+    /// ```
+    ///
     public struct Toggle: Action {
         public init() {}
     }

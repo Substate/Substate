@@ -14,7 +14,7 @@ public class ActionTimer: Middleware {
         self.filter = filter
     }
 
-    public static let initialInternalState: Substate.State? = nil
+    public static let state: Substate.State? = nil
 
     // TODO: Plain numeric values with a custom print formatter
     private struct Values {

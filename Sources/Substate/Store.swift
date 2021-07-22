@@ -20,7 +20,7 @@ public class Store: ObservableObject {
 
     public init(state: State, middleware: [Middleware] = []) {
         self.state = InternalState(
-            middlewareStates: middleware.compactMap { type(of: $0).initialInternalState },
+            middlewareStates: middleware.compactMap { type(of: $0).state },
             appState: state
         )
 

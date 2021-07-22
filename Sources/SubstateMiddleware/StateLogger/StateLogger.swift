@@ -11,7 +11,7 @@ public class StateLogger: Middleware {
         self.output = output
     }
 
-    public static let initialInternalState: Substate.State? = nil
+    public static let state: Substate.State? = nil
 
     public func setup(store: Store) {
         fire(store: store)
