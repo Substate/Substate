@@ -55,12 +55,9 @@ struct CounterViewPreviews: PreviewProvider {
 
     static var previews: some View {
         Group {
-            // Xcode bug causing crash with multiple views?
-            // Problem with the way .state() is implemented?
-
-            // CounterView().state(Counter.zero)
-            CounterView().state(Counter.random)
-            // CounterView().state(Counter.max)
+            CounterView().model(Counter.zero)
+            CounterView().model(Counter.random)
+            CounterView().model(Counter.max)
         }
         .previewLayout(.sizeThatFits)
     }

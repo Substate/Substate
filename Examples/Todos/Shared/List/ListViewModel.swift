@@ -1,6 +1,6 @@
 import Substate
 
-struct ListViewModel: State {
+struct ListViewModel: Model {
 
 //    var order: Order = .ascending
 //    var column: Column = .date

@@ -1,4 +1,4 @@
-![Substate Icon](https://www.datocms-assets.com/15979/1626704059-substate-icon.svg)
+![Substate Icon](https://www.datocms-assets.com/15979/1627080044-substate-icon.svg)
 
 # Substate
 
@@ -6,13 +6,13 @@
 
 Substate is a state management library for Swift.
 
-## 🎚 States
+## 🎚 Models
 
 ```swift
 import Substate
 ```
 
-Let’s create a self-contained component. Describe the state you need using a simple value type.
+Let’s create a self-contained component. Describe your model using a simple value type.
 
 ```swift
 struct Counter {
@@ -20,7 +20,7 @@ struct Counter {
 }
 ```
 
-Next, add some `Action`s to trigger state changes. They can be defined in any namespace, but it’s neat to keep them inside the state.
+Next, add some `Action`s that will trigger model updates. It’s neat to define these within your model type.
 
 ```swift
 extension Counter {
@@ -29,7 +29,7 @@ extension Counter {
 }
 ```
 
-Then, conform to `State` by adding an `update` method. Define how the value should change when actions are received.
+Finally, conform to `Model` by adding an `update(action:)` method. Define how the value should change when actions are received.
 
 ```swift
 extension Counter: State {
@@ -43,9 +43,9 @@ extension Counter: State {
 }
 ```
 
-## 🎛 Sub-States
+## 🎛 Nesting
 
-Add other states alongside plain values to compose a state tree for your program.
+Add other models alongside plain values to compose a state tree for your program.
 
 ```swift
 struct Counter: State {
@@ -56,7 +56,7 @@ struct Counter: State {
 }
 ```
 
-Sub-states states are automatically detected and updated using their own `update` methods.
+Nested models are automatically detected and updated using their own `update(action:)` methods.
 
 ```swift
 struct SubCounter: State {
@@ -72,49 +72,48 @@ struct SubCounter: State {
 import SubstateUI
 ```
 
-Use `map` for lightweight, flexible access to your models. Pass actions to the `update` function.
+Use `<Model>.map(_:)` inside a SwiftUI view for lightweight access to your models.
 
 ```swift
 struct CounterView: View {
     var body: some View {
-        Counter.map { counter, update in
-            Text("Counter Value: \(counter.value)")
-            Button("Increment", action: update(Counter.Increment()))
+        Counter.map { counter in
+            Text("Count: \(counter.value)")
         }
     }
 }
 ```
 
-Pass in another type to retrieve any sub-state you like from the tree.
+Pass actions to the optional `update(_:)` function to trigger model updates.
 
 ```swift
 struct SubCounterView: View {
     var body: some View {
-        SubCounter.map { subCounter, update in
-            Text("Sub-Counter Value: \(subCounter.value)")
+        SubCounter.map { counter, update in
+            Text("Count: \(counter.value)")
+            Button("Increment", action: update(SubCounter.Increment()))
             Button("Decrement", action: update(SubCounter.Decrement()))
         }
     }
 }
 ```
 
-Conform to `ModelView` for views that have a straightforward 1:1 mapping with a view model.
+Conform your view to `ModelView` when using a stricter view →⃪ view-model pair. Add an optional model `typealias` to cut down on noise. 
 
 ```swift
 struct ProfileView: ModelView {
     typealias Model = ProfileViewModel
 
     func body(model: Model, update: Update) -> View {
-        Text("\(model.name)’s Profile")
-        Button("Refresh", action: Model.Refresh())
-        Button("Refresh", action: update(Model.Refresh()))
+        Text("Welcome, \(model.name)")
+        Button("Sign Out", action: update(Model.SignOut()))
     }
 }
 ```
 
 ## 🌟 Previews
 
-Extend your state with convenience properties for different preview data.
+Extend your model with data for use in different previews.
 
 ```swift
 extension Counter {
@@ -123,18 +122,18 @@ extension Counter {
 }
 ```
 
-Pass in your predefined states to the `state` view modifier.
+Pass your predefined models in to the `model(_:)` view modifier.
 
 ```swift
 struct CounterViewPreviews: PreviewProvider {
     static var previews: some View {
-        CounterView().state(Counter.zero)
-        CounterView().state(Counter.random)
+        CounterView().model(Counter.zero)
+        CounterView().model(Counter.random)
     }
 }
 ```
 
-> The `state` view modifier is an optional shorthand for `environmentObject(Store(state:))`.
+> The `model` view modifier is an optional shorthand for `environmentObject(Store(model:))`.
 
 ## 🗄 Stores
 
@@ -143,27 +142,27 @@ Bootstrap your program by passing in your root state and a list of middleware to
 ```swift
 struct CounterApp: App {
     var scene: some Scene {
-        CounterView().store(state: Counter(), middleware: [...])
+        CounterView().store(model: Counter(), middleware: [])
     }
 }
 ```
 
-> The `store` view modifier is an optional shorthand for `enviromentObject(Store(state:middleware:))`.
+> The `store` view modifier is an optional shorthand for `enviromentObject(Store(model:middleware:))`.
 
 For more control, create a store separately and retain it elsewhere.
 
 ```swift
-let store = Store(state: Counter(), middleware: [...])
+let store = Store(model: Counter(), middleware: [])
 ```
 
-Retrieve sub-states directly from the store using its `select` method, passing in the desired type.
+Retrieve models directly from the store by passing the desired type to `find`.
 
 ```swift
-store.select(Counter.self) // => Optional<Counter>
-store.select(SubCounter.self) // => Optional<SubCounter>
+store.find(Counter.self) // => Optional<Counter>
+store.find(SubCounter.self) // => Optional<SubCounter>
 ```
 
-Trigger actions directly from the store using its `update` method, passing in the desired action.
+Update your app’s model directly by passing an action to `update`.
 
 ```swift
 store.update(Counter.Increment())
@@ -182,7 +181,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-let store = Store(state: Counter(), middleware: [StateLogger(), ActionLogger()])
+let store = Store(model: Counter(), middleware: [StateLogger(), ActionLogger()])
 store.update(Counter.Reset(to: 100))
 ```
 
@@ -201,7 +200,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 struct Increment: Action {}
 struct Decrement: Action, LoggedAction {}
 
-let store = Store(state: Counter(), middleware: [ActionLogger(filter: true)]
+let store = Store(model: Counter(), middleware: [ActionLogger(filter: true)]
 
 store.update(Counter.Increment())
 store.update(Counter.Decrement())
@@ -214,9 +213,9 @@ store.update(Counter.Decrement())
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-Select(ActionLogger.State.self) { logger, update in
+ActionLogger.State.map { logger, update in
     Text("Logging Actions: \(logger.isActive)")
-    Button("Toggle") { update(ActionLogger.Toggle())  }
+    Button("Toggle", action: update(ActionLogger.Toggle()))
 }
 ```
 
@@ -285,13 +284,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ```swift
 
-StatePublisher() // PublishedState
+ModelPublisher() // PublishedModel
 ActionPublisher() // PublishedAction
 
-StateLogger() // LoggedState
+ModelLogger() // LoggedModel
 ActionLogger() // LoggedAction
 
-StateRecorder() // RecordedState
+ModelRecorder() // RecordedModel
 ActionRecorder() // RecordedAction
 
 ActionDelayer() // DelayedAction
@@ -302,7 +301,7 @@ ActionTimer() // TimedAction
 ActionExecutor() // ExecutableAction
 ActionTrigger() // TriggeringAction, MultipleTriggeringAction // Better name?
 
-StateSaver(path: URL, throttle: TimeInterval) // SavedState
+ModelSaver(path: URL, throttle: TimeInterval) // SavedModel
 
 ```
 
@@ -315,18 +314,18 @@ StateSaver(path: URL, throttle: TimeInterval) // SavedState
 
 ## ✅ Testing
 
-Test states and sub-states by creating a store and sending actions to it. Use the store’s `select` method to query values.
+Test models by creating a store and sending actions to it. Use the store’s `find` method to query values.
 
 ```swift
 func testCounter() throws {
-    let store = Store(state: Counter())
-    XCTAssertEqual(store.select(Counter.self)?.value, 0)
+    let store = Store(model: Counter())
+    XCTAssertEqual(store.find(Counter.self)?.value, 0)
 
     store.update(Counter.Increment())
-    XCTAssertEqual(store.select(Counter.self)?.value, 1)
+    XCTAssertEqual(store.find(Counter.self)?.value, 1)
 
     store.update(SubCounter.Increment())
-    XCTAssertEqual(store.select(SubCounter.self)?.value, 1)
+    XCTAssertEqual(store.find(SubCounter.self)?.value, 1)
 }
 ```
 
@@ -346,13 +345,15 @@ class FailingNumberFetcher: Service {
     }
 }
 
-let store = Store(state: Counter(), services: [FixedNumberFetcher()])
-let store = Store(state: Counter(), services: [FailingNumberFetcher()])
+let store = Store(model: Counter(), middleware: [FixedNumberFetcher()])
+let store = Store(model: Counter(), middleware: [FailingNumberFetcher()])
 ```
 
 ## 💣 Escaping
 
 - List escape hatches for code that uses global state
+  - Pretty straightforward, just keep a global reference to the store and dispatch anywhere
+  - Use one of the middleware to subscribe to changes, make it a singleton if you want
 - Get and set state manually when needed
 - Subscribe via callback to the store
 

@@ -2,18 +2,18 @@ import SwiftUI
 import Substate
 
 extension View {
-    public func store(state: Substate.State, middleware: [Middleware]) -> some View {
-        modifier(Modifier(state: state, middleware: middleware))
+    public func store(model: Model, middleware: [Middleware]) -> some View {
+        modifier(Modifier(model: model, middleware: middleware))
     }
 }
 
 private struct Modifier: ViewModifier {
-    let state: Substate.State
+    let model: Model
     let middleware: [Middleware]
 
     func body(content: Content) -> some View {
         content
-            .environmentObject(Store(state: state, middleware: middleware))
+            .environmentObject(Store(model: model, middleware: middleware))
             .environment(\.substateStoreIsPresent, true)
     }
 }

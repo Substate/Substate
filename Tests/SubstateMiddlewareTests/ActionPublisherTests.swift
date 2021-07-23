@@ -7,7 +7,7 @@ final class ActionPublisherTests: XCTestCase {
 
     struct Action1: Action {}
 
-    struct Component: State {
+    struct Component: Model {
         mutating func update(action: Action) {}
     }
 
@@ -15,7 +15,7 @@ final class ActionPublisherTests: XCTestCase {
 
     func testActionIsPublishedUsingCombine() throws {
         let publisher = ActionPublisher()
-        let store = Store(state: Component(), middleware: [publisher])
+        let store = Store(model: Component(), middleware: [publisher])
         var actionWasPublished = false
 
         publisher.publisher(for: Action1.self)
@@ -29,7 +29,7 @@ final class ActionPublisherTests: XCTestCase {
 
     func testActionIsPublishedUsingCallback() throws {
         let publisher = ActionPublisher()
-        let store = Store(state: Component(), middleware: [publisher])
+        let store = Store(model: Component(), middleware: [publisher])
         var actionWasPublished = false
 
         publisher.callback(for: Action1.self) { _ in

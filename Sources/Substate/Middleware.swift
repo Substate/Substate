@@ -10,7 +10,7 @@ public protocol Middleware {
 
     /// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
     ///
-    static var state: State? { get }
+    static var model: Model? { get }
 
     /// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
     ///
@@ -28,8 +28,6 @@ public protocol Middleware {
     /// }
     /// ```
     ///
-    func update(store: Store) -> (@escaping UpdateFunction) -> UpdateFunction
+    func update(store: Store) -> (@escaping Update) -> Update
 
 }
-
-public typealias UpdateFunction = (Action) -> Void

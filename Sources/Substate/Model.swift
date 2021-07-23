@@ -1,10 +1,10 @@
-public protocol State {
+public protocol Model {
     mutating func update(action: Action)
 }
 
-typealias StateArray = [State]
+typealias ModelArray = [Model]
 
-extension StateArray: State {
+extension ModelArray: Model {
     public mutating func update(action: Action) {
         indices.forEach { self[$0].update(action: action) }
     }

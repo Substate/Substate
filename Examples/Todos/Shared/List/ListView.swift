@@ -4,34 +4,34 @@ import SubstateUI
 struct ListView: View {
 
     var body: some View {
-        ListViewModel.select { model in
-            TaskList.select { list in
-                ScrollView {
-                    VStack(spacing: 16) {
+        ListViewModel.map { model, update in
+            TaskList.map { list in
 
-                        let update = { (a: Any) in } // TEMP!
+                GeometryReader { geometry in
+                    ScrollView {
+                        List {
+                            Section(header: Text("Upcoming")) {
+                                ForEach(model.sort(tasks: list.all)) { task in
+                                    ListRowView(task: task, onDelete: { id in
+                                        update(TaskList.Delete(id: task.id))
+                                    })
+                                }
+                            }
 
-                        // Is this good? Passing in the data in the view?
-
-                        ForEach(model.sort(tasks: list.all)) { task in
-                            VStack {
-                                Text(task.date, style: .date)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                                Text(task.body)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                                Button("Delete") { update(TaskList.Delete(id: task.id)) }
-                                    .font(.caption)
-                                    .foregroundColor(.red)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            Section(header: Text("Completed")) {
+                                ForEach(model.sort(tasks: list.all)) { task in
+                                    ListRowView(task: task, onDelete: { id in
+                                        update(TaskList.Delete(id: task.id))
+                                    })
+                                }
                             }
                         }
+                        .padding(.top)
+                        .frame(minHeight: geometry.size.height, alignment: .top)
                     }
                 }
-                .padding()
+
+
             }
         }
     }
@@ -41,7 +41,7 @@ struct ListView: View {
 struct ListViewPreviews: PreviewProvider {
     static var previews: some View {
         ListView()
-            .state(TaskList.sample)
+            .model(TodosAppModel.example)
             .previewLayout(.sizeThatFits)
     }
 }

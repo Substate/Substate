@@ -1,7 +1,7 @@
 import SwiftUI
 import Substate
 
-struct MissingModelView<StateType:Substate.State>: View {
+struct MissingModelView<StateType:Substate.Model>: View {
 
     let type: StateType.Type
 
@@ -23,7 +23,7 @@ struct MissingModelView<StateType:Substate.State>: View {
 
 struct MissingModelViewPreviews: PreviewProvider {
 
-    struct ToolbarTestModel: Substate.State {
+    struct ToolbarTestModel: Substate.Model {
         func update(action: Action) {}
     }
 

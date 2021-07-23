@@ -3,25 +3,27 @@ import Runtime
 
 public class Store: ObservableObject {
 
-    struct InternalState: State {
-        var middlewareStates: [State]
-        var appState: State
+    // TODO: Since we’re dogfooding our own state management system here right in the store,
+    // is there any API we’d like to expose? Some actions on the store?
+    struct InternalModel: Model {
+        var middlewareModels: [Model]
+        var appModel: Model
         func update(action: Action) {}
     }
 
     // No point in this being public since underlying type isn’t available
     // Need to use select(state:), and make that more ergonomic
     // Don’t really need this to be published, can handle the single objectWillChange() call manually?
-    @Published private var state: InternalState
+    @Published private var model: InternalModel
     private let middleware: [Middleware]
-    private var updateFunction: UpdateFunction!
+    private var updateFunction: Update!
 
-    // TODO: Provide a publisher/AsyncSequence for easy subscription to state changes
+    // TODO: Provide a publisher/AsyncSequence for easy subscription to model changes
 
-    public init(state: State, middleware: [Middleware] = []) {
-        self.state = InternalState(
-            middlewareStates: middleware.compactMap { type(of: $0).state },
-            appState: state
+    public init(model: Model, middleware: [Middleware] = []) {
+        self.model = InternalModel(
+            middlewareModels: middleware.compactMap { type(of: $0).model },
+            appModel: model
         )
 
         self.middleware = middleware
@@ -46,32 +48,27 @@ public class Store: ObservableObject {
 
     private func performUpdate(action: Action) {
         precondition(Thread.isMainThread, "Update must be called on the main thread!")
-        state = reduce(state: state, action: action)
+        model = reduce(model: model, action: action)
     }
 
     // NOTE: This will always have to be optional. But using a view helper in the same way as
     // ConnectedView, we can give child ConnectedViews a non-optional `state` property.
     // If the required state isn’t found, we could just show an empty view instead as a failure
     // mode (and log the error!)
-    public func select<StateType:State>(_ type: StateType.Type) -> StateType? {
+    public func find<ModelType:Model>(_ type: ModelType.Type) -> ModelType? {
         // TODO: Don’t do this search every time, cache in init!
-        find(state: type, in: self.state)
+        flatten(object: model).first(where: { $0 is ModelType }) as? ModelType
     }
 
     // TODO: Better naming
-    public var rootState: State {
-        state.appState
+    public var rootModel: Model {
+        model.appModel
     }
 
     // TODO: Better naming
     // TODO: Optimise, bigtime!
-    public var allStates: [State] {
-        flatten(object: self.state).compactMap { $0 as? State }
-    }
-
-    private func find<StateType:State>(state: StateType.Type, in object: Any) -> StateType? {
-        // TODO: Outrageously inefficient! Flattens every single state attribute in the tree every time!
-        flatten(object: object).first(where: { $0 is StateType }) as? StateType
+    public var allModels: [Model] {
+        flatten(object: self.model).compactMap { $0 as? Model }
     }
 
     private func flatten(object: Any) -> [Any] {
@@ -80,42 +77,41 @@ public class Store: ObservableObject {
     }
 
     /// TODO: Clean this up, remove dependency on Runtime library
-    private func reduce<SomeStateType>(state: SomeStateType, action: Action) -> SomeStateType {
+    private func reduce<ModelType>(model: ModelType, action: Action) -> ModelType {
         // TODO: Don’t do this search every time, cache in init!
-        var state = state
+        var model = model
 
-
-        // TODO: This isn’t actually recursive yet! Only recurses through `State` children.
+        // TODO: This isn’t actually recursive yet! Only recurses through `Model` children.
         // TODO: Factor out this helper, it’s complex and needs its own tests.
 
-        let mirror = Mirror(reflecting: state)
+        let mirror = Mirror(reflecting: model)
         for (index, child) in mirror.children.enumerated() {
-            if let childValue = child.value as? State {
+            if let childValue = child.value as? Model {
 
                 // Try and mutate the member
 
-                let reducedChildValue = reduce(state: childValue, action: action)
+                let reducedChildValue = reduce(model: childValue, action: action)
 
-                if var state = state as? [State] {
+                if var model = model as? [Model] {
                     // Child is a collection member; set by index
-                    state[index] = reducedChildValue
+                    model[index] = reducedChildValue
                 } else {
                     // Child is a property; set by mirror label
-                    let info = try! typeInfo(of: type(of: state as Any))
+                    let info = try! typeInfo(of: type(of: model as Any))
                     let property = try! info.property(named: child.label!)
-                    try! property.set(value: reducedChildValue, on: &state)
+                    try! property.set(value: reducedChildValue, on: &model)
                 }
             }
         }
 
-        if var s = state as? State {
+        if var s = model as? Model {
             s.update(action: action)
-            if let s1 = s as? SomeStateType {
-                state = s1
+            if let s1 = s as? ModelType {
+                model = s1
             }
         }
 
-        return state
+        return model
     }
 
 }

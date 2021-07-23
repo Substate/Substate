@@ -4,7 +4,7 @@ import Substate
 /// Checks that a given model is available from the store in the view hierarchy before passing
 /// through to the provided child content.
 ///
-public struct ModelProvider<ModelType:Substate.State, Content:View>: View {
+public struct ModelProvider<ModelType:Model, Content:View>: View {
 
     let type: ModelType.Type
     let content: (ModelType) -> Content
@@ -12,7 +12,7 @@ public struct ModelProvider<ModelType:Substate.State, Content:View>: View {
     @EnvironmentObject private var store: Store
 
     public var body: some View {
-        if let state = store.select(type) {
+        if let state = store.find(type) {
             content(state)
         } else {
             #if DEBUG

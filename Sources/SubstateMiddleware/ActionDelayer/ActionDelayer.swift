@@ -5,11 +5,11 @@ public class ActionDelayer: Middleware {
 
     public init() {}
 
-    public static let state: Substate.State? = nil
+    public static let model: Substate.Model? = nil
 
     public func setup(store: Store) {}
 
-    public func update(store: Store) -> (@escaping UpdateFunction) -> UpdateFunction {
+    public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { action in
                 // TODO: We don’t need to capture self here!

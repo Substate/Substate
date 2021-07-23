@@ -11,18 +11,18 @@ public class ActionLogger: Middleware {
         self.output = output
     }
 
-    public static let state: Substate.State? = ActionLogger.State()
+    public static let model: Substate.Model? = ActionLogger.Model()
 
     public func setup(store: Store) {
         store.update(Start())
     }
 
-    public func update(store: Store) -> (@escaping UpdateFunction) -> UpdateFunction {
+    public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { [self] action in
                 next(action)
 
-                let isActive = store.select(ActionLogger.State.self)?.isActive ?? false
+                let isActive = store.find(ActionLogger.Model.self)?.isActive ?? false
 
                 if isActive && (!filter || (filter && action is LoggedAction)) {
                     output(format(action: action))

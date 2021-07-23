@@ -14,7 +14,7 @@ public class ActionTimer: Middleware {
         self.filter = filter
     }
 
-    public static let state: Substate.State? = nil
+    public static let model: Model? = nil
 
     // TODO: Plain numeric values with a custom print formatter
     private struct Values {
@@ -35,7 +35,7 @@ public class ActionTimer: Middleware {
 
     public func setup(store: Store) {}
 
-    public func update(store: Store) -> (@escaping UpdateFunction) -> UpdateFunction {
+    public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { [self] action in
                 if (filter && action is TimedAction) || !filter {

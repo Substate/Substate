@@ -1,6 +1,6 @@
 import Substate
 
-struct Counter: State {
+struct Counter: Model {
 
     var value = 0
 

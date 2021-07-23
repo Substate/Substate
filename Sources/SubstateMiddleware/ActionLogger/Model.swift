@@ -17,7 +17,7 @@ extension ActionLogger {
     /// TODO: Different naming for these internal states? It’s confusing. The word 'state' is
     /// everywhere!
     ///
-    public struct State: Substate.State {
+    public struct Model: Substate.Model {
         public var isActive = false
 
         public mutating func update(action: Action) {

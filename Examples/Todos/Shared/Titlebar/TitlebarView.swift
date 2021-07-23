@@ -1,27 +1,33 @@
 import SwiftUI
 import SubstateUI
 
-struct TitlebarView: View {
+struct TitlebarView: ModelView {
+    typealias Model = TitlebarViewModel
 
-    var body: some View {
-        TitlebarViewModel.select { model in
-            HStack {
-                Text(model.title)
-                    .font(.system(.headline, design: .rounded))
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color(.secondarySystemBackground).ignoresSafeArea())
+    func body(model: Model, update: Update) -> some View {
+        HStack {
+            Text(model.title)
+                .font(.system(.headline, design: .rounded))
         }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(backgroundColor.ignoresSafeArea())
     }
 
+    var backgroundColor: Color {
+        #if os(macOS)
+        Color.gray
+        #else
+        Color(.secondarySystemBackground)
+        #endif
+    }
 }
 
 struct TitlebarViewPreviews: PreviewProvider {
 
     static var previews: some View {
         Group {
-            TitlebarView().state(TitlebarViewModel.example)
+            TitlebarView().model(TitlebarViewModel.example)
         }
         .previewLayout(.sizeThatFits)
     }

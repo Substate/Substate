@@ -1,7 +1,7 @@
 import Foundation
 import Substate
 
-struct TaskList: State {
+struct TaskList: Model {
 
     var all: [Task] = []
 

@@ -2,7 +2,7 @@ import Foundation
 import Substate
 
 
-struct TodosAppModel: State {
+struct TodosAppModel: Model {
 
     var taskList = TaskList()
 
@@ -58,5 +58,5 @@ struct TodosAppModel: State {
 
 
 extension TodosAppModel {
-    static let example = TodosAppModel()
+    static let example = TodosAppModel(taskList: .sample)
 }

@@ -10,7 +10,7 @@ final class ActionDelayerTests: XCTestCase {
         let delay: TimeInterval = 1
     }
 
-    struct Component: State {
+    struct Component: Model {
         var action1Received = false
         var action2Received = false
 
@@ -24,21 +24,21 @@ final class ActionDelayerTests: XCTestCase {
     }
 
     func testNonDelayedActionIsReceivedImmediately() throws {
-        let store = Store(state: Component(), middleware: [ActionDelayer()])
+        let store = Store(model: Component(), middleware: [ActionDelayer()])
         store.update(Action1())
-        XCTAssertTrue(try XCTUnwrap(store.select(Component.self)).action1Received)
+        XCTAssertTrue(try XCTUnwrap(store.find(Component.self)).action1Received)
     }
 
     func testDelayedActionIsNotReceivedImmediately() throws {
-        let store = Store(state: Component(), middleware: [ActionDelayer()])
+        let store = Store(model: Component(), middleware: [ActionDelayer()])
         store.update(Action2())
-        XCTAssertFalse(try XCTUnwrap(store.select(Component.self)).action2Received)
+        XCTAssertFalse(try XCTUnwrap(store.find(Component.self)).action2Received)
     }
 
     func testDelayedActionIsReceivedOnTime() throws {
         let delayer = ActionDelayer()
         let publisher = ActionPublisher()
-        let store = Store(state: Component(), middleware: [delayer, publisher])
+        let store = Store(model: Component(), middleware: [delayer, publisher])
         let expectation = XCTestExpectation()
         expectation.assertForOverFulfill = true
         let start = Date()

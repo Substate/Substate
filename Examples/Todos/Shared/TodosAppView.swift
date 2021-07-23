@@ -3,7 +3,7 @@ import SwiftUI
 struct TodosAppView: View {
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             TitlebarView()
             ListView()
             ToolbarView()
@@ -15,7 +15,7 @@ struct TodosAppView: View {
 struct TodosAppViewPreviews: PreviewProvider {
 
     static var previews: some View {
-        TodosAppView().state(TodosAppModel.example)
+        TodosAppView().model(TodosAppModel.example)
     }
 
 }

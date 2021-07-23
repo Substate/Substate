@@ -1,23 +1,23 @@
 import Substate
 
-public class StateLogger: Middleware {
+public class ModelLogger: Middleware {
 
     private let filter: Bool
     private let output: (String) -> Void
-    private let tag = "Substate.State"
+    private let tag = "Substate.Model"
 
     public init(filter: Bool = false, output: @escaping (String) -> Void = output) {
         self.filter = filter
         self.output = output
     }
 
-    public static let state: Substate.State? = nil
+    public static let model: Model? = nil
 
     public func setup(store: Store) {
         fire(store: store)
     }
 
-    public func update(store: Store) -> (@escaping UpdateFunction) -> UpdateFunction {
+    public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { [self] action in
                 next(action)
@@ -28,18 +28,18 @@ public class StateLogger: Middleware {
 
     private func fire(store: Store) {
         if filter {
-            store.allStates
-                .filter { $0 is LoggedState }
-                .forEach { output(format(state: $0)) }
+            store.allModels
+                .filter { $0 is LoggedModel }
+                .forEach { output(format(model: $0)) }
         } else {
-            output(format(state: store.rootState))
+            output(format(model: store.rootModel))
         }
 
     }
 
-    private func format(state: State) -> String {
+    private func format(model: Model) -> String {
         var string = ""
-        dump(state, to: &string, name: tag)
+        dump(model, to: &string, name: tag)
         return string.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 

@@ -1,6 +1,6 @@
 import Substate
 
-struct TitlebarViewModel: State {
+struct TitlebarViewModel: Model {
 
     var taskCount = 0
 

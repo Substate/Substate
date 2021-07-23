@@ -1,7 +1,6 @@
 import Substate
 
-struct ToolbarViewModel: State {
-    var searchQuery: String?
+struct ToolbarViewModel: Model {
     var step: Step = .idle
 
     enum Step {
@@ -51,5 +50,5 @@ struct ToolbarViewModel: State {
 
 extension ToolbarViewModel {
     static let initial = ToolbarViewModel()
-    static let searchExample = ToolbarViewModel(searchQuery: "Eggs")
+    static let searchExample = ToolbarViewModel(step: .searching("Eggs"))
 }

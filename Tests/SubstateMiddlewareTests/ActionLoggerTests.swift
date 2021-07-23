@@ -8,21 +8,21 @@ final class ActionLoggerTests: XCTestCase {
     struct Action2: Action, LoggedAction { let property: Int }
     struct Action3: Action, LoggedAction { let property: Int }
 
-    struct Component: State {
+    struct Component: Model {
         mutating func update(action: Action) {}
     }
 
     func testStartActionIsLoggedDuringSetup() throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        _ = Store(state: Component(), middleware: [logger])
+        _ = Store(model: Component(), middleware: [logger])
         XCTAssert(output.contains("ActionLogger.Start"))
     }
 
     func testAllActionsAreLoggedByDefault() throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        let store = Store(state: Component(), middleware: [logger])
+        let store = Store(model: Component(), middleware: [logger])
         store.update(Action1())
         XCTAssert(output.contains("Action1"))
         store.update(Action2(property: 1))
@@ -34,7 +34,7 @@ final class ActionLoggerTests: XCTestCase {
     func testAllActionsAreLoggedWhenFilterIsInactive() throws {
         var output = ""
         let logger = ActionLogger(filter: false) { output.append($0) }
-        let store = Store(state: Component(), middleware: [logger])
+        let store = Store(model: Component(), middleware: [logger])
         store.update(Action1())
         XCTAssert(output.contains("Action1"))
         store.update(Action2(property: 1))
@@ -46,7 +46,7 @@ final class ActionLoggerTests: XCTestCase {
     func testTaggedActionsAreLoggedWhenFilterIsActive() throws {
         var output = ""
         let logger = ActionLogger(filter: true) { output.append($0) }
-        let store = Store(state: Component(), middleware: [logger])
+        let store = Store(model: Component(), middleware: [logger])
         store.update(Action2(property: 1))
         XCTAssert(output.contains("Action2"))
         store.update(Action3(property: 2))
@@ -56,7 +56,7 @@ final class ActionLoggerTests: XCTestCase {
     func testUntaggedActionsAreNotLoggedWhenFilterIsActive() throws {
         var output = ""
         let logger = ActionLogger(filter: true) { output.append($0) }
-        let store = Store(state: Component(), middleware: [logger])
+        let store = Store(model: Component(), middleware: [logger])
         store.update(Action1())
         XCTAssertFalse(output.contains("Action1"))
     }
@@ -64,7 +64,7 @@ final class ActionLoggerTests: XCTestCase {
     func testActionPropertiesAreLogged() throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        let store = Store(state: Component(), middleware: [logger])
+        let store = Store(model: Component(), middleware: [logger])
         store.update(Action2(property: 1))
         XCTAssert(output.contains("property: 1"))
         store.update(Action3(property: 2))
@@ -72,7 +72,7 @@ final class ActionLoggerTests: XCTestCase {
     }
 
     func testRealConsoleOutput() throws {
-        let store = Store(state: Component(), middleware: [ActionLogger()])
+        let store = Store(model: Component(), middleware: [ActionLogger()])
         store.update(Action1())
         store.update(Action2(property: 1))
         store.update(Action3(property: 2))
@@ -81,7 +81,7 @@ final class ActionLoggerTests: XCTestCase {
     func testStopActionDisablesOutput() throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        let store = Store(state: Component(), middleware: [logger])
+        let store = Store(model: Component(), middleware: [logger])
         store.update(ActionLogger.Stop())
         output = ""
         store.update(Action1())
@@ -91,7 +91,7 @@ final class ActionLoggerTests: XCTestCase {
     func testStartActionReenablesOutput() throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        let store = Store(state: Component(), middleware: [logger])
+        let store = Store(model: Component(), middleware: [logger])
         store.update(ActionLogger.Stop())
         output = ""
         store.update(ActionLogger.Start())
@@ -100,21 +100,21 @@ final class ActionLoggerTests: XCTestCase {
     }
 
     func testLoggerStateIsAvailable() throws {
-        let store = Store(state: Component(), middleware: [ActionLogger()])
-        XCTAssertNotNil(store.select(ActionLogger.State.self))
+        let store = Store(model: Component(), middleware: [ActionLogger()])
+        XCTAssertNotNil(store.find(ActionLogger.Model.self))
     }
 
     func testLoggerStateIsInitiallyActive() throws {
-        let store = Store(state: Component(), middleware: [ActionLogger()])
-        XCTAssertTrue(try XCTUnwrap(store.select(ActionLogger.State.self)).isActive)
+        let store = Store(model: Component(), middleware: [ActionLogger()])
+        XCTAssertTrue(try XCTUnwrap(store.find(ActionLogger.Model.self)).isActive)
     }
 
     func testLoggerStateChangesWhenStartAndStopAreDispatched() throws {
-        let store = Store(state: Component(), middleware: [ActionLogger()])
+        let store = Store(model: Component(), middleware: [ActionLogger()])
         store.update(ActionLogger.Stop())
-        XCTAssertFalse(try XCTUnwrap(store.select(ActionLogger.State.self)).isActive)
+        XCTAssertFalse(try XCTUnwrap(store.find(ActionLogger.Model.self)).isActive)
         store.update(ActionLogger.Start())
-        XCTAssertTrue(try XCTUnwrap(store.select(ActionLogger.State.self)).isActive)
+        XCTAssertTrue(try XCTUnwrap(store.find(ActionLogger.Model.self)).isActive)
     }
 
 }
