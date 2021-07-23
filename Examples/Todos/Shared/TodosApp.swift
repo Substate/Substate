@@ -1,17 +1,11 @@
-//
-//  TodosApp.swift
-//  Shared
-//
-//  Created by Dan Halliday on 22/07/2021.
-//
-
 import SwiftUI
+import SubstateUI
+import SubstateMiddleware
 
-@main
-struct TodosApp: App {
+@main struct TodosApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ListView().store(state: TodosAppModel(), middleware: [ActionLogger()])
         }
     }
 }

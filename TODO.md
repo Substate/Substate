@@ -1,6 +1,8 @@
 Store
 
 - Maybe go back to `send()` for sending actions, easier to refer to 'sending' in the docs. Keep `update()` for models and middleware
+- Maybe also look again at `Model` for states. Does work nicely with view model naming
+
 - Optimise state selection by computing a full tree on init
 - Provide some kind of helper on the store to create bindings for SwiftUI that take a setter action
   - Could this actually be done within the `State`s with property wrappers or something so that the view is super clean?

@@ -45,7 +45,9 @@ struct Counter: State {
 }
 
 extension Counter {
+
     static let zero = Counter(value: 0)
     static let random = Counter(value: .random(in: 1...1000))
     static let max = Counter(value: .max)
+
 }
