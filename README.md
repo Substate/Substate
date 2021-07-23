@@ -72,12 +72,12 @@ struct SubCounter: State {
 import SubstateUI
 ```
 
-Use the `Select` helper for lightweight, flexible access to your models. Pass actions directly to built-in controls.
+Use `map` for lightweight, flexible access to your models. Pass actions to the `update` function.
 
 ```swift
 struct CounterView: View {
     var body: some View {
-        Counter.map { counter in
+        Counter.map { counter, update in
             Text("Counter Value: \(counter.value)")
             Button("Increment", action: update(Counter.Increment()))
         }
@@ -90,7 +90,7 @@ Pass in another type to retrieve any sub-state you like from the tree.
 ```swift
 struct SubCounterView: View {
     var body: some View {
-        SubCounter.map { subCounter in
+        SubCounter.map { subCounter, update in
             Text("Sub-Counter Value: \(subCounter.value)")
             Button("Decrement", action: update(SubCounter.Decrement()))
         }
