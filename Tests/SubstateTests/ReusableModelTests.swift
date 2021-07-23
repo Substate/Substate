@@ -9,7 +9,7 @@ import Substate
 ///
 final class ReusableModelTests: XCTestCase {
 
-    struct Pager<Parent>: Model {
+    struct Pager<ID>: Model {
         var page = 1
 
         struct Next: Action {}

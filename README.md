@@ -98,7 +98,7 @@ struct SubCounterView: View {
 }
 ```
 
-Conform your view to `ModelView` when using a stricter view →⃪ view-model pair. Add an optional model `typealias` to cut down on noise. 
+Conform your view to `ModelView` when using a stricter view ⇔ view-model pair. Add an optional model `typealias` to cut down on noise. 
 
 ```swift
 struct ProfileView: ModelView {
