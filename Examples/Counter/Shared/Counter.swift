@@ -4,17 +4,9 @@ struct Counter: Model {
 
     var value = 0
 
-    var canReset: Bool {
-        value != 0
-    }
-
-    var canIncrement: Bool {
-        value < .max
-    }
-
-    var canDecrement: Bool {
-        value > .min
-    }
+    var canReset: Bool { value != 0 }
+    var canIncrement: Bool { value < .max }
+    var canDecrement: Bool { value > .min }
 
     struct Reset: Action {}
     struct Increment: Action {}
@@ -24,19 +16,13 @@ struct Counter: Model {
         switch action {
 
         case is Reset:
-            if canReset {
-                value = 0
-            }
+            if canReset { value = 0 }
 
         case is Increment:
-            if canIncrement {
-                value += 1
-            }
+            if canIncrement { value += 1 }
 
         case is Decrement:
-            if canDecrement {
-                value -= 1
-            }
+            if canDecrement { value -= 1 }
 
         default: ()
         }
