@@ -72,14 +72,14 @@ struct SubCounter: State {
 import SubstateUI
 ```
 
-Use the `Select` container to fetch your state inside views. Trigger actions by passing one into `update`.
+Use the `Select` helper for lightweight, flexible access to your models. Pass actions directly to built-in controls.
 
 ```swift
 struct CounterView: View {
     var body: some View {
-        Select(Counter.self) { counter, update in
+        Select(Counter.self) { counter in
             Text("Counter Value: \(counter.value)")
-            Button("Increment") { update(Counter.Increment()) }
+            Button("Increment", action: Counter.Increment())
         }
     }
 }
@@ -90,10 +90,20 @@ Pass in another type to retrieve any sub-state you like from the tree.
 ```swift
 struct SubCounterView: View {
     var body: some View {
-        Select(SubCounter.self) { subCounter, update in
+        Select(SubCounter.self) { subCounter in
             Text("Sub-Counter Value: \(subCounter.value)")
-            Button("Decrement") { update(Counter.Decrement()) }
+            Button("Decrement", action: Counter.Decrement())
         }
+    }
+}
+```
+
+Conform to `ModelView` for views that have a straightforward 1:1 mapping with a view model.
+
+```swift
+struct ProfileView: ModelView {
+    func body(model: ProfileViewModel) -> View {
+        Text("\(model.name)’s Profile")
     }
 }
 ```

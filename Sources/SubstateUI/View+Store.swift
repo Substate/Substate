@@ -12,6 +12,8 @@ private struct Modifier: ViewModifier {
     let middleware: [Middleware]
 
     func body(content: Content) -> some View {
-        content.environmentObject(Store(state: state, middleware: middleware))
+        content
+            .environmentObject(Store(state: state, middleware: middleware))
+            .environment(\.substateStoreIsPresent, true)
     }
 }

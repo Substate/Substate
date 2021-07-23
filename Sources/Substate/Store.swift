@@ -84,12 +84,6 @@ public class Store: ObservableObject {
         // TODO: Don’t do this search every time, cache in init!
         var state = state
 
-        if var s = state as? State {
-            s.update(action: action)
-            if let s1 = s as? SomeStateType {
-                state = s1
-            }
-        }
 
         // TODO: This isn’t actually recursive yet! Only recurses through `State` children.
         // TODO: Factor out this helper, it’s complex and needs its own tests.
@@ -111,6 +105,13 @@ public class Store: ObservableObject {
                     let property = try! info.property(named: child.label!)
                     try! property.set(value: reducedChildValue, on: &state)
                 }
+            }
+        }
+
+        if var s = state as? State {
+            s.update(action: action)
+            if let s1 = s as? SomeStateType {
+                state = s1
             }
         }
 

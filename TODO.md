@@ -1,5 +1,13 @@
 Store
 
+- Need to traverse updates from deepest to shallowest so that parents can read the up-to-date state from all of their children
+  - Think this is done but needs to be tested properly!
+
+- Make the store not conform to ObservableObject so users can’t pass it as to .environmentObject() directly
+  - To be able to prevent crashes due to a missing store, we want control over its passing in to the view hierarchy
+  - Can probably use some wrapper type that binds to the store and conforms to ObservableObject and is used by the .store() and .state() wrappers
+  - Might be able to overload .environmentObject(Substate.Store) and provide an Xcode error message to explain why it’s deprecated/not possible? 
+
 - Maybe go back to `send()` for sending actions, easier to refer to 'sending' in the docs. Keep `update()` for models and middleware
 - Maybe also look again at `Model` for states. Does work nicely with view model naming
 
@@ -106,6 +114,10 @@ let step = Journey.Step(
   - eg. JourneyTracker.JourneyDidProgress
     - journey: how to ID this?
     - step: WidgetFetchButtonWasPressed
+
+UI
+
+- TextView.onSubmit(send: Model.AddWasCommitted(body: string))
 
 Logging
 

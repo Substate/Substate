@@ -5,7 +5,7 @@ import SubstateMiddleware
 @main struct TodosApp: App {
     var body: some Scene {
         WindowGroup {
-            ListView().store(state: TodosAppModel(), middleware: [ActionLogger()])
+            TodosAppView().store(state: TodosAppModel(), middleware: [ActionLogger()])
         }
     }
 }

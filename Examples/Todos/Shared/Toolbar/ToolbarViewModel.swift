@@ -1,8 +1,55 @@
-//
-//  ToolbarViewState.swift
-//  Todos (iOS)
-//
-//  Created by Dan Halliday on 23/07/2021.
-//
+import Substate
 
-import Foundation
+struct ToolbarViewModel: State {
+    var searchQuery: String?
+    var step: Step = .idle
+
+    enum Step {
+        case idle, adding(String), searching(String)
+    }
+
+    var canSaveAddedTask: Bool {
+        if case .adding(let body) = step, !body.isEmpty {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    struct AddButtonWasPressed: Action {}
+    struct AddBodyDidChange: Action {
+        let body: String
+    }
+    struct AddWasCommitted: Action {
+        let body: String
+    }
+
+    struct SearchButtonWasPressed: Action {}
+    struct SearchQueryDidChange: Action {
+        let query: String
+    }
+
+    mutating func update(action: Action) {
+        switch action {
+
+        case is AddButtonWasPressed:
+            step = .adding("")
+
+        case let action as AddBodyDidChange:
+            step = .adding(action.body.trimmingCharacters(in: .whitespacesAndNewlines))
+
+        case is AddWasCommitted:
+            step = .idle
+
+        case is SearchButtonWasPressed:
+            step = .searching("")
+
+        default: ()
+        }
+    }
+}
+
+extension ToolbarViewModel {
+    static let initial = ToolbarViewModel()
+    static let searchExample = ToolbarViewModel(searchQuery: "Eggs")
+}

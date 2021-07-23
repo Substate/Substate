@@ -6,30 +6,32 @@ struct ListView: View {
     var body: some View {
         Select(ListViewModel.self) { model, update in
             Select(TaskList.self) { list, update in
-                VStack(spacing: 32) {
+                ScrollView {
+                    VStack(spacing: 16) {
 
 
-                    Button("Create") {
-                        update(TaskList.Create(body: "Lorem ipsum dolor sit amet"))
-                    }
 
-                    // Is this good? Passing in the data in the view?
+                        // Is this good? Passing in the data in the view?
 
-                    ForEach(model.sort(tasks: list.all)) { task in
-                        VStack(alignment: .leading) {
-                            Text(task.date, style: .date)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                        ForEach(model.sort(tasks: list.all)) { task in
+                            VStack {
+                                Text(task.date, style: .date)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text(task.body)
+                                Text(task.body)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Button("Delete") { update(TaskList.Delete(id: task.id)) }
-                                .font(.caption)
-                                .foregroundColor(.red)
+                                Button("Delete") { update(TaskList.Delete(id: task.id)) }
+                                    .font(.caption)
+                                    .foregroundColor(.red)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
                         }
                     }
-
                 }
+                .padding()
             }
         }
     }

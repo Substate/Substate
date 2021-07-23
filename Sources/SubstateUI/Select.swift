@@ -19,12 +19,14 @@ import Substate
 /// }
 /// ```
 ///
+/// - TODO: Refactor and clean up after change to support detecting a missing store.
+///
 public struct Select<StateType:Substate.State, Content:View>: View {
 
     private let type: StateType.Type
     private let content: (StateType, @escaping (Action) -> Void) -> Content
 
-    @EnvironmentObject private var store: Store
+    @Environment(\.substateStoreIsPresent) private var substateStoreIsPresent: Bool
 
     /// Create a selector for a given state.
     ///
@@ -38,9 +40,36 @@ public struct Select<StateType:Substate.State, Content:View>: View {
     }
 
     public var body: some View {
-        store.select(type).map { state in
-            content(state, store.update)
+        if substateStoreIsPresent {
+            WrappedView(type, content: content)
+        } else {
+            MissingStoreView()
+        }
+
+    }
+
+    struct WrappedView<StateType:Substate.State, Content:View>: View {
+
+        private let type: StateType.Type
+        private let content: (StateType, @escaping (Action) -> Void) -> Content
+
+        @EnvironmentObject private var store: Store
+
+        public init(_ type: StateType.Type, @ViewBuilder content: @escaping (StateType, @escaping (Action) -> Void) -> Content) {
+            self.type = type
+            self.content = content
+        }
+
+        var body: some View {
+            if let state = store.select(type) {
+                content(state, store.update)
+            } else {
+                #if DEBUG
+                MissingModelView(type: type)
+                #endif
+            }
         }
     }
 
 }
+

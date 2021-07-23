@@ -11,7 +11,9 @@ private struct Modifier: ViewModifier {
     let store: Substate.Store
 
     func body(content: Content) -> some View {
-        content.environmentObject(store)
+        content
+            .environmentObject(store)
+            .environment(\.substateStoreIsPresent, true)
     }
 }
 
