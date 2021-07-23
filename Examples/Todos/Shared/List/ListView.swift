@@ -4,12 +4,12 @@ import SubstateUI
 struct ListView: View {
 
     var body: some View {
-        Select(ListViewModel.self) { model, update in
-            Select(TaskList.self) { list, update in
+        ListViewModel.select { model in
+            TaskList.select { list in
                 ScrollView {
                     VStack(spacing: 16) {
 
-
+                        let update = { (a: Any) in } // TEMP!
 
                         // Is this good? Passing in the data in the view?
 

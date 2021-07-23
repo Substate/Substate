@@ -4,7 +4,7 @@ import SubstateUI
 struct TitlebarView: View {
 
     var body: some View {
-        Select(TitlebarViewModel.self) { model, update in
+        TitlebarViewModel.select { model in
             HStack {
                 Text(model.title)
                     .font(.system(.headline, design: .rounded))
@@ -27,3 +27,4 @@ struct TitlebarViewPreviews: PreviewProvider {
     }
 
 }
+

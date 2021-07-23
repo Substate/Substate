@@ -9,31 +9,37 @@ struct CounterView: View {
         .monospacedDigit()
 
     var body: some View {
-        Select(Counter.self) { counter, update in
+        Counter.map { counter in
             VStack(spacing: 24) {
                 Text(String(counter.value))
 
                 HStack {
-                    Button(action: { update(Counter.Decrement()) }) {
-                        Image(systemName: "minus.circle.fill")
-                            .foregroundColor(.green)
-                            .accessibility(label: Text("Decrement"))
+                    Counter.Decrement().map { decrement in
+                        Button(action: decrement) {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundColor(.green)
+                                .accessibility(label: Text("Decrement"))
+                        }
+                        .disabled(!counter.canDecrement)
                     }
-                    .disabled(!counter.canDecrement)
 
-                    Button(action: { update(Counter.Reset()) }) {
-                        Image(systemName: "trash.circle.fill")
-                            .foregroundColor(.red)
-                            .accessibility(label: Text("Reset"))
+                    Counter.Reset().map { reset in
+                        Button(action: reset) {
+                            Image(systemName: "trash.circle.fill")
+                                .foregroundColor(.red)
+                                .accessibility(label: Text("Reset"))
+                        }
+                        .disabled(!counter.canReset)
                     }
-                    .disabled(!counter.canReset)
 
-                    Button(action: { update(Counter.Increment()) }) {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(.green)
-                            .accessibility(label: Text("Increment"))
+                    Counter.Increment().map { increment in
+                        Button(action: increment) {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.green)
+                                .accessibility(label: Text("Increment"))
+                        }
+                        .disabled(!counter.canIncrement)
                     }
-                    .disabled(!counter.canIncrement)
                 }
                 .buttonStyle(PlainButtonStyle())
             }

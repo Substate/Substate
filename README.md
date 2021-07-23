@@ -77,9 +77,9 @@ Use the `Select` helper for lightweight, flexible access to your models. Pass ac
 ```swift
 struct CounterView: View {
     var body: some View {
-        Select(Counter.self) { counter in
+        Counter.map { counter in
             Text("Counter Value: \(counter.value)")
-            Button("Increment", action: Counter.Increment())
+            Button("Increment", action: update(Counter.Increment()))
         }
     }
 }
@@ -90,9 +90,9 @@ Pass in another type to retrieve any sub-state you like from the tree.
 ```swift
 struct SubCounterView: View {
     var body: some View {
-        Select(SubCounter.self) { subCounter in
+        SubCounter.map { subCounter in
             Text("Sub-Counter Value: \(subCounter.value)")
-            Button("Decrement", action: Counter.Decrement())
+            Button("Decrement", action: update(SubCounter.Decrement()))
         }
     }
 }
@@ -102,8 +102,12 @@ Conform to `ModelView` for views that have a straightforward 1:1 mapping with a 
 
 ```swift
 struct ProfileView: ModelView {
-    func body(model: ProfileViewModel) -> View {
+    typealias Model = ProfileViewModel
+
+    func body(model: Model, update: Update) -> View {
         Text("\(model.name)’s Profile")
+        Button("Refresh", action: Model.Refresh())
+        Button("Refresh", action: update(Model.Refresh()))
     }
 }
 ```
