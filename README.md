@@ -67,9 +67,7 @@ struct SubCounter: State {
 Reuse models in different places by making them generic with respect to their containers.
 
 ```swift
-struct Tracker<Screen>: State { 
-    var clicks = 0
-}
+struct Tracker<Screen>: State { ... }
 
 struct NewsScreen: State {
     var tracker = Tracker<NewsScreen>()
@@ -107,8 +105,8 @@ struct CounterView: View {
     @Update var update
     
     var body: some View {
-        Button("Increment", action: update(SubCounter.Increment()))
-        Button("Decrement", action: update(SubCounter.Decrement()))
+        Button("Increment", action: update(Counter.Increment()))
+        Button("Decrement", action: update(Counter.Decrement()))
     }
 }
 ```
