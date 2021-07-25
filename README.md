@@ -72,41 +72,27 @@ struct SubCounter: State {
 import SubstateUI
 ```
 
-Use `<Model>.map(_:)` inside a SwiftUI view for lightweight access to your models.
+Add `@Model` properties to access models from your views.
 
 ```swift
 struct CounterView: View {
+    @Model var counter: Counter
     var body: some View {
-        Counter.map { counter in
-            Text("Count: \(counter.value)")
-        }
+        Text("Count: \(counter.value)")
     }
 }
 ```
 
-Pass actions to the optional `update(_:)` function to trigger model updates.
+Add an `@Update` property to access a function which can trigger model updates.
 
 ```swift
 struct SubCounterView: View {
+    @Update var update
+    @Model var counter: SubCounter
     var body: some View {
-        SubCounter.map { counter, update in
-            Text("Count: \(counter.value)")
-            Button("Increment", action: update(SubCounter.Increment()))
-            Button("Decrement", action: update(SubCounter.Decrement()))
-        }
-    }
-}
-```
-
-Conform your view to `ModelView` when using a stricter view ⇔ view-model pair. Add an optional model `typealias` to cut down on noise. 
-
-```swift
-struct ProfileView: ModelView {
-    typealias Model = ProfileViewModel
-
-    func body(model: Model, update: Update) -> View {
-        Text("Welcome, \(model.name)")
-        Button("Sign Out", action: update(Model.SignOut()))
+        Text("Count: \(counter.value)")
+        Button("Increment", action: update(SubCounter.Increment()))
+        Button("Decrement", action: update(SubCounter.Decrement()))
     }
 }
 ```
@@ -213,9 +199,12 @@ store.update(Counter.Decrement())
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-ActionLogger.State.map { logger, update in
-    Text("Logging Actions: \(logger.isActive)")
-    Button("Toggle", action: update(ActionLogger.Toggle()))
+struct LoggerDebugView: View {
+    @Model state: ActionLogger.State
+    var body: some View {
+        Text("Logging Actions: \(state.isActive)")
+        Button("Toggle", action: update(ActionLogger.Toggle()))
+    }
 }
 ```
 

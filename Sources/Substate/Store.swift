@@ -10,7 +10,7 @@ public class Store: ObservableObject {
         var appModel: Model
         func update(action: Action) {}
     }
-
+    
     // No point in this being public since underlying type isn’t available
     // Need to use select(state:), and make that more ergonomic
     // Don’t really need this to be published, can handle the single objectWillChange() call manually?
