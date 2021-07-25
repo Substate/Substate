@@ -1,11 +1,12 @@
 import SwiftUI
 import SubstateUI
-import Substate
 
-struct ToolbarView: ModelView {
-    typealias Model = ToolbarViewModel
+struct ToolbarView: View {
 
-    func body(model: Model, update: @escaping Update) -> some View {
+    @Update var update
+    @Model var model: ToolbarViewModel
+
+    var body: some View {
         VStack(spacing: 32) {
             switch model.step {
 
@@ -25,7 +26,7 @@ struct ToolbarView: ModelView {
                             update(ToolbarViewModel.AddWasCommitted(body: string))
                         }
 
-                    Button(action: { update(ToolbarViewModel.AddWasCommitted(body: string)) }) {
+                    Button(action: update(ToolbarViewModel.AddWasCommitted(body: string))) {
                         Text("Save")
                     }
                     .disabled(!model.canSaveAddedTask)
@@ -36,7 +37,7 @@ struct ToolbarView: ModelView {
             }
 
             HStack {
-                Button(action: { update(ToolbarViewModel.AddButtonWasPressed()) }) {
+                Button(action: update(ToolbarViewModel.AddButtonWasPressed())) {
                     VStack {
                         Image(systemName: "plus.circle.fill")
                         Text("Add")
@@ -45,7 +46,7 @@ struct ToolbarView: ModelView {
 
                 Spacer()
 
-                Button(action: { update(ToolbarViewModel.SearchButtonWasPressed()) }) {
+                Button(action: update(ToolbarViewModel.SearchButtonWasPressed())) {
                     VStack {
                         Image(systemName: "magnifyingglass.circle.fill")
                         Text("Search")

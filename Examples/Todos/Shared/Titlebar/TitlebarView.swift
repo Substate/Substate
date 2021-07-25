@@ -1,10 +1,11 @@
 import SwiftUI
 import SubstateUI
 
-struct TitlebarView: ModelView {
-    typealias Model = TitlebarViewModel
+struct TitlebarView: View {
 
-    func body(model: Model, update: Update) -> some View {
+    @Model var model: TitlebarViewModel
+
+    var body: some View {
         HStack {
             Text(model.title)
                 .font(.system(.headline, design: .rounded))

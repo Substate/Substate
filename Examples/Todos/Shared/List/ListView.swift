@@ -3,35 +3,33 @@ import SubstateUI
 
 struct ListView: View {
 
+    @Update var update
+
+    @Model var taskList: TaskList
+    @Model var listViewModel: ListViewModel
+
     var body: some View {
-        ListViewModel.map { model, update in
-            TaskList.map { list in
-
-                GeometryReader { geometry in
-                    ScrollView {
-                        List {
-                            Section(header: Text("Upcoming")) {
-                                ForEach(model.sort(tasks: list.all)) { task in
-                                    ListRowView(task: task, onDelete: { id in
-                                        update(TaskList.Delete(id: task.id))
-                                    })
-                                }
-                            }
-
-                            Section(header: Text("Completed")) {
-                                ForEach(model.sort(tasks: list.all)) { task in
-                                    ListRowView(task: task, onDelete: { id in
-                                        update(TaskList.Delete(id: task.id))
-                                    })
-                                }
-                            }
+        GeometryReader { geometry in
+            ScrollView {
+                List {
+                    Section(header: Text("Upcoming")) {
+                        ForEach(listViewModel.sort(tasks: taskList.all)) { task in
+                            ListRowView(task: task, onDelete: { id in
+                                update(TaskList.Delete(id: task.id))
+                            })
                         }
-                        .padding(.top)
-                        .frame(minHeight: geometry.size.height, alignment: .top)
+                    }
+
+                    Section(header: Text("Completed")) {
+                        ForEach(listViewModel.sort(tasks: taskList.all)) { task in
+                            ListRowView(task: task, onDelete: { id in
+                                update(TaskList.Delete(id: task.id))
+                            })
+                        }
                     }
                 }
-
-
+                .padding(.top)
+                .frame(minHeight: geometry.size.height, alignment: .top)
             }
         }
     }

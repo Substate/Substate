@@ -20,7 +20,7 @@ struct Counter {
 }
 ```
 
-Next, add some `Action`s that will trigger model updates. It’s neat to define these within your model type.
+Next, add some `Action`s that will trigger model updates. It’s best to define these within your model type.
 
 ```swift
 extension Counter {
@@ -51,7 +51,6 @@ Add other models alongside plain values to compose a state tree for your program
 struct Counter: State {
     var value = 0
     var subCounter = SubCounter()
-
     mutating func update(action: Action) { ... }
 }
 ```
@@ -61,8 +60,23 @@ Nested models are automatically detected and updated using their own `update(act
 ```swift
 struct SubCounter: State {
     var value = 0
-
     mutating func update(action: Action) { ... }
+}
+```
+
+Reuse models in different places by making them generic with respect to their containers.
+
+```swift
+struct Tracker<Screen>: State { 
+    var clicks = 0
+}
+
+struct NewsScreen: State {
+    var tracker = Tracker<NewsScreen>()
+}
+
+struct ProductsScreen: State {
+    var tracker = Tracker<ProductsScreen>()
 }
 ```
 
