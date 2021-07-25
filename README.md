@@ -91,20 +91,22 @@ Add `@Model` properties to access models from your views.
 ```swift
 struct CounterView: View {
     @Model var counter: Counter
+    @Model var subCounter: SubCounter
+
     var body: some View {
         Text("Count: \(counter.value)")
+        Text("Subcount: \(subCounter.value)")
     }
 }
 ```
 
-Add an `@Update` property to access a function which can trigger model updates.
+Use an `@Update` property to trigger model updates.
 
 ```swift
-struct SubCounterView: View {
+struct CounterView: View {
     @Update var update
-    @Model var counter: SubCounter
+    
     var body: some View {
-        Text("Count: \(counter.value)")
         Button("Increment", action: update(SubCounter.Increment()))
         Button("Decrement", action: update(SubCounter.Decrement()))
     }
@@ -122,7 +124,7 @@ extension Counter {
 }
 ```
 
-Pass your predefined models in to the `model(_:)` view modifier.
+Pass your predefined models in to the `model` view modifier.
 
 ```swift
 struct CounterViewPreviews: PreviewProvider {
