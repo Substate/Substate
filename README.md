@@ -32,7 +32,7 @@ extension Counter {
 Finally, conform to `Model` by adding an `update(action:)` method. Define how the value should change when actions are received.
 
 ```swift
-extension Counter: State {
+extension Counter: Model {
     mutating func update(action: Action) {
         switch action {
         case is Increment: value += 1
@@ -48,7 +48,7 @@ extension Counter: State {
 Add other models alongside plain values to compose a state tree for your program.
 
 ```swift
-struct Counter: State {
+struct Counter: Model {
     var value = 0
     var subCounter = SubCounter()
     mutating func update(action: Action) { ... }
@@ -58,7 +58,7 @@ struct Counter: State {
 Nested models are automatically detected and updated using their own `update(action:)` methods.
 
 ```swift
-struct SubCounter: State {
+struct SubCounter: Model {
     var value = 0
     mutating func update(action: Action) { ... }
 }
@@ -67,13 +67,13 @@ struct SubCounter: State {
 Reuse models in different places by making them generic with respect to their containers.
 
 ```swift
-struct Tracker<Screen>: State { ... }
+struct Tracker<Screen>: Model { ... }
 
-struct NewsScreen: State {
+struct NewsScreen: Model {
     var tracker = Tracker<NewsScreen>()
 }
 
-struct ProductsScreen: State {
+struct ProductsScreen: Model {
     var tracker = Tracker<ProductsScreen>()
 }
 ```
