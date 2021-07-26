@@ -149,7 +149,7 @@ struct CounterApp: App {
 
 > The `store` view modifier is an optional shorthand for `enviromentObject(Store(model:middleware:))`.
 
-For more control, create a store separately and retain it elsewhere.
+For more control or to use Substate separately from SwiftUI, create a store manually.
 
 ```swift
 let store = Store(model: Counter(), middleware: [])

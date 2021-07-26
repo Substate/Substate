@@ -17,14 +17,6 @@ jobs:
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty
 
-  test-substate-ios:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Test
-        run: set -o pipefail; xcodebuild test -scheme Substate -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
-
   test-substate-middleware-macos:
     runs-on: macos-latest
     steps:
@@ -32,6 +24,14 @@ jobs:
         uses: actions/checkout@v2
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme SubstateMiddleware -destination 'platform=macOS' | xcpretty
+
+  test-substate-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test
+        run: set -o pipefail; xcodebuild test -scheme Substate -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
 
   test-substate-middleware-ios:
     runs-on: macos-latest
@@ -41,8 +41,7 @@ jobs:
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme SubstateMiddleware -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
 
-  # TODO: Enabled once Github supports iOS 15
-  # test-counter-ios-15-0:
+  # test-counter-ios: # TODO: Enable once Github supports iOS 15
   #   runs-on: macos-latest
   #   steps:
   #     - name: Checkout
