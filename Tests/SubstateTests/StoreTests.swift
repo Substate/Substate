@@ -97,12 +97,11 @@ final class StoreTests: XCTestCase {
         XCTAssertEqual(store.find(SubCounter.self)?.value, 1)
     }
 
-    func testDeeplyNestedChildActionDispatch() throws {
-        XCTExpectFailure("Full recursion is not yet implemented")
-
-        let store = Store(model: Counter())
-        store.update(DeepState.Change())
-        XCTAssertEqual(store.find(DeepState.self)?.value, 1)
-    }
+//    Full recursion is not yet implemented!
+//    func testDeeplyNestedChildActionDispatch() throws {
+//        let store = Store(model: Counter())
+//        store.update(DeepState.Change())
+//        XCTAssertEqual(store.find(DeepState.self)?.value, 1)
+//    }
 
 }
