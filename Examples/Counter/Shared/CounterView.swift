@@ -1,5 +1,6 @@
 import SwiftUI
 import SubstateUI
+import SubstateMiddleware
 import Combine
 
 struct CounterView: View {

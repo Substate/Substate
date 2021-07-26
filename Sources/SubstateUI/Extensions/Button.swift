@@ -6,6 +6,11 @@ extension Button {
         self.init(action: action, label: label)
     }
 
+//    ?
+//    public init(_ titleKey: LocalizedStringKey, action: @autoclosure @escaping () -> Void) {
+//        self.init(titleKey, action: action)
+//    }
+
     // TODO: Review all Button initialisers and create correspondoing @autoclosure versions.
 
 }

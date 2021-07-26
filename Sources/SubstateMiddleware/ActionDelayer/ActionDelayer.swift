@@ -5,7 +5,7 @@ public class ActionDelayer: Middleware {
 
     public init() {}
 
-    public static let model: Substate.Model? = nil
+    public let model: Substate.Model? = nil
 
     public func setup(store: Store) {}
 

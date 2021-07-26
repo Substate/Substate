@@ -10,7 +10,7 @@ public protocol Middleware {
 
     /// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
     ///
-    static var model: Model? { get }
+    var model: Model? { get }
 
     /// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
     ///

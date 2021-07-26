@@ -11,7 +11,7 @@ public class ActionLogger: Middleware {
         self.output = output
     }
 
-    public static let model: Substate.Model? = ActionLogger.Model()
+    public let model: Substate.Model? = ActionLogger.Model()
 
     public func setup(store: Store) {
         store.update(Start())

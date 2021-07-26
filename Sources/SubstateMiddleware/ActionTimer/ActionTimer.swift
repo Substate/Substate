@@ -14,7 +14,7 @@ public class ActionTimer: Middleware {
         self.filter = filter
     }
 
-    public static let model: Model? = nil
+    public let model: Model? = nil
 
     // TODO: Plain numeric values with a custom print formatter
     private struct Values {

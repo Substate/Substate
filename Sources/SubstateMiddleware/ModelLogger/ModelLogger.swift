@@ -11,7 +11,7 @@ public class ModelLogger: Middleware {
         self.output = output
     }
 
-    public static let model: Model? = nil
+    public let model: Model? = nil
 
     public func setup(store: Store) {
         fire(store: store)

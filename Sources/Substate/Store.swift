@@ -22,7 +22,7 @@ public class Store: ObservableObject {
 
     public init(model: Model, middleware: [Middleware] = []) {
         self.model = InternalModel(
-            middlewareModels: middleware.compactMap { type(of: $0).model },
+            middlewareModels: middleware.compactMap(\.model),
             appModel: model
         )
 

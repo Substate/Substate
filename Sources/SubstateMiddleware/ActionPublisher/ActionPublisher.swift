@@ -8,7 +8,7 @@ public class ActionPublisher: Middleware {
     private let publisher = PassthroughSubject<Action, Never>()
     private var subscriptions: [AnyCancellable] = []
 
-    public static let model: Model? = nil
+    public let model: Model? = nil
     
     public func setup(store: Store) {}
 
