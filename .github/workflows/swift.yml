@@ -14,11 +14,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Test
-        run: xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty
-  test-counter-ios-14-0:
+        run: set -o pipefail xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty
+  test-counter-ios-15-0:
     runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Test
-        run: xcodebuild test -scheme 'Counter (iOS)' -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
+        run: set -o pipefail xcodebuild test -scheme 'Counter (iOS)' -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 12 mini' | xcpretty
