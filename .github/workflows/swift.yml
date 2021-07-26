@@ -8,7 +8,7 @@ on:
     branches: ["*"]
 
 jobs:
-  test:
+  test-substate-macos:
     runs-on: macos-latest
     steps:
       - name: Swift
@@ -17,7 +17,16 @@ jobs:
         run: swift --version
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build
-        run: xcodebuild build -scheme Substate
       - name: Test
-        run: xcodebuild test -scheme Substate
+          run: xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty
+  test-substate-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Swift
+        uses: fwal/setup-swift@v1
+      - name: Print Swift Version
+        run: swift --version
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test
+        run: xcodebuild test -scheme Substate -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 12' | xcpretty
