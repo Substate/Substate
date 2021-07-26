@@ -9,7 +9,7 @@ on:
 
 jobs:
 
-  "Test Substate (macOS)":
+  test-substate-macos:
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -17,7 +17,7 @@ jobs:
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty
 
-  "Test Substate (iOS)":
+  test-substate-ios:
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -25,7 +25,7 @@ jobs:
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme Substate -destination 'platform=iOS Simulator,OS=14.4' | xcpretty
 
-  "Test Substate Middleware (macOS)":
+  test-substate-middleware-macos:
     runs-on: macos-latest
     steps:
       - name: Checkout
