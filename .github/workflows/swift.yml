@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Test
-          run: "xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty"
+        run: xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty
   test-substate-ios:
     runs-on: macos-latest
     steps:
@@ -29,4 +29,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Test
-        run: "xcodebuild test -scheme Substate -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 12 mini' | xcpretty"
+        run: xcodebuild test -scheme Substate -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 12 mini' | xcpretty
