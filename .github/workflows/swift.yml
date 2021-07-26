@@ -11,22 +11,14 @@ jobs:
   test-substate-macos-10-15:
     runs-on: macos-latest
     steps:
-      # - name: Swift
-      #   uses: fwal/setup-swift@v1
-      # - name: Print Swift Version
-      #  run: swift --version
       - name: Checkout
         uses: actions/checkout@v2
       - name: Test
-        run: xcodebuild test -scheme Substate -destination 'platform=macOS,OS=1.15' | xcpretty
+        run: xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty
   test-counter-ios-14-0:
     runs-on: macos-latest
     steps:
-      # - name: Swift
-      #   uses: fwal/setup-swift@v1
-      # - name: Print Swift Version
-      #  run: swift --version
       - name: Checkout
         uses: actions/checkout@v2
       - name: Test
-        run: xcodebuild test -scheme 'Counter (iOS)' -destination 'platform=iOS Simulator,OS=14.0,name=iPhone 12 mini' | xcpretty
+        run: xcodebuild test -scheme 'Counter (iOS)' -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
