@@ -9,7 +9,7 @@ on:
 
 jobs:
   test-counter-macos:
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       # - name: Swift
       #   uses: fwal/setup-swift@v1
