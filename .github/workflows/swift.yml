@@ -2,22 +2,22 @@ name: Swift
 
 on:
   push:
-    tags: [none]
-    branches: [none]
+    tags: ["*"]
+    branches: ["*"]
   pull_request:
-    branches: [none]
+    branches: ["*"]
 
 jobs:
   test:
     runs-on: macos-latest
     steps:
-      - name: Swift
-        uses: fwal/setup-swift@v1
-      - name: Print Swift Version
-        run: swift --version
+      # - name: Swift
+      #   uses: fwal/setup-swift@v1
+      # - name: Print Swift Version
+      #   run: swift --version
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
-        run: swift build -v
+        run: xcodebuild build -scheme Substate
       - name: Test
-        run: swift test -v
+        run: xcodebuild test -scheme Substate
