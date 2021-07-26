@@ -8,8 +8,8 @@ on:
     branches: ["*"]
 
 jobs:
-  test-counter-macos:
-    runs-on: macos-11
+  test-substate-macos-10.15:
+    runs-on: macos-latest
     steps:
       # - name: Swift
       #   uses: fwal/setup-swift@v1
@@ -18,7 +18,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Test
-        run: xcodebuild test -scheme 'Counter (macOS)' -destination 'platform=macOS' | xcpretty
+        run: xcodebuild test -scheme Substate -destination 'platform=macOS,OS=1.15' | xcpretty
+  test-counter-ios-14.0:
+    runs-on: macos-latest
+    steps:
+      # - name: Swift
+      #   uses: fwal/setup-swift@v1
+      # - name: Print Swift Version
+      #  run: swift --version
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test
+        run: xcodebuild test -scheme 'Counter (iOS)' -destination 'platform=iOS Simulator,OS=14.0,name=iPhone 12 mini' | xcpretty
   # test-substate-ios:
   #   runs-on: macos-latest
   #   steps:
