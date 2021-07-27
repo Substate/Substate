@@ -56,12 +56,17 @@ final class ModelSaverTests: XCTestCase {
         // TODO: Some middleware to help us test more easily
         // eg. TestMiddleware().expectation(for: ModelSaver.SaveDidSucceed.self)
         // eg. TestMiddleware().expectation(for: ModelSaver.SaveDidSucceed(value: 123))
+        // eg. TestMiddleware().expectation(notSeen: ModelSaver.SaveDidFail.self)
 
         wait(for: [saveCallbackExpectation], timeout: 1)
     }
 
 //    func testFailingModelSave() throws {
-//        // ...
+//
+//    }
+
+//    func testFilesystemRoundtrip() throws {
+//
 //    }
 
 }
