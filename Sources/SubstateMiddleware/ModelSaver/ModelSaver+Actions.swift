@@ -14,11 +14,9 @@ extension ModelSaver {
     }
 
     public struct LoadDidSucceed: Action {
-        public let type: Model.Type
         public let model: Model
 
-        public init(for type: Model.Type, model: Model) {
-            self.type = type
+        public init(with model: Model) {
             self.model = model
         }
     }

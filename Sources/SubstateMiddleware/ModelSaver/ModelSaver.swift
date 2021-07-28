@@ -97,7 +97,7 @@ public class ModelSaver: Middleware {
             } receiveValue: { model in
                 let t = Swift.type(of: model)
                 if t == type {
-                    store.update(LoadDidSucceed(for: type, model: model))
+                    store.update(LoadDidSucceed(with: model))
                 } else {
                     store.update(LoadDidFail(for: type, with: .wrongModelTypeReturned))
                 }

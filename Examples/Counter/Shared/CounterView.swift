@@ -17,8 +17,6 @@ struct CounterView: View {
         VStack(spacing: 24) {
             Text(String(counter.value))
 
-            Button("Save", action: { update(ModelSaver.Save(Counter.self)) })
-
             HStack {
                 Button(action: update(Counter.Decrement())) {
                     Image(systemName: "minus.circle.fill")
@@ -42,6 +40,9 @@ struct CounterView: View {
                 .disabled(!counter.canIncrement)
             }
             .buttonStyle(PlainButtonStyle())
+
+            Button("Save", action: { update(ModelSaver.Save(Counter.self)) })
+                .font(.body)
         }
         .font(font)
         .padding()
