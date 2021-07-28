@@ -40,9 +40,6 @@ struct CounterView: View {
                 .disabled(!counter.canIncrement)
             }
             .buttonStyle(PlainButtonStyle())
-
-            Button("Save", action: { update(ModelSaver.Save(Counter.self)) })
-                .font(.body)
         }
         .font(font)
         .padding()
