@@ -1,6 +1,7 @@
 import Substate
+import SubstateMiddleware
 
-struct Counter: Model {
+struct Counter: Model, SavedModel {
 
     var value = 0
 
@@ -23,6 +24,9 @@ struct Counter: Model {
 
         case is Decrement:
             if canDecrement { value -= 1 }
+
+        case let action as ModelSaver.LoadDidSucceed:
+            if let model = action.model as? Self { self = model }
 
         default: ()
         }

@@ -2,16 +2,16 @@ import Foundation
 
 /// A type designating a model which can be saved.
 ///
-/// - Default implementations of all requirements are provided for `Codable` models.
+/// - Default implementations of all requirements are provided.
 ///
 /// ```swift
-/// struct Counter: Model, SavedModel, Codable {
+/// struct Counter: Model, SavedModel {
 ///     var value = 0
 ///     mutating func update(action: Action) { ... }
 /// }
 /// ```
 ///
-public protocol SavedModel {
+public protocol SavedModel: Codable {
 
     typealias ID = String
 
@@ -25,18 +25,6 @@ public protocol SavedModel {
 
     /// Initialise this model from a binary representation.
     ///
-    init?(from data: Data)
-
-}
-
-public extension SavedModel {
-
-    /// Default implementation of ID which uses the type name.
-    ///
-    /// - TODO: Sanitise some cases where String(describing:) produces junk strings
-    ///
-    static var id: String {
-        String(describing: self)
-    }
+    init(from data: Data) throws
 
 }

@@ -4,18 +4,71 @@ import Substate
 
 extension ModelSaver {
 
+    /// Configuration options for ModelSaver.
+    ///
+    /// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+    /// ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+    /// laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in.
+    ///
+    /// ```swift
+    /// // Override the save strategy
+    /// let configuration = ModelSaver.Configuration(saveStrategy: .debounced(5))
+    /// ```
+    ///
+    /// ```swift
+    /// // Provide a custom function for loading models remotely
+    /// let configuration = ModelSaver.Configuration(load: { id in
+    ///     Just(id)
+    ///         .flatMap { CloudService.fetch(id: id) }
+    ///         .mapError { error in ModelSaver.LoadError.other($0) }
+    ///         .receive(on: DispatchQueue.main }
+    ///         .eraseToAnyPublisher()
+    /// })
+    /// ```
+    ///
+    /// ```swift
+    /// // Create a new ModelSaver with a custom configuration
+    /// let saver = ModelSaver(configuration: .init(saveStrategy: .debounced(5)))
+    /// ```
+    ///
+    /// - TODO: Caching filter to avoid saving models that didn’t change since they were last saved?
+    ///
     public struct Configuration: Model {
 
-        public var save: SaveFunction = defaultSaveFunction
-        public var load: LoadFunction = defaultLoadFunction
-
-        var loadAllOnInit = false
-        var saveTimeStrategy: SaveStrategy = .debounced(5)
+        // MARK: - Initialisation
 
         public init() {}
 
-        public typealias SaveFunction = (SavedModel) -> AnyPublisher<Void, Error>
-        public typealias LoadFunction = (SavedModel.ID) -> AnyPublisher<Data, Error>
+        public init(
+            load: @escaping LoadFunction = initial.load,
+            save: @escaping SaveFunction = initial.save,
+            loadStrategy: LoadStrategy = initial.loadStrategy,
+            saveStrategy: SaveStrategy = initial.saveStrategy) {
+            self.load = load
+            self.save = save
+            self.loadStrategy = loadStrategy
+            self.saveStrategy = saveStrategy
+        }
+
+        public static let initial = Configuration()
+
+        // MARK: - Members
+
+        public var load: LoadFunction = defaultLoadFunction
+        public var save: SaveFunction = defaultSaveFunction
+
+        public var loadStrategy: LoadStrategy = .automatic
+        public var saveStrategy: SaveStrategy = .debounced(5)
+
+        // MARK: - Types
+
+        public typealias LoadFunction = (SavedModel.Type) -> AnyPublisher<Model, LoadError>
+        public typealias SaveFunction = (SavedModel) -> AnyPublisher<Void, SaveError>
+
+        public enum LoadStrategy {
+            case manual
+            case automatic
+        }
 
         public enum SaveStrategy {
             case manual
@@ -24,14 +77,15 @@ extension ModelSaver {
             case throttled(TimeInterval)
         }
 
+        // MARK: - Update
+
         public struct Update: Action {
             let value: Configuration
+
             public init(value: Configuration) {
                 self.value = value
             }
         }
-
-        public static let initial = Configuration()
 
         mutating public func update(action: Action) {
             if let action = action as? Update {
@@ -40,55 +94,5 @@ extension ModelSaver {
         }
 
     }
-
-}
-
-extension ModelSaver.Configuration {
-
-    // MARK: - Default Save & Load Implementation
-
-    private static func defaultSaveFunction(model: SavedModel) -> AnyPublisher<Void, Error> {
-        print("DEFAULT SAVE FN CALLED")
-
-        do { try manager.createDirectory(at: folder, withIntermediateDirectories: true) } catch let error {
-            return Fail(error: ModelSaver.SaveError.folderCouldNotBeCreated(error))
-                .eraseToAnyPublisher()
-        }
-
-        guard let data = model.data else {
-            return Fail(error: ModelSaver.SaveError.noDataProduced)
-                .eraseToAnyPublisher()
-        }
-
-        return Just((data, url(for: model)))
-            .tryMap { data, url in
-                try data.write(to: url)
-            }
-            .mapError { error in
-                ModelSaver.SaveError.unknown(error)
-            }
-            .eraseToAnyPublisher()
-    }
-
-    private static func defaultLoadFunction(id: SavedModel.ID) -> AnyPublisher<Data, Error> {
-        print("DEFAULT LOAD FN CALLED")
-        return Just(Data()).setFailureType(to: Error.self).eraseToAnyPublisher()
-    }
-
-    private static func url(for model: SavedModel) -> URL {
-        folder.appendingPathComponent(name(for: model))
-    }
-
-    private static func name(for model: SavedModel) -> String {
-        String(describing: type(of: model)) + ".json"
-    }
-
-    private static var folder: URL {
-        manager
-            .urls(for: .documentDirectory, in: .userDomainMask).first!
-            .appendingPathComponent("Substate")
-    }
-
-    private static var manager: FileManager { .default }
 
 }

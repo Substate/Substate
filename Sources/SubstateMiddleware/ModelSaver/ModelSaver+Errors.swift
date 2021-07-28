@@ -3,7 +3,12 @@
 extension ModelSaver {
 
     public enum LoadError: Error {
-        case fileNotRead
+        case fileNotRead(Error)
+        case modelNotDecoded(Error)
+        case modelIsNotAModel
+        case modelIsNotASavedModel
+        case wrongModelTypeReturned
+        case other(Error)
     }
 
     public enum SaveError: Error {
@@ -11,7 +16,7 @@ extension ModelSaver {
         case modelIsNotASavedModel
         case noDataProduced
         case folderCouldNotBeCreated(Error)
-        case unknown(Error)
+        case other(Error)
     }
 
 }
