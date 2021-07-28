@@ -1,5 +1,7 @@
 import Substate
 
+/// Log models to the standard output after updates.
+///
 public class ModelLogger: Middleware {
 
     private let filter: Bool

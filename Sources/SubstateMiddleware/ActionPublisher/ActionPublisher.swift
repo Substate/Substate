@@ -9,7 +9,7 @@ public class ActionPublisher: Middleware {
     private var subscriptions: [AnyCancellable] = []
 
     public let model: Model? = nil
-    
+
     public func setup(store: Store) {}
 
     public func update(store: Store) -> (@escaping Update) -> Update {

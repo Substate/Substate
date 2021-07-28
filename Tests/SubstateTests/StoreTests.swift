@@ -97,6 +97,20 @@ final class StoreTests: XCTestCase {
         XCTAssertEqual(store.find(SubCounter.self)?.value, 1)
     }
 
+    func testReplaceAction() throws {
+        let store = Store(model: Counter(value: 123))
+
+        store.update(Store.Replace(model: Counter(value: 456)))
+        XCTAssertEqual(store.find(Counter.self)?.value, 456)
+        // Double-check child model state was not changed
+        XCTAssertEqual(store.find(SubCounter.self)?.value, 0)
+
+        store.update(Store.Replace(model: SubCounter(value: 789)))
+        XCTAssertEqual(store.find(SubCounter.self)?.value, 789)
+        // Double-check parent model state was not changed
+        XCTAssertEqual(store.find(Counter.self)?.value, 456)
+    }
+
 //    Full recursion is not yet implemented!
 //    func testDeeplyNestedChildActionDispatch() throws {
 //        let store = Store(model: Counter())

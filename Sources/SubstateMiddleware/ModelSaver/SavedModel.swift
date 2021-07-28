@@ -1,23 +1,11 @@
 import Foundation
 
-/// A type designating a model which can be saved.
+/// A model which can be saved to persistent storage.
 ///
-/// - Default implementations of all requirements are provided.
-///
-/// ```swift
-/// struct Counter: Model, SavedModel {
-///     var value = 0
-///     mutating func update(action: Action) { ... }
-/// }
-/// ```
+/// - Default implementations of all requirements are provided. They use JSONEncoder/JSONDecoder
+/// - Ideally we’d just use codable directly and get rid of these methods but I can’t figure out how to pass the desired type into JSONDecoder.decode() using a variable containing the type.
 ///
 public protocol SavedModel: Codable {
-
-    typealias ID = String
-
-    /// An identifier unique to this model type.
-    ///
-    static var id: ID { get }
 
     /// A binary representation of this model for saving.
     ///

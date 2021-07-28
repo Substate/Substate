@@ -1,6 +1,8 @@
 import Foundation
 import Runtime
 
+/// Stores all models and allows them to be mutated by actions.
+///
 public class Store: ObservableObject {
 
     // TODO: Since we’re dogfooding our own state management system here right in the store,
@@ -16,10 +18,12 @@ public class Store: ObservableObject {
     // Don’t really need this to be published, can handle the single objectWillChange() call manually?
     @Published private var model: InternalModel
     private let middleware: [Middleware]
-    private var updateFunction: Update!
+    private var updateFunction: Middleware.Update!
 
     // TODO: Provide a publisher/AsyncSequence for easy subscription to model changes
 
+    /// Create a store with an initial root model, and any required middleware.
+    ///
     public init(model: Model, middleware: [Middleware] = []) {
         self.model = InternalModel(
             middlewareModels: middleware.compactMap(\.model),
@@ -88,9 +92,20 @@ public class Store: ObservableObject {
         for (index, child) in mirror.children.enumerated() {
             if let childValue = child.value as? Model {
 
+                var replacedChildValue = childValue
+
                 // Try and mutate the member
 
-                let reducedChildValue = reduce(model: childValue, action: action)
+                // First action any Replace action on this model
+                if let action = action as? Store.Replace {
+                    let newModel = action.model
+                    if type(of: newModel) == type(of: childValue) {
+                        replacedChildValue = newModel
+                    }
+                }
+
+                // Then follow reduce as usual, to ensure Replace is actioned on any relevant children
+                let reducedChildValue = reduce(model: replacedChildValue, action: action)
 
                 if var model = model as? [Model] {
                     // Child is a collection member; set by index

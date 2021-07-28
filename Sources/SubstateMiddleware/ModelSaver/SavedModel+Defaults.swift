@@ -2,14 +2,6 @@ import Foundation
 
 public extension SavedModel {
 
-    /// Default implementation of ID which uses the type name.
-    ///
-    /// - TODO: Sanitise some cases where String(describing:) produces junk strings
-    ///
-    static var id: String {
-        String(describing: self)
-    }
-
     /// Default implementation of `data` getter.
     ///
     /// - Uses JSON

@@ -5,6 +5,8 @@ extension ModelSaver {
 
     // MARK: - Loading
 
+    /// Load a model from persistent storage.
+    ///
     public struct Load: Action {
         public let type: Model.Type
 
@@ -13,6 +15,8 @@ extension ModelSaver {
         }
     }
 
+    /// Loading a model from persistent storage succeeded.
+    ///
     public struct LoadDidSucceed: Action {
         public let model: Model
 
@@ -21,6 +25,8 @@ extension ModelSaver {
         }
     }
 
+    /// Loading a model from persistent storage failed.
+    ///
     public struct LoadDidFail: Action {
         public let type: Model.Type
         public let error: LoadError
@@ -31,12 +37,16 @@ extension ModelSaver {
         }
     }
 
+    /// Load all `SavedModel`s from persistent storage.
+    ///
     public struct LoadAll: Action {
         public init() {}
     }
 
     // MARK: - Saving
 
+    /// Save a model to persistent storage.
+    ///
     public struct Save: Action {
         public let type: Model.Type
 
@@ -45,6 +55,8 @@ extension ModelSaver {
         }
     }
 
+    /// Saving a model to persistent storage succeeded.
+    ///
     public struct SaveDidSucceed: Action {
         public let type: Model.Type
 
@@ -53,6 +65,8 @@ extension ModelSaver {
         }
     }
 
+    /// Saving a model to persistent storage failed.
+    ///
     public struct SaveDidFail: Action, Error {
         public let type: Model.Type
         public let error: SaveError
@@ -63,6 +77,8 @@ extension ModelSaver {
         }
     }
 
+    /// Save all `SavedModel`s to persistent storage.
+    /// 
     public struct SaveAll: Action {
         public init() {}
     }

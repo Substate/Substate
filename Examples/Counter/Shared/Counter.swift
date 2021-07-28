@@ -25,9 +25,6 @@ struct Counter: Model, SavedModel {
         case is Decrement:
             if canDecrement { value -= 1 }
 
-        case let action as ModelSaver.LoadDidSucceed:
-            if let model = action.model as? Self { self = model }
-
         default: ()
         }
     }

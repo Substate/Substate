@@ -2,33 +2,7 @@ import Foundation
 import Combine
 import Substate
 
-/// Save and load models via disk or network.
-///
-/// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-/// labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-/// nisi ut aliquip ex ea commodo consequat.
-///
-/// ```swift
-/// let store = Store(model: Counter(), middleware: [ModelSaver()])
-/// // - Substate.Action: SubstateMiddleware.ModelSaver.LoadAll
-///
-/// store.update(Counter.Increment())
-/// // - Substate.Action: Example.Counter.Increment
-///
-/// store.update(ModelSaver.Save(Counter.self))
-/// // - Substate.Action: SubstateMiddleware.ModelSaver.Save
-/// // - Substate.Action: SubstateMiddleware.ModelSaver.SaveDidSucceed
-/// ```
-///
-/// ## Customising Load & Save Behaviour
-///
-/// Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-/// pariatur. Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt
-/// mollit anim id est laborum.
-///
-/// ```swift
-/// let saver = ModelSaver(configuration: .init(saveStrategy: .debounce(5)))
-/// ```
+/// Save and load models to persistent storage.
 ///
 public class ModelSaver: Middleware {
 
@@ -36,9 +10,40 @@ public class ModelSaver: Middleware {
 
     private var subscriptions: [AnyCancellable] = []
 
+    private let actionSubject = PassthroughSubject<Action, Never>()
+    private var saveTrigger: AnyPublisher<Void, Never>
+    private var storeCache: Store? // TODO: How can we get around this? It sucks to keep a reference to the store!
+
+    /// Create a new `ModelSaver` with the given configuration.
+    ///
     public init(configuration: Configuration = .initial) {
         self.model = configuration
         print(NSHomeDirectory())
+
+        // TODO: Factor out this setup and be able to redo it cleanly if configuration is updated
+        switch configuration.saveStrategy {
+        case .manual:
+            saveTrigger = Empty().eraseToAnyPublisher()
+        case .periodic(let interval):
+            saveTrigger = Timer.publish(every: interval, on: RunLoop.main, in: .common)
+                .autoconnect()
+                .map { _ in }
+                .eraseToAnyPublisher()
+        case .debounced(let interval):
+            saveTrigger = actionSubject
+                .debounce(for: .seconds(interval), scheduler: RunLoop.main)
+                .map { _ in }
+                .eraseToAnyPublisher()
+        case .throttled(let interval):
+            saveTrigger = actionSubject
+                .throttle(for: .seconds(interval), scheduler: RunLoop.main, latest: true)
+                .map { _ in }
+                .eraseToAnyPublisher()
+        }
+
+        saveTrigger
+            .sink { self.storeCache?.update(SaveAll()) }
+            .store(in: &subscriptions)
     }
 
     // MARK: - Middleware API
@@ -46,6 +51,7 @@ public class ModelSaver: Middleware {
     public var model: Model?
 
     public func setup(store: Store) {
+        storeCache = store // Ugh...
         let configuration = store.find(Configuration.self)!
 
         if configuration.loadStrategy == .automatic {
@@ -55,16 +61,24 @@ public class ModelSaver: Middleware {
 
     public func update(store: Store) -> (@escaping Update) -> Update {
         { next in
-            { action in
+            { [self] action in
                 switch action {
-                case let action as Load: self.load(type: action.type, using: store)
-                case let action as Save: self.save(type: action.type, using: store)
-                case is LoadAll: self.loadAll(using: store)
-                case is SaveAll: self.saveAll(using: store)
-                default: ()
+                case let action as Load: load(type: action.type, using: store)
+                case let action as Save: save(type: action.type, using: store)
+                case is LoadAll: loadAll(using: store)
+                case is SaveAll: saveAll(using: store)
+
+                case is LoadDidSucceed, is LoadDidFail: ()
+                case is SaveDidSucceed, is SaveDidFail: ()
+
+                // TODO: Handle any setup needed after a configuration update.
+                // NOTE: Would need to let the middleware chain complete to get new config value
+                default:
+                    actionSubject.send(action)
                 }
 
                 next(action)
+
             }
         }
 
@@ -98,6 +112,9 @@ public class ModelSaver: Middleware {
                 let t = Swift.type(of: model)
                 if t == type {
                     store.update(LoadDidSucceed(with: model))
+                    if configuration.updateStrategy == .automatic {
+                        store.update(Store.Replace(model: model))
+                    }
                 } else {
                     store.update(LoadDidFail(for: type, with: .wrongModelTypeReturned))
                 }

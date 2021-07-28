@@ -1,5 +1,7 @@
 import Substate
 
+/// Log actions to the standard output.
+///
 public class ActionLogger: Middleware {
 
     private let filter: Bool
