@@ -6,7 +6,14 @@ Substate is a state management library for Swift.
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
+## Toolkit
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+
+![Mac App Screenshot](MacAppScreenshot)
+
 > Note: At present, Substate is developed for and tested using iOS 14+ and macOS 11+. Greater platform and version support is planned pending more work on the CI setup.
+
 
 ## Topics
 

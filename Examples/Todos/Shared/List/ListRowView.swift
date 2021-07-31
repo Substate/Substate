@@ -1,8 +1,11 @@
 import SwiftUI
+import SubstateUI
 
 struct ListRowView: View {
 
     let task: Task
+
+    let onTap: (UUID) -> Void
     let onDelete: (UUID) -> Void
 
     var body: some View {
@@ -22,6 +25,7 @@ struct ListRowView: View {
             }
         }
         .padding(.vertical, 4)
+        .onTapGesture { onTap(task.id) }
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button(role: .destructive, action: { onDelete(task.id) }) {
                 Label("Delete", systemImage: "trash.fill")
@@ -36,9 +40,9 @@ struct ListRowViewPreviews: PreviewProvider {
 
     static var previews: some View {
         List {
-            ListRowView(task: .sample1, onDelete: { _ in })
-//            ListRowView(task: .sample2, onDelete: { _ in })
-//            ListRowView(task: .sample3, onDelete: { _ in })
+            ListRowView(task: .sample1, onTap: { _ in }, onDelete: { _ in })
+            // ListRowView(task: .sample2, onDelete: { _ in })
+            // ListRowView(task: .sample3, onDelete: { _ in })
         }
         .previewLayout(.sizeThatFits)
     }

@@ -3,12 +3,32 @@ import SubstateUI
 
 struct TitlebarView: View {
 
+    @Update var update
+
     @Model var model: TitlebarViewModel
+    // @ModelBinding(\TitlebarViewModel.filter.category, { Filter.Update(category: $0) }) var $category
+
+    var categoryBinding: Binding<Filter.Category> {
+        .init(
+            get: { model.filter.category },
+            set: { update(Filter.Update(category: $0)) }
+        )
+    }
 
     var body: some View {
-        HStack {
+        ZStack {
+            Picker("Filter", selection: categoryBinding) {
+                ForEach(Filter.Category.allCases, id: \.self) { category in
+                    Text(String(describing: category).capitalized)
+                        .tag(category)
+                }
+            }
+            .pickerStyle(.menu)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
             Text(model.title)
                 .font(.system(.headline, design: .rounded))
+                .frame(width: 100)
         }
         .padding()
         .frame(maxWidth: .infinity)

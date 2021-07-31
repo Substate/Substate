@@ -8,6 +8,9 @@
       location = "group:Examples/Todos/Todos.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:Examples/Inspector/Inspector.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:">
    </FileRef>
 </Workspace>

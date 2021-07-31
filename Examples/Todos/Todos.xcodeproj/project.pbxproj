@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3716C81B26B2308D005B9ACA /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBE026AB84EF001BEE76 /* ListRowView.swift */; };
 		3763BB8226AA1E99001BEE76 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BB8126AA1E99001BEE76 /* Tests_iOS.swift */; };
 		3763BB8C26AA1E99001BEE76 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BB8B26AA1E99001BEE76 /* Tests_macOS.swift */; };
 		3763BB8D26AA1E99001BEE76 /* TodosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BB6B26AA1E98001BEE76 /* TodosApp.swift */; };
@@ -40,6 +41,8 @@
 		3763BBDE26AB8350001BEE76 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC226AA4090001BEE76 /* ToolbarView.swift */; };
 		3763BBDF26AB8353001BEE76 /* ToolbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC426AA409D001BEE76 /* ToolbarViewModel.swift */; };
 		3763BBE126AB84EF001BEE76 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBE026AB84EF001BEE76 /* ListRowView.swift */; };
+		376FEA6426B36A23004BD597 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376FEA6326B36A23004BD597 /* Filter.swift */; };
+		376FEA6526B36A23004BD597 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376FEA6326B36A23004BD597 /* Filter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +82,7 @@
 		3763BBD226AAB8F1001BEE76 /* TitlebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitlebarView.swift; sourceTree = "<group>"; };
 		3763BBD526AAB909001BEE76 /* TitlebarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitlebarViewModel.swift; sourceTree = "<group>"; };
 		3763BBE026AB84EF001BEE76 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
+		376FEA6326B36A23004BD597 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +140,7 @@
 				3763BB6B26AA1E98001BEE76 /* TodosApp.swift */,
 				3763BBD026AAB805001BEE76 /* TodosAppView.swift */,
 				3763BBBF26AA3B04001BEE76 /* TodosAppModel.swift */,
-				3763BBCB26AA4109001BEE76 /* Task */,
+				376FEA6226B369B5004BD597 /* Models */,
 				3763BBBE26AA3AE8001BEE76 /* List */,
 				3763BBD426AAB8F4001BEE76 /* Titlebar */,
 				3763BBC126AA4086001BEE76 /* Toolbar */,
@@ -198,15 +202,6 @@
 			path = Toolbar;
 			sourceTree = "<group>";
 		};
-		3763BBCB26AA4109001BEE76 /* Task */ = {
-			isa = PBXGroup;
-			children = (
-				3763BBCC26AA4117001BEE76 /* Task.swift */,
-				3763BBCE26AA411F001BEE76 /* TaskList.swift */,
-			);
-			path = Task;
-			sourceTree = "<group>";
-		};
 		3763BBD426AAB8F4001BEE76 /* Titlebar */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +209,16 @@
 				3763BBD526AAB909001BEE76 /* TitlebarViewModel.swift */,
 			);
 			path = Titlebar;
+			sourceTree = "<group>";
+		};
+		376FEA6226B369B5004BD597 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3763BBCC26AA4117001BEE76 /* Task.swift */,
+				3763BBCE26AA411F001BEE76 /* TaskList.swift */,
+				376FEA6326B36A23004BD597 /* Filter.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -394,6 +399,7 @@
 				3763BBCF26AA411F001BEE76 /* TaskList.swift in Sources */,
 				3763BB8D26AA1E99001BEE76 /* TodosApp.swift in Sources */,
 				3763BBC326AA4090001BEE76 /* ToolbarView.swift in Sources */,
+				376FEA6426B36A23004BD597 /* Filter.swift in Sources */,
 				3763BBC026AA3B04001BEE76 /* TodosAppModel.swift in Sources */,
 				3763BBE126AB84EF001BEE76 /* ListRowView.swift in Sources */,
 			);
@@ -413,7 +419,9 @@
 				3763BBDC26AB834B001BEE76 /* ListViewModel.swift in Sources */,
 				3763BBD826AB832B001BEE76 /* TitlebarView.swift in Sources */,
 				3763BBDF26AB8353001BEE76 /* ToolbarViewModel.swift in Sources */,
+				376FEA6526B36A23004BD597 /* Filter.swift in Sources */,
 				3763BBDD26AB834E001BEE76 /* TitlebarViewModel.swift in Sources */,
+				3716C81B26B2308D005B9ACA /* ListRowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

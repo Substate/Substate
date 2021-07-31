@@ -1,6 +1,7 @@
 import Substate
 
 struct ToolbarViewModel: Model {
+
     var step: Step = .idle
 
     enum Step {
@@ -46,6 +47,33 @@ struct ToolbarViewModel: Model {
         default: ()
         }
     }
+
+//    var updates: some Updates {
+//        AddButtonWasPressed.update {
+//            step = .adding("")
+//        }
+//
+//        AddButtonWasPressed
+//            .map(Step.adding(""))
+//            .update(\.step)
+//
+//        AddBodyDidChange
+//            .map(\.body)
+//            .map(Step.adding)
+//            .update(\.step)
+//
+//        AddBodyDidChange
+//            .update { step = .adding($0.body) }
+//
+//        AddWasCommitted
+//            .map(Step.idle)
+//            .update(\.step)
+//
+//        SearchButtonWasPressed
+//            .map(Step.searching(""))
+//            .assign(to: &step)
+//    }
+
 }
 
 extension ToolbarViewModel {

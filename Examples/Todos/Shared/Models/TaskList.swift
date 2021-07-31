@@ -3,7 +3,24 @@ import Substate
 
 struct TaskList: Model {
 
-    var all: [Task] = []
+    var filter = Todos.Filter()
+
+    var all: [Task] = [.sample1, .sample2, .sample3]
+
+    var filteredTasks: [Task] {
+        all.filter {
+            switch filter.category {
+            case .all: return true
+            case .upcoming: return !$0.completed
+            case .completed: return $0.completed
+            case .deleted: return false
+            }
+        }
+    }
+
+    var filteredTaskCount: Int {
+        filteredTasks.count
+    }
 
     struct Create: Action {
         let body: String
@@ -16,6 +33,17 @@ struct TaskList: Model {
 
     struct Delete: Action {
         let id: UUID
+    }
+
+    struct Toggle: Action {
+        let id: UUID
+    }
+
+    // Just for testing, but could move more to something like this, where the tasklist keeps its
+    // own filter state as a plain value and reacts a filter action that is passed in, triggered
+    // from some view somewhere and passing through a 'transformer'
+    struct Filter: Action {
+        let filter: Todos.Filter
     }
 
     mutating func update(action: Action) {
@@ -31,6 +59,11 @@ struct TaskList: Model {
 
         case let action as Delete:
             all.removeAll { $0.id == action.id }
+
+        case let action as Toggle:
+            all.firstIndex(where: { $0.id == action.id }).map { index in
+                all[index].completed.toggle()
+            }
 
         default: ()
         }
