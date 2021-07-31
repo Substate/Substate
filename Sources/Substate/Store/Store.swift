@@ -47,8 +47,25 @@ public class Store: ObservableObject {
 
     public func update(_ action: Action) {
         precondition(Thread.isMainThread, "Update must be called on the main thread!")
+        if isUpdating {
+            queue.append(action)
+            return
+        }
+
+        // This is kind of basic but it works given we’re requiring calling update on the
+        // main thread. Should we be using an atomic instead of a Bool to avoid deadlocks?
+        // Is there a more elegant factoring of this lock/queue routine?
+        isUpdating = true
         updateFunction(action)
+        isUpdating = false
+
+        if !queue.isEmpty {
+            self.update(queue.removeFirst())
+        }
     }
+
+    var isUpdating = false
+    var queue: [Action] = []
 
     private func performUpdate(action: Action) {
         precondition(Thread.isMainThread, "Update must be called on the main thread!")
@@ -89,6 +106,7 @@ public class Store: ObservableObject {
         // TODO: Factor out this helper, it’s complex and needs its own tests.
 
         let mirror = Mirror(reflecting: model)
+
         for (index, child) in mirror.children.enumerated() {
             if let childValue = child.value as? Model {
 
@@ -107,9 +125,12 @@ public class Store: ObservableObject {
                 // Then follow reduce as usual, to ensure Replace is actioned on any relevant children
                 let reducedChildValue = reduce(model: replacedChildValue, action: action)
 
-                if var model = model as? [Model] {
+                if var m1 = model as? [Model] {
                     // Child is a collection member; set by index
-                    model[index] = reducedChildValue
+                    m1[index] = reducedChildValue
+                    if let m2 = m1 as? ModelType {
+                        model = m2
+                    }
                 } else {
                     // Child is a property; set by mirror label
                     let info = try! typeInfo(of: type(of: model as Any))

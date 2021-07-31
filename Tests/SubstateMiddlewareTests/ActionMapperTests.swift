@@ -8,7 +8,7 @@ final class ActionMapperTests: XCTestCase {
     struct Action1: Action {}
     struct Action2: Action {}
     struct Action3: Action { let value: Int }
-    struct Action4: Action { let value: Int }
+    struct Action4: Action { let value: Int; init(action: Action3) { value = action.value } }
     struct Action5: Action { let model: Model }
     struct Action6: Action { let action: Action3; let model: Model }
     struct Action7: Action { let action: Action3; let value: Int }
@@ -21,12 +21,12 @@ final class ActionMapperTests: XCTestCase {
         let mapper = ActionMapper {
 
             // Forward one empty action to another’s init
-            Action1.map(to: Action2.init)
-//            // Forward an empty action to a constant action
+//            Action1.map(to: Action2.init)
+            // Forward an empty action to a constant action
 //            Action1.map(to: Action3(value: 123))
 //
 //            // Forward an action with a value to another’s init
-//            Action3.map(to: Action4.init(value:))
+//            Action3.map(to: Action4.init(action:))
 //            // Forward an action with a value to another using a closure
 //            Action3.map { Action4(value: $0.value) }
 //
@@ -78,8 +78,10 @@ final class ActionMapperTests: XCTestCase {
 
 
         let store = Store(model: Model1(), middleware: [ActionLogger(), mapper])
+
         store.update(Action1())
-        store.update(Action2())
+
+        store.update(Action3(value: 33))
 
 
 
