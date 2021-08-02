@@ -16,6 +16,7 @@ extension ActionLogger {
     ///
     /// TODO: Different naming for these internal states? It’s confusing. The word 'state' is
     /// everywhere!
+    /// TODO: This is fixed, it’s now 'model' and TODO rename this to 'Configuration'
     ///
     public struct Model: Substate.Model {
         public var isActive = false

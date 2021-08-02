@@ -40,7 +40,11 @@ public class Store: ObservableObject {
                 return middleware.update(store: self)(update)
             })
 
+        self.update(Start())
+        self.update(Setup())
         self.middleware.forEach { $0.setup(store: self) }
+        self.update(SetupDidComplete())
+
         // TODO: Build up a list of substate type -> path segment mappings
         // Then at runtime use Mirror.descendant(a, b, c) to grab the value, rather than iterating every time
     }
@@ -79,6 +83,13 @@ public class Store: ObservableObject {
     public func find<ModelType:Model>(_ type: ModelType.Type) -> ModelType? {
         // TODO: Don’t do this search every time, cache in init!
         flatten(object: model).first(where: { $0 is ModelType }) as? ModelType
+    }
+
+    public func uncheckedFind(_ modelType: Model.Type) -> Model? {
+        // Is there some way to avoid needing this version of find?
+        // In cases where we don’t have the model type statically, can we still somehow
+        // call the generic find<>?
+        flatten(object: model).first(where: { type(of: $0) == modelType }) as? Model
     }
 
     // TODO: Better naming

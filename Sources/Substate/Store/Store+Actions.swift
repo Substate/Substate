@@ -1,6 +1,23 @@
 extension Store {
 
-    /// Directly replace all models of the same type as the one provided with its value.
+    /// Notification that the store will start.
+    ///
+    public struct Start: Action {}
+
+    /// Notification that the store will begin its setup phase.
+    ///
+    /// The setup phase is where all middleware is initialised, so middleware may begin generating
+    /// actions from this point.
+    ///
+    public struct Setup: Action {}
+
+    /// Notification that the setup phase has completed.
+    ///
+    /// Anything relying on middleware being up and running should catch this action.
+    ///
+    public struct SetupDidComplete: Action {}
+
+    /// Directly replace all models of type provided with the given value.
     ///
     /// This action is provided as an escape hatch when direct mutation of models is unavoidable. It
     /// is intended to be used sparingly, for example in the `ModelSaver` middleware to

@@ -1,50 +1,52 @@
 import Foundation
 import Substate
+import SubstateMiddleware
 
-struct TaskList: Model {
+struct TaskList: Model, SavedModel {
 
-    var filter = Todos.Filter()
+    var all: [Task] = []
 
-    var all: [Task] = [.sample1, .sample2, .sample3]
+//    var filteredTasks: [Task] {
+//        all.filter {
+//            switch filter.category {
+//            case .all: return true
+//            case .upcoming: return !$0.completed
+//            case .completed: return $0.completed
+//            case .deleted: return false
+//            }
+//        }
+//    }
 
-    var filteredTasks: [Task] {
-        all.filter {
-            switch filter.category {
-            case .all: return true
-            case .upcoming: return !$0.completed
-            case .completed: return $0.completed
-            case .deleted: return false
-            }
-        }
-    }
+//    var filteredTaskCount: Int {
+//        filteredTasks.count
+//    }
 
-    var filteredTaskCount: Int {
-        filteredTasks.count
-    }
-
-    struct Create: Action {
+    struct Create: Action, FollowupAction {
         let body: String
+
+        let followup: Action = Changed()
     }
 
-    struct Update: Action {
+    struct Update: Action, FollowupAction {
         let id: UUID
         let body: String
+
+        let followup: Action = Changed()
     }
 
-    struct Delete: Action {
+    struct Delete: Action, FollowupAction {
         let id: UUID
+
+        let followup: Action = Changed()
     }
 
-    struct Toggle: Action {
+    struct Toggle: Action, FollowupAction {
         let id: UUID
+
+        let followup: Action = Changed()
     }
 
-    // Just for testing, but could move more to something like this, where the tasklist keeps its
-    // own filter state as a plain value and reacts a filter action that is passed in, triggered
-    // from some view somewhere and passing through a 'transformer'
-    struct Filter: Action {
-        let filter: Todos.Filter
-    }
+    struct Changed: Action {}
 
     mutating func update(action: Action) {
         switch action {

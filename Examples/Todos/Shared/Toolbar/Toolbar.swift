@@ -1,11 +1,18 @@
 import Substate
 
-struct ToolbarViewModel: Model {
+struct Toolbar: Model {
 
     var step: Step = .idle
 
     enum Step {
         case idle, adding(String), searching(String)
+    }
+
+    var newTaskBody: String? {
+        switch step {
+        case .adding(let body): return body
+        default: return nil
+        }
     }
 
     var canSaveAddedTask: Bool {
@@ -17,10 +24,10 @@ struct ToolbarViewModel: Model {
     }
 
     struct AddButtonWasPressed: Action {}
+    struct SaveButtonWasPressed: Action {}
+    struct Reset: Action {}
+
     struct AddBodyDidChange: Action {
-        let body: String
-    }
-    struct AddWasCommitted: Action {
         let body: String
     }
 
@@ -35,14 +42,17 @@ struct ToolbarViewModel: Model {
         case is AddButtonWasPressed:
             step = .adding("")
 
+        case is SaveButtonWasPressed:
+            () // step = .idle
+
         case let action as AddBodyDidChange:
             step = .adding(action.body.trimmingCharacters(in: .whitespacesAndNewlines))
 
-        case is AddWasCommitted:
-            step = .idle
-
         case is SearchButtonWasPressed:
             step = .searching("")
+
+        case is Reset:
+            step = .idle
 
         default: ()
         }
@@ -76,7 +86,7 @@ struct ToolbarViewModel: Model {
 
 }
 
-extension ToolbarViewModel {
-    static let initial = ToolbarViewModel()
-    static let searchExample = ToolbarViewModel(step: .searching("Eggs"))
+extension Toolbar {
+    static let initial = Toolbar()
+    static let searchExample = Toolbar(step: .searching("Eggs"))
 }

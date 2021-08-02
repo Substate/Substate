@@ -1,14 +1,16 @@
 import Foundation
 import Substate
 
-
 struct TodosAppModel: Model {
 
-    var taskList = TaskList()
+    var titlebar = Titlebar()
+    var toolbar = Toolbar()
 
-    var titlebarViewModel = TitlebarViewModel()
+    var tasks = TaskList()
+    var filter = Filter()
+    var notifications = Notifications()
+
     var listViewModel = ListViewModel()
-    var toolbarViewModel = ToolbarViewModel()
 
     mutating func update(action: Action) {}
 

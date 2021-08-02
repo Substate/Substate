@@ -37,6 +37,12 @@ extension ModelSaver {
         }
     }
 
+    /// Automatic update of a loaded model completed.
+    /// 
+    public struct UpdateDidComplete: Action {
+        public let type: Model.Type
+    }
+
     /// Load all `SavedModel`s from persistent storage.
     ///
     public struct LoadAll: Action {

@@ -22,7 +22,6 @@
 		3763BBBA26AA1F20001BEE76 /* SubstateUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3763BBB926AA1F20001BEE76 /* SubstateUI */; };
 		3763BBC026AA3B04001BEE76 /* TodosAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBBF26AA3B04001BEE76 /* TodosAppModel.swift */; };
 		3763BBC326AA4090001BEE76 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC226AA4090001BEE76 /* ToolbarView.swift */; };
-		3763BBC526AA409D001BEE76 /* ToolbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC426AA409D001BEE76 /* ToolbarViewModel.swift */; };
 		3763BBC626AA40A2001BEE76 /* TodosAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBBF26AA3B04001BEE76 /* TodosAppModel.swift */; };
 		3763BBC826AA40A8001BEE76 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC726AA40A8001BEE76 /* ListView.swift */; };
 		3763BBCA26AA40AF001BEE76 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC926AA40AF001BEE76 /* ListViewModel.swift */; };
@@ -30,19 +29,28 @@
 		3763BBCF26AA411F001BEE76 /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBCE26AA411F001BEE76 /* TaskList.swift */; };
 		3763BBD126AAB805001BEE76 /* TodosAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBD026AAB805001BEE76 /* TodosAppView.swift */; };
 		3763BBD326AAB8F1001BEE76 /* TitlebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBD226AAB8F1001BEE76 /* TitlebarView.swift */; };
-		3763BBD626AAB909001BEE76 /* TitlebarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBD526AAB909001BEE76 /* TitlebarViewModel.swift */; };
 		3763BBD726AB8326001BEE76 /* TodosAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBD026AAB805001BEE76 /* TodosAppView.swift */; };
 		3763BBD826AB832B001BEE76 /* TitlebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBD226AAB8F1001BEE76 /* TitlebarView.swift */; };
 		3763BBD926AB8336001BEE76 /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBCE26AA411F001BEE76 /* TaskList.swift */; };
 		3763BBDA26AB8343001BEE76 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBCC26AA4117001BEE76 /* Task.swift */; };
 		3763BBDB26AB834B001BEE76 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC726AA40A8001BEE76 /* ListView.swift */; };
 		3763BBDC26AB834B001BEE76 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC926AA40AF001BEE76 /* ListViewModel.swift */; };
-		3763BBDD26AB834E001BEE76 /* TitlebarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBD526AAB909001BEE76 /* TitlebarViewModel.swift */; };
 		3763BBDE26AB8350001BEE76 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC226AA4090001BEE76 /* ToolbarView.swift */; };
-		3763BBDF26AB8353001BEE76 /* ToolbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBC426AA409D001BEE76 /* ToolbarViewModel.swift */; };
 		3763BBE126AB84EF001BEE76 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBE026AB84EF001BEE76 /* ListRowView.swift */; };
 		376FEA6426B36A23004BD597 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376FEA6326B36A23004BD597 /* Filter.swift */; };
 		376FEA6526B36A23004BD597 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376FEA6326B36A23004BD597 /* Filter.swift */; };
+		37D99C5F26B60D390015FEEE /* TodosAppActionMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* TodosAppActionMap.swift */; };
+		37D99C6026B60D390015FEEE /* TodosAppActionMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* TodosAppActionMap.swift */; };
+		37D99C6226B616FB0015FEEE /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6126B616FB0015FEEE /* Toolbar.swift */; };
+		37D99C6326B616FB0015FEEE /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6126B616FB0015FEEE /* Toolbar.swift */; };
+		37D99C6526B617B20015FEEE /* SoundEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6426B617B20015FEEE /* SoundEffects.swift */; };
+		37D99C6626B617B20015FEEE /* SoundEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6426B617B20015FEEE /* SoundEffects.swift */; };
+		37D99C6826B7D7DC0015FEEE /* Titlebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6726B7D7DC0015FEEE /* Titlebar.swift */; };
+		37D99C6926B7D7DC0015FEEE /* Titlebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6726B7D7DC0015FEEE /* Titlebar.swift */; };
+		37D99C6D26B81AAD0015FEEE /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6C26B81AAD0015FEEE /* Notifications.swift */; };
+		37D99C6E26B81AAD0015FEEE /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6C26B81AAD0015FEEE /* Notifications.swift */; };
+		37D99C7026B81BC70015FEEE /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6F26B81BC70015FEEE /* NotificationsView.swift */; };
+		37D99C7126B81BC70015FEEE /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6F26B81BC70015FEEE /* NotificationsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,16 +81,20 @@
 		3763BB8B26AA1E99001BEE76 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		3763BBBF26AA3B04001BEE76 /* TodosAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppModel.swift; sourceTree = "<group>"; };
 		3763BBC226AA4090001BEE76 /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
-		3763BBC426AA409D001BEE76 /* ToolbarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarViewModel.swift; sourceTree = "<group>"; };
 		3763BBC726AA40A8001BEE76 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		3763BBC926AA40AF001BEE76 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		3763BBCC26AA4117001BEE76 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		3763BBCE26AA411F001BEE76 /* TaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskList.swift; sourceTree = "<group>"; };
 		3763BBD026AAB805001BEE76 /* TodosAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppView.swift; sourceTree = "<group>"; };
 		3763BBD226AAB8F1001BEE76 /* TitlebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitlebarView.swift; sourceTree = "<group>"; };
-		3763BBD526AAB909001BEE76 /* TitlebarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitlebarViewModel.swift; sourceTree = "<group>"; };
 		3763BBE026AB84EF001BEE76 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
 		376FEA6326B36A23004BD597 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		37D99C5E26B60D390015FEEE /* TodosAppActionMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppActionMap.swift; sourceTree = "<group>"; };
+		37D99C6126B616FB0015FEEE /* Toolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
+		37D99C6426B617B20015FEEE /* SoundEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEffects.swift; sourceTree = "<group>"; };
+		37D99C6726B7D7DC0015FEEE /* Titlebar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Titlebar.swift; sourceTree = "<group>"; };
+		37D99C6C26B81AAD0015FEEE /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		37D99C6F26B81BC70015FEEE /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,10 +152,13 @@
 				3763BB6B26AA1E98001BEE76 /* TodosApp.swift */,
 				3763BBD026AAB805001BEE76 /* TodosAppView.swift */,
 				3763BBBF26AA3B04001BEE76 /* TodosAppModel.swift */,
-				376FEA6226B369B5004BD597 /* Models */,
+				37D99C5E26B60D390015FEEE /* TodosAppActionMap.swift */,
+				37D99C6A26B7D8110015FEEE /* Task */,
 				3763BBBE26AA3AE8001BEE76 /* List */,
 				3763BBD426AAB8F4001BEE76 /* Titlebar */,
 				3763BBC126AA4086001BEE76 /* Toolbar */,
+				37D99C6B26B81AA00015FEEE /* Notifications */,
+				37D99C6426B617B20015FEEE /* SoundEffects.swift */,
 				3763BB6D26AA1E99001BEE76 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -196,8 +211,8 @@
 		3763BBC126AA4086001BEE76 /* Toolbar */ = {
 			isa = PBXGroup;
 			children = (
+				37D99C6126B616FB0015FEEE /* Toolbar.swift */,
 				3763BBC226AA4090001BEE76 /* ToolbarView.swift */,
-				3763BBC426AA409D001BEE76 /* ToolbarViewModel.swift */,
 			);
 			path = Toolbar;
 			sourceTree = "<group>";
@@ -205,20 +220,29 @@
 		3763BBD426AAB8F4001BEE76 /* Titlebar */ = {
 			isa = PBXGroup;
 			children = (
+				37D99C6726B7D7DC0015FEEE /* Titlebar.swift */,
 				3763BBD226AAB8F1001BEE76 /* TitlebarView.swift */,
-				3763BBD526AAB909001BEE76 /* TitlebarViewModel.swift */,
 			);
 			path = Titlebar;
 			sourceTree = "<group>";
 		};
-		376FEA6226B369B5004BD597 /* Models */ = {
+		37D99C6A26B7D8110015FEEE /* Task */ = {
 			isa = PBXGroup;
 			children = (
 				3763BBCC26AA4117001BEE76 /* Task.swift */,
 				3763BBCE26AA411F001BEE76 /* TaskList.swift */,
 				376FEA6326B36A23004BD597 /* Filter.swift */,
 			);
-			path = Models;
+			path = Task;
+			sourceTree = "<group>";
+		};
+		37D99C6B26B81AA00015FEEE /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				37D99C6C26B81AAD0015FEEE /* Notifications.swift */,
+				37D99C6F26B81BC70015FEEE /* NotificationsView.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -389,13 +413,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37D99C6826B7D7DC0015FEEE /* Titlebar.swift in Sources */,
 				3763BBCD26AA4117001BEE76 /* Task.swift in Sources */,
-				3763BBC526AA409D001BEE76 /* ToolbarViewModel.swift in Sources */,
 				3763BBD326AAB8F1001BEE76 /* TitlebarView.swift in Sources */,
 				3763BBC826AA40A8001BEE76 /* ListView.swift in Sources */,
 				3763BBCA26AA40AF001BEE76 /* ListViewModel.swift in Sources */,
-				3763BBD626AAB909001BEE76 /* TitlebarViewModel.swift in Sources */,
+				37D99C5F26B60D390015FEEE /* TodosAppActionMap.swift in Sources */,
+				37D99C7026B81BC70015FEEE /* NotificationsView.swift in Sources */,
 				3763BBD126AAB805001BEE76 /* TodosAppView.swift in Sources */,
+				37D99C6226B616FB0015FEEE /* Toolbar.swift in Sources */,
+				37D99C6D26B81AAD0015FEEE /* Notifications.swift in Sources */,
+				37D99C6526B617B20015FEEE /* SoundEffects.swift in Sources */,
 				3763BBCF26AA411F001BEE76 /* TaskList.swift in Sources */,
 				3763BB8D26AA1E99001BEE76 /* TodosApp.swift in Sources */,
 				3763BBC326AA4090001BEE76 /* ToolbarView.swift in Sources */,
@@ -409,18 +437,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37D99C6926B7D7DC0015FEEE /* Titlebar.swift in Sources */,
 				3763BBC626AA40A2001BEE76 /* TodosAppModel.swift in Sources */,
 				3763BBD926AB8336001BEE76 /* TaskList.swift in Sources */,
 				3763BBD726AB8326001BEE76 /* TodosAppView.swift in Sources */,
 				3763BBDB26AB834B001BEE76 /* ListView.swift in Sources */,
 				3763BB8E26AA1E99001BEE76 /* TodosApp.swift in Sources */,
+				37D99C7126B81BC70015FEEE /* NotificationsView.swift in Sources */,
 				3763BBDA26AB8343001BEE76 /* Task.swift in Sources */,
+				37D99C6026B60D390015FEEE /* TodosAppActionMap.swift in Sources */,
+				37D99C6E26B81AAD0015FEEE /* Notifications.swift in Sources */,
 				3763BBDE26AB8350001BEE76 /* ToolbarView.swift in Sources */,
+				37D99C6626B617B20015FEEE /* SoundEffects.swift in Sources */,
+				37D99C6326B616FB0015FEEE /* Toolbar.swift in Sources */,
 				3763BBDC26AB834B001BEE76 /* ListViewModel.swift in Sources */,
 				3763BBD826AB832B001BEE76 /* TitlebarView.swift in Sources */,
-				3763BBDF26AB8353001BEE76 /* ToolbarViewModel.swift in Sources */,
 				376FEA6526B36A23004BD597 /* Filter.swift in Sources */,
-				3763BBDD26AB834E001BEE76 /* TitlebarViewModel.swift in Sources */,
 				3716C81B26B2308D005B9ACA /* ListRowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

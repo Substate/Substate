@@ -4,29 +4,29 @@ import SubstateUI
 struct TitlebarView: View {
 
     @Update var update
+    @Model var model: Titlebar
+    // @ModelBinding(\TitlebarViewModel.filter.category, Filter.Update(category:)) var $category
 
-    @Model var model: TitlebarViewModel
-    // @ModelBinding(\TitlebarViewModel.filter.category, { Filter.Update(category: $0) }) var $category
-
-    var categoryBinding: Binding<Filter.Category> {
-        .init(
-            get: { model.filter.category },
-            set: { update(Filter.Update(category: $0)) }
-        )
-    }
+//    var categoryBinding: Binding<Filter.Category> {
+//        .init(
+//            get: { model.filter.category },
+//            set: { update(Filter.Update(category: $0)) }
+//        )
+//    }
 
     var body: some View {
         ZStack {
-            Picker("Filter", selection: categoryBinding) {
-                ForEach(Filter.Category.allCases, id: \.self) { category in
-                    Text(String(describing: category).capitalized)
-                        .tag(category)
-                }
-            }
-            .pickerStyle(.menu)
-            .frame(maxWidth: .infinity, alignment: .leading)
+//            Picker("Filter", selection: categoryBinding) {
+//                ForEach(Filter.Category.allCases, id: \.self) { category in
+//                    Text(String(describing: category).capitalized)
+//                        .tag(category)
+//                }
+//            }
+//            .pickerStyle(.menu)
+//            .frame(maxWidth: .infinity, alignment: .leading)
 
             Text(model.title)
+                .fixedSize()
                 .font(.system(.headline, design: .rounded))
                 .frame(width: 100)
         }
@@ -48,7 +48,7 @@ struct TitlebarViewPreviews: PreviewProvider {
 
     static var previews: some View {
         Group {
-            TitlebarView().model(TitlebarViewModel.example)
+            TitlebarView().model(Titlebar.example)
         }
         .previewLayout(.sizeThatFits)
     }

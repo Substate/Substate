@@ -6,6 +6,7 @@ struct TodosAppView: View {
         VStack(spacing: 0) {
             TitlebarView()
             ListView()
+            NotificationsView()
             ToolbarView()
         }
     }

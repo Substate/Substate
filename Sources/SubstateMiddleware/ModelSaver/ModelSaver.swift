@@ -109,11 +109,12 @@ public class ModelSaver: Middleware {
                     store.update(LoadDidFail(for: type, with: error))
                 }
             } receiveValue: { model in
-                let t = Swift.type(of: model)
-                if t == type {
+                let loadedType = Swift.type(of: model)
+                if loadedType == type {
                     store.update(LoadDidSucceed(with: model))
                     if configuration.updateStrategy == .automatic {
                         store.update(Store.Replace(model: model))
+                        store.update(UpdateDidComplete(type: type))
                     }
                 } else {
                     store.update(LoadDidFail(for: type, with: .wrongModelTypeReturned))

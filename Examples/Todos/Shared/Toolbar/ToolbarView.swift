@@ -4,7 +4,7 @@ import SubstateUI
 struct ToolbarView: View {
 
     @Update var update
-    @Model var model: ToolbarViewModel
+    @Model var model: Toolbar
 
     var body: some View {
         VStack(spacing: 32) {
@@ -17,16 +17,16 @@ struct ToolbarView: View {
                 HStack {
                     let binding = Binding<String> (
                         get: { string },
-                        set: { update(ToolbarViewModel.AddBodyDidChange(body: $0)) }
+                        set: { update(Toolbar.AddBodyDidChange(body: $0)) }
                     )
 
                     TextField("Body...", text: binding)
                         .submitLabel(.done)
                         .onSubmit {
-                            update(ToolbarViewModel.AddWasCommitted(body: string))
+                            update(Toolbar.SaveButtonWasPressed())
                         }
 
-                    Button(action: update(ToolbarViewModel.AddWasCommitted(body: string))) {
+                    Button(action: update(Toolbar.SaveButtonWasPressed())) {
                         Text("Save")
                     }
                     .disabled(!model.canSaveAddedTask)
@@ -37,7 +37,7 @@ struct ToolbarView: View {
             }
 
             HStack {
-                Button(action: update(ToolbarViewModel.AddButtonWasPressed())) {
+                Button(action: update(Toolbar.AddButtonWasPressed())) {
                     VStack {
                         Image(systemName: "plus.circle.fill")
                         Text("Add")
@@ -46,7 +46,7 @@ struct ToolbarView: View {
 
                 Spacer()
 
-                Button(action: update(ToolbarViewModel.SearchButtonWasPressed())) {
+                Button(action: update(Toolbar.SearchButtonWasPressed())) {
                     VStack {
                         Image(systemName: "magnifyingglass.circle.fill")
                         Text("Search")
@@ -81,7 +81,7 @@ struct ToolbarViewPreviews: PreviewProvider {
 
     static var previews: some View {
         Group {
-            ToolbarView().model(ToolbarViewModel.initial)
+            ToolbarView().model(Toolbar.initial)
             // ToolbarView().model(ToolbarViewModel.searchExample)
         }
         .previewLayout(.sizeThatFits)
