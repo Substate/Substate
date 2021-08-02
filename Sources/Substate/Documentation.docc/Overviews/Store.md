@@ -24,4 +24,9 @@ store.update(Counter.Increment())
 
 ### Actions
 
+- ``Start``
+
+- ``Setup``
+- ``SetupDidComplete``
+
 - ``Replace``

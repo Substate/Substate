@@ -13,6 +13,7 @@ let package = Package(
         .library(name: "Substate", targets: ["Substate"]),
         .library(name: "SubstateMiddleware", targets: ["SubstateMiddleware"]),
         .library(name: "SubstateUI", targets: ["SubstateUI"]),
+        .library(name: "Package", targets: ["Substate", "SubstateMiddleware", "SubstateUI"]),
     ],
 
     dependencies: [

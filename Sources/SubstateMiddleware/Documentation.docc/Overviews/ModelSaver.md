@@ -56,6 +56,8 @@ let saver = ModelSaver(configuration: .init(saveStrategy: .periodic(30)))
 - ``LoadDidFail``
 - ``LoadDidSucceed``
 
+- ``UpdateDidComplete``
+
 - ``Save``
 - ``SaveAll``
 - ``SaveDidFail``

@@ -21,3 +21,9 @@ This package provides a broad set of built-in middleware for application develop
 ### Persitence
 
 - ``ModelSaver``
+
+### App Logic
+
+- ``ActionFollower``
+- ``ActionMapper``
+
