@@ -19,15 +19,15 @@ jobs:
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty
 
-  # test-substate-middleware-macos: # TODO: Enable once Github supports result builders
-  #   runs-on: macos-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #     - name: Set Package.swift tools version to 5.3
-  #       run: sed -i "" "s/version:5.5/version:5.3/" Package.swift
-  #     - name: Test
-  #       run: set -o pipefail; xcodebuild test -scheme SubstateMiddleware -destination 'platform=macOS' | xcpretty
+  test-substate-middleware-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set Package.swift tools version to 5.3
+        run: sed -i "" "s/version:5.5/version:5.3/" Package.swift
+      - name: Test
+        run: set -o pipefail; xcodebuild test -scheme SubstateMiddleware -destination 'platform=macOS' | xcpretty
 
   test-substate-ios:
     runs-on: macos-latest
@@ -39,15 +39,15 @@ jobs:
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme Substate -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
 
-  # test-substate-middleware-ios: # TODO: Enable once Github supports result builders
-  #   runs-on: macos-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #     - name: Set Package.swift tools version to 5.3
-  #       run: sed -i "" "s/version:5.5/version:5.3/" Package.swift
-  #     - name: Test
-  #       run: set -o pipefail; xcodebuild test -scheme SubstateMiddleware -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
+  test-substate-middleware-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set Package.swift tools version to 5.3
+        run: sed -i "" "s/version:5.5/version:5.3/" Package.swift
+      - name: Test
+        run: set -o pipefail; xcodebuild test -scheme SubstateMiddleware -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
 
   # test-counter-ios: # TODO: Enable once Github supports iOS 15
   #   runs-on: macos-latest
