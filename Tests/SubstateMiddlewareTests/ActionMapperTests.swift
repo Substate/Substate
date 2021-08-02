@@ -12,6 +12,7 @@ final class ActionMapperTests: XCTestCase {
     struct Model2: Model { var value = 2; func update(action: Action) {} }
     struct Model3: Model { var value = 3; func update(action: Action) {} }
 
+#if compiler(>=5.4)
     /// Check every intended version of `Action.map` compiles.
     ///
     func testMapMethod() throws {
@@ -40,6 +41,7 @@ final class ActionMapperTests: XCTestCase {
             Action2.map(\.value, \Model1.value, \Model2.value) { _, _, _ in Action1()  }
         }
     }
+#endif
 
     // TODO: Test the actual operation of ActionMapper
     // TODO: Will need an ActionRecorder or similar to check all the results
