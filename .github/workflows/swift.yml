@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set Package.swift tools version to 5.3
+        run: sed -i "" "s/version:5.5/version:5.3/" Package.swift
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme Substate -destination 'platform=macOS' | xcpretty
 
@@ -22,6 +24,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set Package.swift tools version to 5.3
+        run: sed -i "" "s/version:5.5/version:5.3/" Package.swift
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme SubstateMiddleware -destination 'platform=macOS' | xcpretty
 
@@ -30,6 +34,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set Package.swift tools version to 5.3
+        run: sed -i "" "s/version:5.5/version:5.3/" Package.swift
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme Substate -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
 
@@ -38,6 +44,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set Package.swift tools version to 5.3
+        run: sed -i "" "s/version:5.5/version:5.3/" Package.swift
       - name: Test
         run: set -o pipefail; xcodebuild test -scheme SubstateMiddleware -destination 'platform=iOS Simulator,OS=14.4,name=iPhone 12 mini' | xcpretty
 
