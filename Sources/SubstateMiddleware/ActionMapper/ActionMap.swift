@@ -6,6 +6,7 @@ public struct ActionMap {
         self.items = items
     }
 
+    @available(swift 5.4)
     public init(@ActionMapItemListBuilder items: () -> [ActionMapItem]) {
         self.items = items()
     }
