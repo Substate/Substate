@@ -10,7 +10,7 @@ public struct ActionMap {
         self.items = items()
     }
 
-    @available(macOS 10.15, iOS 13, *)
+    @available(swift 5.4)
     @resultBuilder public struct ActionMapItemListBuilder {
         public static func buildBlock(_ items: ActionMapItem...) -> [ActionMapItem] { items }
     }
