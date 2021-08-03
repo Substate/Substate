@@ -101,20 +101,20 @@ final class ActionLoggerTests: XCTestCase {
 
     func testLoggerStateIsAvailable() throws {
         let store = Store(model: Component(), middleware: [ActionLogger()])
-        XCTAssertNotNil(store.find(ActionLogger.Model.self))
+        XCTAssertNotNil(store.find(ActionLogger.Configuration.self))
     }
 
     func testLoggerStateIsInitiallyActive() throws {
         let store = Store(model: Component(), middleware: [ActionLogger()])
-        XCTAssertTrue(try XCTUnwrap(store.find(ActionLogger.Model.self)).isActive)
+        XCTAssertTrue(try XCTUnwrap(store.find(ActionLogger.Configuration.self)).isActive)
     }
 
     func testLoggerStateChangesWhenStartAndStopAreDispatched() throws {
         let store = Store(model: Component(), middleware: [ActionLogger()])
         store.update(ActionLogger.Stop())
-        XCTAssertFalse(try XCTUnwrap(store.find(ActionLogger.Model.self)).isActive)
+        XCTAssertFalse(try XCTUnwrap(store.find(ActionLogger.Configuration.self)).isActive)
         store.update(ActionLogger.Start())
-        XCTAssertTrue(try XCTUnwrap(store.find(ActionLogger.Model.self)).isActive)
+        XCTAssertTrue(try XCTUnwrap(store.find(ActionLogger.Configuration.self)).isActive)
     }
 
 }
