@@ -22,27 +22,15 @@ Extend Substate with logging, async tasks, time control, persistent models, acti
 import Substate
 ```
 
-Let’s create a self-contained component. Describe your model using a simple value type.
+Describe your model using a simple value type, and add some `Action`s that will trigger model updates.
 
 ```swift
 struct Counter {
     var value = 0
-}
-```
 
-Next, add some `Action`s that will trigger model updates. It’s best to define these within your model type.
-
-```swift
-extension Counter {
     struct Increment: Action {}
     struct Decrement: Action {}
-}
-```
 
-Finally, conform to `Model` by adding an `update(action:)` method. Define how the value should change when actions are received.
-
-```swift
-extension Counter: Model {
     mutating func update(action: Action) {
         switch action {
         case is Increment: value += 1
@@ -52,6 +40,8 @@ extension Counter: Model {
     }
 }
 ```
+
+Then, conform to `Model` by adding an `update(action:)` method and define how the model should change when actions are received.
 
 ## 🎛 Nesting
 
