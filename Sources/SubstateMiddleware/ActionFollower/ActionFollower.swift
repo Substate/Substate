@@ -1,5 +1,7 @@
 import Substate
 
+/// Middleware allowing an action to specify one or more other actions that should fire right after it.
+/// 
 public class ActionFollower: Middleware {
 
     public init() {}

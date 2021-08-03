@@ -46,3 +46,8 @@ struct Notifications: Model {
     }
 
 }
+
+extension String {
+    static let taskCreated = "Task Created"
+    static let taskDeleted = "Task Deleted"
+}

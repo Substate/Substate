@@ -22,13 +22,13 @@ public class ActionLogger: Middleware {
     public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { [self] action in
-                next(action)
-
                 let isActive = store.find(ActionLogger.Configuration.self)?.isActive ?? false
 
                 if isActive && (!filter || (filter && action is LoggedAction)) {
                     output(format(action: action))
                 }
+
+                next(action)
             }
         }
     }

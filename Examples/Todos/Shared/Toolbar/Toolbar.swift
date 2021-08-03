@@ -8,10 +8,10 @@ struct Toolbar: Model {
         case idle, adding(String), searching(String)
     }
 
-    var newTaskBody: String? {
+    var newTaskBody: String {
         switch step {
         case .adding(let body): return body
-        default: return nil
+        default: return ""
         }
     }
 

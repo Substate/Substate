@@ -264,7 +264,16 @@ let appActionMap = ActionMap {
 }
 ```
 
+```swift 
+let threeTasksCreatedFunnel = ActionFunnel(for: Milestones.ThreeTasksCreated()) {
+    TaskList.Create.occurred()
+    TaskList.Create.occurred()
+    TaskList.Create.occurred()
+}
+```
+
 - [`ActionMapper`](https://substate.dev/documentation/substatemiddleware/actionmapper)
+- [`ActionFunnel`](https://substate.dev/documentation/substatemiddleware/actionfunnel)
 
 ### Debugging
 

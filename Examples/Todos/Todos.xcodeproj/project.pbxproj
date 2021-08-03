@@ -39,12 +39,18 @@
 		3763BBE126AB84EF001BEE76 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBE026AB84EF001BEE76 /* ListRowView.swift */; };
 		376FEA6426B36A23004BD597 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376FEA6326B36A23004BD597 /* Filter.swift */; };
 		376FEA6526B36A23004BD597 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376FEA6326B36A23004BD597 /* Filter.swift */; };
-		37D99C5F26B60D390015FEEE /* TodosAppActionMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* TodosAppActionMap.swift */; };
-		37D99C6026B60D390015FEEE /* TodosAppActionMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* TodosAppActionMap.swift */; };
+		37C428EC26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */; };
+		37C428ED26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */; };
+		37C428EF26B9936200C26503 /* TodosAppFunnels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EE26B9936200C26503 /* TodosAppFunnels.swift */; };
+		37C428F026B9936200C26503 /* TodosAppFunnels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EE26B9936200C26503 /* TodosAppFunnels.swift */; };
+		37C428F326B9E3D000C26503 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428F226B9E3D000C26503 /* SoundPlayer.swift */; };
+		37C428F426B9E3D000C26503 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428F226B9E3D000C26503 /* SoundPlayer.swift */; };
+		37D99C5F26B60D390015FEEE /* TodosAppTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* TodosAppTriggers.swift */; };
+		37D99C6026B60D390015FEEE /* TodosAppTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* TodosAppTriggers.swift */; };
 		37D99C6226B616FB0015FEEE /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6126B616FB0015FEEE /* Toolbar.swift */; };
 		37D99C6326B616FB0015FEEE /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6126B616FB0015FEEE /* Toolbar.swift */; };
-		37D99C6526B617B20015FEEE /* SoundEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6426B617B20015FEEE /* SoundEffects.swift */; };
-		37D99C6626B617B20015FEEE /* SoundEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6426B617B20015FEEE /* SoundEffects.swift */; };
+		37D99C6526B617B20015FEEE /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6426B617B20015FEEE /* Sound.swift */; };
+		37D99C6626B617B20015FEEE /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6426B617B20015FEEE /* Sound.swift */; };
 		37D99C6826B7D7DC0015FEEE /* Titlebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6726B7D7DC0015FEEE /* Titlebar.swift */; };
 		37D99C6926B7D7DC0015FEEE /* Titlebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6726B7D7DC0015FEEE /* Titlebar.swift */; };
 		37D99C6D26B81AAD0015FEEE /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6C26B81AAD0015FEEE /* Notifications.swift */; };
@@ -89,9 +95,12 @@
 		3763BBD226AAB8F1001BEE76 /* TitlebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitlebarView.swift; sourceTree = "<group>"; };
 		3763BBE026AB84EF001BEE76 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
 		376FEA6326B36A23004BD597 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
-		37D99C5E26B60D390015FEEE /* TodosAppActionMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppActionMap.swift; sourceTree = "<group>"; };
+		37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notifications+ShowForTask.swift"; sourceTree = "<group>"; };
+		37C428EE26B9936200C26503 /* TodosAppFunnels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppFunnels.swift; sourceTree = "<group>"; };
+		37C428F226B9E3D000C26503 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
+		37D99C5E26B60D390015FEEE /* TodosAppTriggers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppTriggers.swift; sourceTree = "<group>"; };
 		37D99C6126B616FB0015FEEE /* Toolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
-		37D99C6426B617B20015FEEE /* SoundEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEffects.swift; sourceTree = "<group>"; };
+		37D99C6426B617B20015FEEE /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		37D99C6726B7D7DC0015FEEE /* Titlebar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Titlebar.swift; sourceTree = "<group>"; };
 		37D99C6C26B81AAD0015FEEE /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		37D99C6F26B81BC70015FEEE /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
@@ -152,13 +161,14 @@
 				3763BB6B26AA1E98001BEE76 /* TodosApp.swift */,
 				3763BBD026AAB805001BEE76 /* TodosAppView.swift */,
 				3763BBBF26AA3B04001BEE76 /* TodosAppModel.swift */,
-				37D99C5E26B60D390015FEEE /* TodosAppActionMap.swift */,
+				37D99C5E26B60D390015FEEE /* TodosAppTriggers.swift */,
+				37C428EE26B9936200C26503 /* TodosAppFunnels.swift */,
 				37D99C6A26B7D8110015FEEE /* Task */,
 				3763BBBE26AA3AE8001BEE76 /* List */,
 				3763BBD426AAB8F4001BEE76 /* Titlebar */,
 				3763BBC126AA4086001BEE76 /* Toolbar */,
 				37D99C6B26B81AA00015FEEE /* Notifications */,
-				37D99C6426B617B20015FEEE /* SoundEffects.swift */,
+				37C428F126B9E3A400C26503 /* Sound */,
 				3763BB6D26AA1E99001BEE76 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -226,6 +236,15 @@
 			path = Titlebar;
 			sourceTree = "<group>";
 		};
+		37C428F126B9E3A400C26503 /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				37D99C6426B617B20015FEEE /* Sound.swift */,
+				37C428F226B9E3D000C26503 /* SoundPlayer.swift */,
+			);
+			path = Sound;
+			sourceTree = "<group>";
+		};
 		37D99C6A26B7D8110015FEEE /* Task */ = {
 			isa = PBXGroup;
 			children = (
@@ -241,6 +260,7 @@
 			children = (
 				37D99C6C26B81AAD0015FEEE /* Notifications.swift */,
 				37D99C6F26B81BC70015FEEE /* NotificationsView.swift */,
+				37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -418,16 +438,19 @@
 				3763BBD326AAB8F1001BEE76 /* TitlebarView.swift in Sources */,
 				3763BBC826AA40A8001BEE76 /* ListView.swift in Sources */,
 				3763BBCA26AA40AF001BEE76 /* ListViewModel.swift in Sources */,
-				37D99C5F26B60D390015FEEE /* TodosAppActionMap.swift in Sources */,
+				37D99C5F26B60D390015FEEE /* TodosAppTriggers.swift in Sources */,
 				37D99C7026B81BC70015FEEE /* NotificationsView.swift in Sources */,
+				37C428EC26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */,
 				3763BBD126AAB805001BEE76 /* TodosAppView.swift in Sources */,
 				37D99C6226B616FB0015FEEE /* Toolbar.swift in Sources */,
 				37D99C6D26B81AAD0015FEEE /* Notifications.swift in Sources */,
-				37D99C6526B617B20015FEEE /* SoundEffects.swift in Sources */,
+				37D99C6526B617B20015FEEE /* Sound.swift in Sources */,
+				37C428EF26B9936200C26503 /* TodosAppFunnels.swift in Sources */,
 				3763BBCF26AA411F001BEE76 /* TaskList.swift in Sources */,
 				3763BB8D26AA1E99001BEE76 /* TodosApp.swift in Sources */,
 				3763BBC326AA4090001BEE76 /* ToolbarView.swift in Sources */,
 				376FEA6426B36A23004BD597 /* Filter.swift in Sources */,
+				37C428F326B9E3D000C26503 /* SoundPlayer.swift in Sources */,
 				3763BBC026AA3B04001BEE76 /* TodosAppModel.swift in Sources */,
 				3763BBE126AB84EF001BEE76 /* ListRowView.swift in Sources */,
 			);
@@ -444,14 +467,17 @@
 				3763BBDB26AB834B001BEE76 /* ListView.swift in Sources */,
 				3763BB8E26AA1E99001BEE76 /* TodosApp.swift in Sources */,
 				37D99C7126B81BC70015FEEE /* NotificationsView.swift in Sources */,
+				37C428ED26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */,
 				3763BBDA26AB8343001BEE76 /* Task.swift in Sources */,
-				37D99C6026B60D390015FEEE /* TodosAppActionMap.swift in Sources */,
+				37D99C6026B60D390015FEEE /* TodosAppTriggers.swift in Sources */,
 				37D99C6E26B81AAD0015FEEE /* Notifications.swift in Sources */,
 				3763BBDE26AB8350001BEE76 /* ToolbarView.swift in Sources */,
-				37D99C6626B617B20015FEEE /* SoundEffects.swift in Sources */,
+				37C428F026B9936200C26503 /* TodosAppFunnels.swift in Sources */,
+				37D99C6626B617B20015FEEE /* Sound.swift in Sources */,
 				37D99C6326B616FB0015FEEE /* Toolbar.swift in Sources */,
 				3763BBDC26AB834B001BEE76 /* ListViewModel.swift in Sources */,
 				3763BBD826AB832B001BEE76 /* TitlebarView.swift in Sources */,
+				37C428F426B9E3D000C26503 /* SoundPlayer.swift in Sources */,
 				376FEA6526B36A23004BD597 /* Filter.swift in Sources */,
 				3716C81B26B2308D005B9ACA /* ListRowView.swift in Sources */,
 			);

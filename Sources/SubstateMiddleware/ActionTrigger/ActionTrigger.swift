@@ -1,15 +1,14 @@
 import Foundation
 import Substate
 
-/// Deprecated
-public class ActionMapper: Middleware {
+public class ActionTrigger: Middleware {
 
     // MARK: - Initialisation
 
-    private let items: [ActionMapItem]
+    private let results: [ActionTriggerResult]
 
-    public init(maps: ActionMap...) {
-        self.items = maps.flatMap(\.items)
+    public init(sources: ActionTriggerList...) {
+        self.results = sources.flatMap(\.results)
     }
 
     // MARK: - Middleware API
@@ -21,10 +20,8 @@ public class ActionMapper: Middleware {
     public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { action in
-                self.items.forEach { item in
-                    if let newAction = item(action, store.uncheckedFind) {
-                        store.update(newAction)
-                    }
+                self.results.forEach { result in
+                    result(action, store.uncheckedFind).map(store.update)
                 }
 
                 next(action)

@@ -2,24 +2,9 @@ import Foundation
 import Substate
 import SubstateMiddleware
 
-struct TaskList: Model, SavedModel {
+struct Tasks: Model, SavedModel {
 
     var all: [Task] = []
-
-//    var filteredTasks: [Task] {
-//        all.filter {
-//            switch filter.category {
-//            case .all: return true
-//            case .upcoming: return !$0.completed
-//            case .completed: return $0.completed
-//            case .deleted: return false
-//            }
-//        }
-//    }
-
-//    var filteredTaskCount: Int {
-//        filteredTasks.count
-//    }
 
     struct Create: Action, FollowupAction {
         let body: String
@@ -73,8 +58,8 @@ struct TaskList: Model, SavedModel {
 
 }
 
-extension TaskList {
-    static let sample = TaskList(all: [
+extension Tasks {
+    static let sample = Tasks(all: [
         .init(id: .init(), date: .init(), body: "Lorem ipsum dolor sit amet."),
         .init(id: .init(), date: .distantFuture, body: "Consectetur adipiscing elit sed."),
         .init(id: .init(), date: .distantPast, body: "Do eismod tempor elit.")

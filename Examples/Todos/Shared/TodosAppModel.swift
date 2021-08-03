@@ -6,7 +6,7 @@ struct TodosAppModel: Model {
     var titlebar = Titlebar()
     var toolbar = Toolbar()
 
-    var tasks = TaskList()
+    var tasks = Tasks()
     var filter = Filter()
     var notifications = Notifications()
 

@@ -6,7 +6,7 @@ struct ListView: View {
     @Update var update
 
     @Model var filter: Filter
-    @Model var list: TaskList
+    @Model var list: Tasks
 
     var body: some View {
         GeometryReader { geometry in
@@ -16,9 +16,9 @@ struct ListView: View {
                         // TODO: Filter!
                         ForEach(list.all) { task in
                             ListRowView(task: task, onTap: { id in
-                                update(TaskList.Toggle(id: id))
+                                update(Tasks.Toggle(id: id))
                             }, onDelete: { id in
-                                update(TaskList.Delete(id: id))
+                                update(Tasks.Delete(id: id))
                             })
                         }
                     }
@@ -35,7 +35,7 @@ struct ListView: View {
 struct ListViewPreviews: PreviewProvider {
     static var previews: some View {
         ListView()
-            .model(TaskList.sample)
+            .model(Tasks.sample)
             .previewLayout(.sizeThatFits)
     }
 }

@@ -8,10 +8,11 @@ import SubstateMiddleware
             TodosAppView()
                 .store(model: TodosAppModel(), middleware: [
                     ActionLogger(),
-                    ActionMapper(map: appActionMap),
+                    ActionTrigger(sources: appTriggers),
+                    ActionFunneller(funnels: taskToggledFunnel, threeTasksCreatedFunnel, taskDeletedFunnel),
                     ActionFollower(),
                     ActionDelayer(),
-                    ModelSaver(),
+                    ModelSaver(configuration: .init(saveStrategy: .manual)),
                     Inspector()
                 ])
         }

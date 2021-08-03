@@ -1,4 +1,4 @@
-Store
+# Store
 
 - Need to traverse updates from deepest to shallowest so that parents can read the up-to-date state from all of their children
   - Think this is done but needs to be tested properly!
@@ -25,9 +25,9 @@ Store
     too coarse-grained? Provide map of bindable props? { bindableList = [\.isActive : SetActive.self, ...] }
 - Remove dependency on the Runtime library
 
-Middleware
+# Middleware
 
-- Middleware that runs a server and enables a client 'substate inspector' type companion app
+- Add ActionDebouncer and ActionThrottler into ActionDelayer and make it one middleware. Call it something like ActionTimer.
 
 - Undo manager!
   - Tag actions as undoable
@@ -115,20 +115,16 @@ let step = Journey.Step(
     - journey: how to ID this?
     - step: WidgetFetchButtonWasPressed
 
-UI
+# UI
 
-- TextView.onSubmit(send: Model.AddWasCommitted(body: string))
+- TextView.onSubmit(send: Model.TextWasSubmitted(text: string))
 
-Logging
+# Logging
 
 - Comprehensive and library-appropriate internal logging (for internal store stuff, maybe disabled or quiet by default)
-- Some kind of general logger. Looks like all middlewares are doing some kind of logging, not just the action/state loggers.
+- Some kind of general logging helper. Looks like all middlewares are doing some kind of logging, not just the action/state loggers, so it would be good to give it a consistent format.
 
-- Is there a way to make everything go through action logger (or maybe something even more general?)
-  - Thinking about how most things that are logged (eg. ActionTrace results) you may also want access to the real data
-  - The log string is certainly a low-res side-effect
-
-Documentation
+# Documentation
 
 - Emphasise that you can easily save only some parts of the state to disk
   - So you can continue to churn heavily on the structure of your app state, and keep a few sub-states stable/additive for longer term persistence without constant migration logic
