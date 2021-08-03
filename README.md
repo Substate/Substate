@@ -6,7 +6,7 @@ A tiny state management library for Swift.
 
 [![Banner](https://www.datocms-assets.com/15979/1627951425-substatebanner.png)](https://substate.dev)
 
-Substate is a Redux-style state management library consisting of actions, models, and a store. The goal is to leverage Swift’s type system to provide the most ergonomic possible version of the pattern. 
+Substate is a Redux-style state management library consisting of actions, models, and a store. The goal is to leverage Swift’s type system to provide the most ergonomic possible version of the pattern.
 
 [![Banner](https://www.datocms-assets.com/15979/1627951446-substateuibanner.png)](https://substate.dev/documentation/substateui)
 
@@ -22,10 +22,10 @@ Extend Substate with logging, async tasks, time control, persistent models, acti
 import Substate
 ```
 
-Describe your model using a simple value type, and add some `Action`s that will trigger model updates.
+Describe your model using a simple value type. Add some `Action`s that will trigger model updates.
 
 ```swift
-struct Counter {
+struct Counter: Model {
     var value = 0
 
     struct Increment: Action {}
@@ -103,7 +103,7 @@ Use an `@Update` property to trigger model updates.
 ```swift
 struct CounterView: View {
     @Update var update
-    
+
     var body: some View {
         Button("Increment", action: update(Counter.Increment()))
         Button("Decrement", action: update(Counter.Decrement()))

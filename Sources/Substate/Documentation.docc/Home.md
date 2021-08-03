@@ -1,10 +1,10 @@
 # ``Substate``
 
-A tiny state management library for Swift. 
+A tiny state management library for Swift.
 
 [![Banner](SubstateBanner)](https://substate.dev)
 
-Substate is a Redux-style state management library consisting of actions, models, and a store. The goal is to leverage Swift’s type system to provide the most ergonomic possible version of the pattern. 
+Substate is a Redux-style state management library consisting of actions, models, and a store. The goal is to leverage Swift’s type system to provide the most ergonomic possible version of the pattern.
 
 [![Banner](SubstateUIBanner)](https://substate.dev/documentation/substateui)
 
@@ -20,10 +20,10 @@ Extend Substate with logging, async tasks, time control, persistent models, acti
 import Substate
 ```
 
-Describe your model using a simple value type, and add some `Action`s that will trigger model updates.
+Describe your model using a simple value type. Add some `Action`s that will trigger model updates.
 
 ```swift
-struct Counter {
+struct Counter: Model {
     var value = 0
 
     struct Increment: Action {}
@@ -42,7 +42,7 @@ struct Counter {
 Then, conform to `Model` by adding an `update(action:)` method and define how the model should change when actions are received.
 
 - ``Model``
-- <doc:Create-a-Model>  
+- <doc:Create-a-Model>
 - <doc:Advanced-Model-Composition>
 
 ## 🎛 Nesting
@@ -97,7 +97,7 @@ Use an `@Update` property to trigger model updates.
 ```swift
 struct CounterView: View {
     @Update var update
-    
+
     var body: some View {
         Button("Increment", action: update(Counter.Increment()))
         Button("Decrement", action: update(Counter.Decrement()))
@@ -252,7 +252,7 @@ let appActionMap = ActionMap {
 
     TaskList.Create
         .map(to: Notifications.Show(message: "Task Created"))
-    
+
     TaskList.Delete
         .map(to: Notifications.Show(message: "Task Deleted"))
 
