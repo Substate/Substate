@@ -4,15 +4,15 @@
 
 A tiny state management library for Swift.
 
-[![Banner](https://www.datocms-assets.com/15979/1627947187-substatebanner.png)](https://substate.dev)
+[![Banner](https://www.datocms-assets.com/15979/1627951425-substatebanner.png)](https://substate.dev)
 
 Substate is a Redux-style state management library consisting of actions, models, and a store. The goal is to leverage Swift’s type system to provide the most ergonomic possible version of the pattern. 
 
-[![Banner](https://www.datocms-assets.com/15979/1627947192-substateuibanner.png)](https://substate.dev/documentation/substateui)
+[![Banner](https://www.datocms-assets.com/15979/1627951446-substateuibanner.png)](https://substate.dev/documentation/substateui)
 
 Access your Substate models from SwiftUI views, and dispatch actions to update them. Bootstrap your app from SwiftUI, and inject models into previews.
 
-[![Banner](https://www.datocms-assets.com/15979/1627947190-substatemiddlewarebanner.png)](https://substate.dev/documentation/substatemiddleware)
+[![Banner](https://www.datocms-assets.com/15979/1627951444-substatemiddlewarebanner.png)](https://substate.dev/documentation/substatemiddleware)
 
 Extend Substate with logging, async tasks, time control, persistent models, action mapping logic, and a standalone debugging app. Connect your own services to Substate.
 
