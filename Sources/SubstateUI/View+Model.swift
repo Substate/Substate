@@ -2,6 +2,8 @@ import SwiftUI
 import Substate
 
 extension View {
+    /// Provide a Substate model to the upstream view hierarchy.
+    ///
     public func model(_ model: Substate.Model) -> some View {
         modifier(Modifier(store: Store(model: model)))
     }
@@ -14,4 +16,3 @@ private struct Modifier: ViewModifier {
         content.environmentObject(store)
     }
 }
-

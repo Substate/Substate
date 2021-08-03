@@ -46,7 +46,7 @@ final class ActionDelayerTests: XCTestCase {
         publisher.callback(for: Action2.self) { action in
             let end = Date()
             let overshoot = end.timeIntervalSince(start) - action.delay
-            XCTAssertLessThan(overshoot, 0.1)
+            XCTAssertLessThan(overshoot, 0.25)
             expectation.fulfill()
         }
 

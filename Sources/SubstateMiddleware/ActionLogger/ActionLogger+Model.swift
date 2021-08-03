@@ -2,23 +2,18 @@ import Substate
 
 extension ActionLogger {
 
-    /// Select `ActionLogger.State` from your application to see the logger’s current state.
+    /// Use `ActionLogger.Configuration` from your application to see the logger’s current state.
     ///
     /// ```swift
     /// struct DebugView: View {
+    ///     @Model var configuration: ActionLogger.Configuration
     ///     var body: some View {
-    ///         Select(ActionLogger.State.self) { logger, update in
-    ///             Text("Action logging is: \(logger.isActive ? "Active" : "Inactive")")
-    ///         }
+    ///         Text("Action logging is: \(configuration.isActive ? "Active" : "Inactive")")
     ///     }
     /// }
     /// ```
     ///
-    /// TODO: Different naming for these internal states? It’s confusing. The word 'state' is
-    /// everywhere!
-    /// TODO: This is fixed, it’s now 'model' and TODO rename this to 'Configuration'
-    ///
-    public struct Model: Substate.Model {
+    public struct Configuration: Model {
         public var isActive = false
 
         public mutating func update(action: Action) {
