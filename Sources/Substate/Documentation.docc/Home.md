@@ -243,24 +243,26 @@ struct TaskList: Model, SavedModel { ... }
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-let appActionMap = ActionMap {
+let appTriggers = ActionTriggerList {
     TaskList.Create
-        .map(to: Sounds.Play(.blip))
+        .trigger(Sounds.Play(.blip))
 
     TaskList.Delete
-        .map(to: Sounds.Play(.crunch))
+        .trigger(Sounds.Play(.crunch))
 
     TaskList.Create
-        .map(to: Notifications.Show(message: "Task Created"))
+        .trigger(Notifications.Show(message: "Task Created"))
 
     TaskList.Delete
-        .map(to: Notifications.Show(message: "Task Deleted"))
+        .trigger(Notifications.Show(message: "Task Deleted"))
 
     TaskList.Changed
-        .map(\TaskList.all.count, to: Titlebar.UpdateCount.init)
+        .map(\TaskList.all.count)
+        .trigger(Titlebar.UpdateCount.init)
 
     ModelSaver.UpdateDidComplete
-        .map(\TaskList.all.count, to: Titlebar.UpdateCount.init)
+        .map(\TaskList.all.count)
+        .trigger(Titlebar.UpdateCount.init)
 }
 ```
 

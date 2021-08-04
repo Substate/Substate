@@ -1,8 +1,8 @@
 import Substate
 
-enum Sound {
+enum Sound: String, CaseIterable {
 
-    case blip, trash, pong
+    case pop, pow, twinkle, warp
 
     struct Play: Action {
         let sound: Sound

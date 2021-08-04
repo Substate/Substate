@@ -8,6 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		3716C81B26B2308D005B9ACA /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBE026AB84EF001BEE76 /* ListRowView.swift */; };
+		373DA22926BA078D008E77BA /* twinkle.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22526BA078D008E77BA /* twinkle.wav */; };
+		373DA22A26BA078D008E77BA /* twinkle.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22526BA078D008E77BA /* twinkle.wav */; };
+		373DA22B26BA078D008E77BA /* warp.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22626BA078D008E77BA /* warp.wav */; };
+		373DA22C26BA078D008E77BA /* warp.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22626BA078D008E77BA /* warp.wav */; };
+		373DA22D26BA078D008E77BA /* pow.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22726BA078D008E77BA /* pow.wav */; };
+		373DA22E26BA078D008E77BA /* pow.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22726BA078D008E77BA /* pow.wav */; };
+		373DA22F26BA078D008E77BA /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22826BA078D008E77BA /* pop.wav */; };
+		373DA23026BA078D008E77BA /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22826BA078D008E77BA /* pop.wav */; };
+		373DA23326BA8FEF008E77BA /* SoundTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373DA23226BA8FEF008E77BA /* SoundTriggers.swift */; };
+		373DA23426BA8FEF008E77BA /* SoundTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373DA23226BA8FEF008E77BA /* SoundTriggers.swift */; };
+		373DA23626BA8FF6008E77BA /* NotificationTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373DA23526BA8FF6008E77BA /* NotificationTriggers.swift */; };
+		373DA23726BA8FF6008E77BA /* NotificationTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373DA23526BA8FF6008E77BA /* NotificationTriggers.swift */; };
 		3763BB8226AA1E99001BEE76 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BB8126AA1E99001BEE76 /* Tests_iOS.swift */; };
 		3763BB8C26AA1E99001BEE76 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BB8B26AA1E99001BEE76 /* Tests_macOS.swift */; };
 		3763BB8D26AA1E99001BEE76 /* TodosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BB6B26AA1E98001BEE76 /* TodosApp.swift */; };
@@ -45,8 +57,8 @@
 		37C428F026B9936200C26503 /* TodosAppFunnels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EE26B9936200C26503 /* TodosAppFunnels.swift */; };
 		37C428F326B9E3D000C26503 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428F226B9E3D000C26503 /* SoundPlayer.swift */; };
 		37C428F426B9E3D000C26503 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428F226B9E3D000C26503 /* SoundPlayer.swift */; };
-		37D99C5F26B60D390015FEEE /* TodosAppTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* TodosAppTriggers.swift */; };
-		37D99C6026B60D390015FEEE /* TodosAppTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* TodosAppTriggers.swift */; };
+		37D99C5F26B60D390015FEEE /* AppTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* AppTriggers.swift */; };
+		37D99C6026B60D390015FEEE /* AppTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* AppTriggers.swift */; };
 		37D99C6226B616FB0015FEEE /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6126B616FB0015FEEE /* Toolbar.swift */; };
 		37D99C6326B616FB0015FEEE /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6126B616FB0015FEEE /* Toolbar.swift */; };
 		37D99C6526B617B20015FEEE /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C6426B617B20015FEEE /* Sound.swift */; };
@@ -77,6 +89,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		373DA22526BA078D008E77BA /* twinkle.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = twinkle.wav; sourceTree = "<group>"; };
+		373DA22626BA078D008E77BA /* warp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = warp.wav; sourceTree = "<group>"; };
+		373DA22726BA078D008E77BA /* pow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pow.wav; sourceTree = "<group>"; };
+		373DA22826BA078D008E77BA /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
+		373DA23226BA8FEF008E77BA /* SoundTriggers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundTriggers.swift; sourceTree = "<group>"; };
+		373DA23526BA8FF6008E77BA /* NotificationTriggers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTriggers.swift; sourceTree = "<group>"; };
 		3763BB6B26AA1E98001BEE76 /* TodosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosApp.swift; sourceTree = "<group>"; };
 		3763BB6D26AA1E99001BEE76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3763BB7226AA1E99001BEE76 /* Todos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todos.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,7 +116,7 @@
 		37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notifications+ShowForTask.swift"; sourceTree = "<group>"; };
 		37C428EE26B9936200C26503 /* TodosAppFunnels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppFunnels.swift; sourceTree = "<group>"; };
 		37C428F226B9E3D000C26503 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
-		37D99C5E26B60D390015FEEE /* TodosAppTriggers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppTriggers.swift; sourceTree = "<group>"; };
+		37D99C5E26B60D390015FEEE /* AppTriggers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTriggers.swift; sourceTree = "<group>"; };
 		37D99C6126B616FB0015FEEE /* Toolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		37D99C6426B617B20015FEEE /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		37D99C6726B7D7DC0015FEEE /* Titlebar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Titlebar.swift; sourceTree = "<group>"; };
@@ -144,6 +162,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		373DA23126BA8FD9008E77BA /* Triggers */ = {
+			isa = PBXGroup;
+			children = (
+				37D99C5E26B60D390015FEEE /* AppTriggers.swift */,
+				373DA23226BA8FEF008E77BA /* SoundTriggers.swift */,
+				373DA23526BA8FF6008E77BA /* NotificationTriggers.swift */,
+			);
+			path = Triggers;
+			sourceTree = "<group>";
+		};
 		3763BB6526AA1E98001BEE76 = {
 			isa = PBXGroup;
 			children = (
@@ -161,8 +189,8 @@
 				3763BB6B26AA1E98001BEE76 /* TodosApp.swift */,
 				3763BBD026AAB805001BEE76 /* TodosAppView.swift */,
 				3763BBBF26AA3B04001BEE76 /* TodosAppModel.swift */,
-				37D99C5E26B60D390015FEEE /* TodosAppTriggers.swift */,
 				37C428EE26B9936200C26503 /* TodosAppFunnels.swift */,
+				373DA23126BA8FD9008E77BA /* Triggers */,
 				37D99C6A26B7D8110015FEEE /* Task */,
 				3763BBBE26AA3AE8001BEE76 /* List */,
 				3763BBD426AAB8F4001BEE76 /* Titlebar */,
@@ -241,6 +269,10 @@
 			children = (
 				37D99C6426B617B20015FEEE /* Sound.swift */,
 				37C428F226B9E3D000C26503 /* SoundPlayer.swift */,
+				373DA22826BA078D008E77BA /* pop.wav */,
+				373DA22726BA078D008E77BA /* pow.wav */,
+				373DA22526BA078D008E77BA /* twinkle.wav */,
+				373DA22626BA078D008E77BA /* warp.wav */,
 			);
 			path = Sound;
 			sourceTree = "<group>";
@@ -400,7 +432,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				373DA22B26BA078D008E77BA /* warp.wav in Resources */,
+				373DA22D26BA078D008E77BA /* pow.wav in Resources */,
+				373DA22F26BA078D008E77BA /* pop.wav in Resources */,
 				3763BB9126AA1E99001BEE76 /* Assets.xcassets in Resources */,
+				373DA22926BA078D008E77BA /* twinkle.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,7 +444,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				373DA22C26BA078D008E77BA /* warp.wav in Resources */,
+				373DA22E26BA078D008E77BA /* pow.wav in Resources */,
+				373DA23026BA078D008E77BA /* pop.wav in Resources */,
 				3763BB9226AA1E99001BEE76 /* Assets.xcassets in Resources */,
+				373DA22A26BA078D008E77BA /* twinkle.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,13 +478,14 @@
 				3763BBD326AAB8F1001BEE76 /* TitlebarView.swift in Sources */,
 				3763BBC826AA40A8001BEE76 /* ListView.swift in Sources */,
 				3763BBCA26AA40AF001BEE76 /* ListViewModel.swift in Sources */,
-				37D99C5F26B60D390015FEEE /* TodosAppTriggers.swift in Sources */,
+				37D99C5F26B60D390015FEEE /* AppTriggers.swift in Sources */,
 				37D99C7026B81BC70015FEEE /* NotificationsView.swift in Sources */,
 				37C428EC26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */,
 				3763BBD126AAB805001BEE76 /* TodosAppView.swift in Sources */,
 				37D99C6226B616FB0015FEEE /* Toolbar.swift in Sources */,
 				37D99C6D26B81AAD0015FEEE /* Notifications.swift in Sources */,
 				37D99C6526B617B20015FEEE /* Sound.swift in Sources */,
+				373DA23326BA8FEF008E77BA /* SoundTriggers.swift in Sources */,
 				37C428EF26B9936200C26503 /* TodosAppFunnels.swift in Sources */,
 				3763BBCF26AA411F001BEE76 /* TaskList.swift in Sources */,
 				3763BB8D26AA1E99001BEE76 /* TodosApp.swift in Sources */,
@@ -453,6 +494,7 @@
 				37C428F326B9E3D000C26503 /* SoundPlayer.swift in Sources */,
 				3763BBC026AA3B04001BEE76 /* TodosAppModel.swift in Sources */,
 				3763BBE126AB84EF001BEE76 /* ListRowView.swift in Sources */,
+				373DA23626BA8FF6008E77BA /* NotificationTriggers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,9 +511,10 @@
 				37D99C7126B81BC70015FEEE /* NotificationsView.swift in Sources */,
 				37C428ED26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */,
 				3763BBDA26AB8343001BEE76 /* Task.swift in Sources */,
-				37D99C6026B60D390015FEEE /* TodosAppTriggers.swift in Sources */,
+				37D99C6026B60D390015FEEE /* AppTriggers.swift in Sources */,
 				37D99C6E26B81AAD0015FEEE /* Notifications.swift in Sources */,
 				3763BBDE26AB8350001BEE76 /* ToolbarView.swift in Sources */,
+				373DA23426BA8FEF008E77BA /* SoundTriggers.swift in Sources */,
 				37C428F026B9936200C26503 /* TodosAppFunnels.swift in Sources */,
 				37D99C6626B617B20015FEEE /* Sound.swift in Sources */,
 				37D99C6326B616FB0015FEEE /* Toolbar.swift in Sources */,
@@ -480,6 +523,7 @@
 				37C428F426B9E3D000C26503 /* SoundPlayer.swift in Sources */,
 				376FEA6526B36A23004BD597 /* Filter.swift in Sources */,
 				3716C81B26B2308D005B9ACA /* ListRowView.swift in Sources */,
+				373DA23726BA8FF6008E77BA /* NotificationTriggers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

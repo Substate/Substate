@@ -2,20 +2,20 @@ import Substate
 
 public struct ActionTriggerList {
 
-    let results: [ActionTriggerResult]
+    public let triggers: [ActionTriggerFunction]
 
-    public init(results: [ActionTriggerResult]) {
-        self.results = results
+    public init(triggers: [ActionTriggerFunction]) {
+        self.triggers = triggers
     }
 
 #if compiler(>=5.4)
-    public init(@ActionTriggerListBuilder results: () -> [ActionTriggerResult]) {
-        self.results = results()
+    public init(@ActionTriggerListBuilder providers: () -> [ActionTriggerFunctionProvider]) {
+        self.triggers = providers().flatMap(\.triggers)
     }
 
     @resultBuilder public struct ActionTriggerListBuilder {
-        public static func buildBlock(_ results: ActionTriggerResult...) -> [ActionTriggerResult] {
-            results
+        public static func buildBlock(_ providers: ActionTriggerFunctionProvider...) -> [ActionTriggerFunctionProvider] {
+            providers
         }
     }
 #endif

@@ -5,10 +5,10 @@ public class ActionTrigger: Middleware {
 
     // MARK: - Initialisation
 
-    private let results: [ActionTriggerResult]
+    private let triggers: [ActionTriggerFunction]
 
     public init(sources: ActionTriggerList...) {
-        self.results = sources.flatMap(\.results)
+        self.triggers = sources.flatMap(\.triggers)
     }
 
     // MARK: - Middleware API
@@ -20,8 +20,8 @@ public class ActionTrigger: Middleware {
     public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { action in
-                self.results.forEach { result in
-                    result(action, store.uncheckedFind).map(store.update)
+                self.triggers.forEach { trigger in
+                    trigger(action, store.uncheckedFind).map(store.update)
                 }
 
                 next(action)
