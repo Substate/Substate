@@ -13,11 +13,11 @@ public class ActionTrigger: Middleware {
 
     // MARK: - Middleware API
 
-    public func update(store: Store) -> (@escaping Update) -> Update {
+    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
         return { next in
             return { action in
                 self.triggers.forEach { trigger in
-                    trigger(action, store.uncheckedFind).map(store.update)
+                    trigger(action, find).map(update)
                 }
 
                 next(action)
@@ -26,3 +26,4 @@ public class ActionTrigger: Middleware {
     }
 
 }
+

@@ -13,22 +13,25 @@ public class ModelLogger: Middleware {
         self.output = output
     }
 
-    public func update(store: Store) -> (@escaping Update) -> Update {
+    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
         return { next in
             return { [self] action in
                 next(action)
-                fire(store: store)
+                fire(find: find)
             }
         }
     }
 
-    private func fire(store: Store) {
+    /// TODO: This isn’t great behaviour for the non-filter case. We used to have access to the root
+    /// model, but now that’s gone from the middleware API. What to do?
+    private func fire(find: Find) {
         if filter {
-            store.allModels
+            find(nil)
                 .filter { $0 is LoggedModel }
                 .forEach { output(format(model: $0)) }
         } else {
-            output(format(model: store.rootModel))
+            find(nil)
+                .forEach { output(format(model: $0)) }
         }
 
     }

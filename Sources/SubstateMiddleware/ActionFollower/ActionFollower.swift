@@ -6,17 +6,17 @@ public class ActionFollower: Middleware {
 
     public init() {}
 
-    public func update(store: Store) -> (@escaping Update) -> Update {
+    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
         return { next in
             return { action in
                 next(action)
 
                 if let action = action as? FollowupAction {
-                    store.update(action.followup)
+                    update(action.followup)
                 }
 
                 if let action = action as? MultipleFollowupAction {
-                    action.followup.forEach(store.update)
+                    action.followup.forEach(update)
                 }
             }
         }

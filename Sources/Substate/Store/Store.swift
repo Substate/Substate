@@ -21,7 +21,7 @@ public class Store: ObservableObject {
     // Don’t really need this to be published, can handle the single objectWillChange() call manually?
     @Published private var model: InternalModel
     private let middleware: [Middleware]
-    private var updateFunction: Middleware.Update!
+    private var updateFunction: Update!
 
     // TODO: Provide a publisher/AsyncSequence for easy subscription to model changes
 
@@ -34,10 +34,11 @@ public class Store: ObservableObject {
 
         self.updateFunction = self.middleware
             .reversed()
-            .reduce({ action in
-                self.performUpdate(action: action)
-            }, { update, middleware in
-                return middleware.update(store: self)(update)
+            .reduce({ [unowned self] in self.performUpdate(action: $0) }, { update, middleware in
+                let weakUpdate: Update = { [weak self] in self?.update($0) }
+                let weakFind: Find = { [weak self] in self?.uncheckedFind($0) ?? [] }
+
+                return middleware.update(update: weakUpdate, find: weakFind)(update)
             })
 
         self.update(Start())
@@ -82,11 +83,15 @@ public class Store: ObservableObject {
         flatten(object: model).first(where: { $0 is ModelType }) as? ModelType
     }
 
-    public func uncheckedFind(_ modelType: Model.Type) -> Model? {
+    public func uncheckedFind(_ modelType: Model.Type? = nil) -> [Model] {
         // Is there some way to avoid needing this version of find?
         // In cases where we don’t have the model type statically, can we still somehow
         // call the generic find<>?
-        flatten(object: model).first(where: { type(of: $0) == modelType }) as? Model
+        if let modelType = modelType {
+            return flatten(object: model).filter { type(of: $0) == modelType }.compactMap { $0 as? Model }
+        } else {
+            return flatten(object: model).compactMap { $0 as? Model }
+        }
     }
 
     // TODO: Better naming

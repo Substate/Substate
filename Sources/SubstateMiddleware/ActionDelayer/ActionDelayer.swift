@@ -5,7 +5,7 @@ public class ActionDelayer: Middleware {
 
     public init() {}
 
-    public func update(store: Store) -> (@escaping Update) -> Update {
+    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
         return { next in
             return { action in
                 // TODO: We don’t need to capture self here!
@@ -29,5 +29,7 @@ public class ActionDelayer: Middleware {
     private func output(message: String) {
         print(message) // TODO: Use some kind of more general shared logger
     }
+
+
 
 }

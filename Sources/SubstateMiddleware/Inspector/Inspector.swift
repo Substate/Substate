@@ -16,7 +16,7 @@ public class Inspector: Middleware {
         var id: Date { date }
     }
 
-    public func update(store: Store) -> (@escaping Update) -> Update {
+    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
         return { next in
             return { action in
 

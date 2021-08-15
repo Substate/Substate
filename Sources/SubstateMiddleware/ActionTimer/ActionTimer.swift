@@ -31,7 +31,7 @@ public class ActionTimer: Middleware {
         }
     }
 
-    public func update(store: Store) -> (@escaping Update) -> Update {
+    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
         return { next in
             return { [self] action in
                 if (filter && action is TimedAction) || !filter {
