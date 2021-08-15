@@ -17,7 +17,7 @@ let soundTriggers = ActionTriggerList {
 
     Notifications.Dismiss.trigger(Sound.Play(.swish))
 
-    // This is ot well factored! Should be more like add button pressed on TasksScreen
+    // This is not well factored! Should be more like add button pressed on TasksScreen
     // and dismissed on add screen.
     CreateTaskScreenModel.Toggle.trigger {
         toggle in Sound.Play(toggle.isActive ? .pop : .swish)

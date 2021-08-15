@@ -25,5 +25,5 @@ This package provides a broad set of built-in middleware for application develop
 ### App Logic
 
 - ``ActionFollower``
-- ``ActionMapper``
+- ``ActionTrigger``
 

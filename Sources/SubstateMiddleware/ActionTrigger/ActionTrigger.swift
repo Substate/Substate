@@ -1,6 +1,9 @@
 import Foundation
 import Substate
 
+/// TODO: Get rid of this root class and make the individual 'ActionTriggerList's conform to the
+/// middleware protocol to avoid the useless layer of wrapping.
+/// 
 public class ActionTrigger: Middleware {
 
     // MARK: - Initialisation
