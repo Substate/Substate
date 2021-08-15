@@ -3,10 +3,19 @@ import Substate
 
 struct TodosAppModel: Model {
 
+    var tabs = Tabs()
+    var settings = Settings()
+
+    var tasks = Tasks()
+    var createTaskScreen = CreateTaskScreenModel()
+
+
+
+
+
     var titlebar = Titlebar()
     var toolbar = Toolbar()
 
-    var tasks = Tasks()
     var filter = Filter()
     var notifications = Notifications()
 
@@ -17,5 +26,5 @@ struct TodosAppModel: Model {
 }
 
 extension TodosAppModel {
-    static let example = TodosAppModel()
+    static let preview = TodosAppModel()
 }

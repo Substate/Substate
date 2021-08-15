@@ -4,18 +4,20 @@ extension Store {
     ///
     public struct Start: Action {}
 
-    /// Notification that the store will begin its setup phase.
+    /// Dynamically register a model for use with the store.
     ///
-    /// The setup phase is where all middleware is initialised, so middleware may begin generating
-    /// actions from this point.
+    /// Primarily intended for use with middleware as a way of storing and mutating configuration
+    /// information. Middleware may register a model to be held by the store and updated according
+    /// to its own `update(action:)` method. Middleware may later query the store for any registered
+    /// models and get their values, or dispatch further actions to update them.
     ///
-    public struct Setup: Action {}
+    public struct Register: Action {
+        let model: Model
 
-    /// Notification that the setup phase has completed.
-    ///
-    /// Anything relying on middleware being up and running should catch this action.
-    ///
-    public struct SetupDidComplete: Action {}
+        public init(model: Model) {
+            self.model = model
+        }
+    }
 
     /// Directly replace all models of type provided with the given value.
     ///

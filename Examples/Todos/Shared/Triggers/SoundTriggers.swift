@@ -1,17 +1,26 @@
+import Substate
 import SubstateMiddleware
 
 let soundTriggers = ActionTriggerList {
 
-    Tasks.Create
-        .trigger(Sound.Play(.twinkle))
+    Tabs.Select.trigger(Sound.Play(.click))
 
-    Tasks.Delete
-        .trigger(Sound.Play(.warp))
+    Settings.SetTheme.trigger(Sound.Play(.click))
+    Settings.SetSounds.trigger(Sound.Play(.click))
+    Settings.SetColourScheme.trigger(Sound.Play(.click))
 
-    Tasks.Toggle
-        .trigger(Sound.Play(.pow))
+    Tasks.Create.trigger(Sound.Play(.twinkle))
+    Tasks.Delete.trigger(Sound.Play(.warp))
+    Tasks.Toggle.trigger(Sound.Play(.pow)) // switch on state! More elegant API!
 
-    Toolbar.AddButtonWasPressed
-        .trigger(Sound.Play(.pop))
+    Toolbar.AddButtonWasPressed.trigger(Sound.Play(.pop))
+
+    Notifications.Dismiss.trigger(Sound.Play(.swish))
+
+    // This is ot well factored! Should be more like add button pressed on TasksScreen
+    // and dismissed on add screen.
+    CreateTaskScreenModel.Toggle.trigger {
+        toggle in Sound.Play(toggle.isActive ? .pop : .swish)
+    }
 
 }

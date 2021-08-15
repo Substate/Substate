@@ -8,10 +8,6 @@ public class ActionPublisher: Middleware {
     private let publisher = PassthroughSubject<Action, Never>()
     private var subscriptions: [AnyCancellable] = []
 
-    public let model: Model? = nil
-
-    public func setup(store: Store) {}
-
     public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { action in

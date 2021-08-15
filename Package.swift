@@ -11,8 +11,8 @@ let package = Package(
 
     products: [
         .library(name: "Substate", targets: ["Substate"]),
-        .library(name: "SubstateMiddleware", targets: ["SubstateMiddleware"]),
         .library(name: "SubstateUI", targets: ["SubstateUI"]),
+        .library(name: "SubstateMiddleware", targets: ["SubstateMiddleware"]),
         .library(name: "Package", targets: ["Substate", "SubstateMiddleware", "SubstateUI"]),
     ],
 
@@ -22,10 +22,11 @@ let package = Package(
 
     targets: [
         .target(name: "Substate", dependencies: ["Runtime"]),
-        .target(name: "SubstateMiddleware", dependencies: ["Substate"]),
         .target(name: "SubstateUI", dependencies: ["Substate"]),
+        .target(name: "SubstateMiddleware", dependencies: ["Substate"]),
 
         .testTarget(name: "SubstateTests", dependencies: ["Substate"]),
+        .testTarget(name: "SubstateUITests", dependencies: ["Substate", "SubstateUI"]),
         .testTarget(name: "SubstateMiddlewareTests", dependencies: ["Substate", "SubstateMiddleware"]),
     ]
 )

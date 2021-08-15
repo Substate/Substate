@@ -3,13 +3,7 @@ import Substate
 
 public class Inspector: Middleware {
 
-    public var model: Model?
-
     public init() {}
-
-    public func setup(store: Store) {
-
-    }
 
     /// A makeshift model for log entries.
     /// Lots more work to do to create something good here that works well with whatever we end up with on the client.

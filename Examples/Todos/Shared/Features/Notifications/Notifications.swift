@@ -14,18 +14,18 @@ struct Notifications: Model {
     struct Show: Action, FollowupAction {
         let id = UUID()
         let message: String
-
-        var followup: Action { DismissAfterDelay(id: id) }
+        let followup: Action = Changed()
     }
 
-    struct Dismiss: Action {
+    struct Dismiss: Action, FollowupAction {
         let id: UUID
+        let followup: Action = Changed()
     }
+
+    struct Changed: Action {}
 
     struct DismissAfterDelay: Action, DelayedAction {
-        let id: UUID
-
-        let delay: TimeInterval = 5
+        let delay: TimeInterval = 2
     }
 
     mutating func update(action: Action) {
@@ -37,8 +37,10 @@ struct Notifications: Model {
         case let action as Dismiss:
             notifications.removeAll { $0.id == action.id }
 
-        case let action as DismissAfterDelay:
-            notifications.removeAll { $0.id == action.id }
+        case is DismissAfterDelay:
+            if !notifications.isEmpty {
+                notifications.removeLast()
+            }
 
         default:
             ()
@@ -50,4 +52,14 @@ struct Notifications: Model {
 extension String {
     static let taskCreated = "Task Created"
     static let taskDeleted = "Task Deleted"
+}
+
+extension Notifications.Notification {
+    static let preview = Notifications.Notification(id: .init(), message: "This is a notification")
+}
+
+extension Notifications {
+    static let preview = Notifications(notifications: [
+        .preview, .preview, .preview
+    ])
 }

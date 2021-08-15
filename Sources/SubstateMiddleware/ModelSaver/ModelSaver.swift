@@ -14,10 +14,12 @@ public class ModelSaver: Middleware {
     private var saveTrigger: AnyPublisher<Void, Never>
     private var storeCache: Store? // TODO: How can we get around this? It sucks to keep a reference to the store!
 
+    private var initialConfiguration: Configuration
+
     /// Create a new `ModelSaver` with the given configuration.
     ///
     public init(configuration: Configuration = .initial) {
-        self.model = configuration
+        self.initialConfiguration = configuration
         print(NSHomeDirectory())
 
         // TODO: Factor out this setup and be able to redo it cleanly if configuration is updated
@@ -48,21 +50,21 @@ public class ModelSaver: Middleware {
 
     // MARK: - Middleware API
 
-    public var model: Model?
-
-    public func setup(store: Store) {
-        storeCache = store // Ugh...
-        let configuration = store.find(Configuration.self)!
-
-        if configuration.loadStrategy == .automatic {
-            store.update(LoadAll())
-        }
-    }
-
     public func update(store: Store) -> (@escaping Update) -> Update {
         { next in
             { [self] action in
                 switch action {
+                case is Store.Start:
+                    store.update(Store.Register(model: initialConfiguration))
+                    store.update(Setup())
+                case is Setup:
+                    // TODO: Factor out
+                    storeCache = store // Ugh...
+                    let configuration = store.find(Configuration.self)!
+
+                    if configuration.loadStrategy == .automatic {
+                        store.update(LoadAll())
+                    }
                 case let action as Load: load(type: action.type, using: store)
                 case let action as Save: save(type: action.type, using: store)
                 case is LoadAll: loadAll(using: store)

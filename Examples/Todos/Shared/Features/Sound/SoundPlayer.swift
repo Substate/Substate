@@ -6,14 +6,13 @@ class SoundPlayer {
 
     init() {
         ids = .init(repeating: SystemSoundID(), count: Sound.allCases.count)
-        
+
         Sound.allCases.enumerated().forEach { index, sound in
             guard let url = Bundle.main.url(forResource: sound.rawValue, withExtension: "wav") else {
                 fatalError("Couldn’t find sound file")
             }
 
-            let cfurl = url as CFURL
-            AudioServicesCreateSystemSoundID(cfurl, &ids[index])
+            AudioServicesCreateSystemSoundID(url as CFURL, &ids[index])
         }
     }
 

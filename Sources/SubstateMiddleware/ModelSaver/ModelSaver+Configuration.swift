@@ -57,6 +57,11 @@ extension ModelSaver {
         public enum UpdateStrategy {
             case manual
             case automatic
+
+            // Maybe change to 'replace' and 'update'
+            // Where replace is the direct store replace
+            // And update throws out an Update<ModelType> action
+            // Maybe update isn’t the best name though
         }
 
         // MARK: - Update

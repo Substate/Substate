@@ -5,17 +5,13 @@ let appTriggers = ActionTriggerList {
 
     soundTriggers
     notificationTriggers
+    saveTriggers
 
-    // Load & Save
-
-    Tasks.Changed
-        .trigger(ModelSaver.Save(Tasks.self))
+    // Titlebar
 
     ModelSaver.UpdateDidComplete
         .map(\Tasks.all.count)
         .trigger(Titlebar.UpdateCount.init)
-
-    // Titlebar
 
     Tasks.Changed
         .map(\Tasks.all.count)

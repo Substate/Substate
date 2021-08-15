@@ -11,7 +11,7 @@ struct ListRowView: View {
     var body: some View {
         HStack(alignment: .center) {
             Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
-                .foregroundColor(.yellow)
+                .foregroundColor(task.completed ? .accentColor : .secondary)
                 .font(.largeTitle)
 
             VStack {

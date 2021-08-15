@@ -5,16 +5,19 @@ import Runtime
 ///
 public class Store: ObservableObject {
 
-    // TODO: Since we’re dogfooding our own state management system here right in the store,
-    // is there any API we’d like to expose? Some actions on the store?
-    struct InternalModel: Model {
-        var middlewareModels: [Model]
-        var appModel: Model
-        func update(action: Action) {}
+    // TODO: Put any other previously-special-cased operations into this model as official store
+    // actions, and keep the `reduce` function completely clean so all it does is walk the tree.
+    private struct InternalModel: Model {
+        var staticModel: Model
+        var dynamicModels: [Model] = []
+
+        mutating func update(action: Action) {
+            if let register = action as? Register {
+                dynamicModels.append(register.model)
+            }
+        }
     }
-    
-    // No point in this being public since underlying type isn’t available
-    // Need to use select(state:), and make that more ergonomic
+
     // Don’t really need this to be published, can handle the single objectWillChange() call manually?
     @Published private var model: InternalModel
     private let middleware: [Middleware]
@@ -25,10 +28,7 @@ public class Store: ObservableObject {
     /// Create a store with an initial root model, and any required middleware.
     ///
     public init(model: Model, middleware: [Middleware] = []) {
-        self.model = InternalModel(
-            middlewareModels: middleware.compactMap(\.model),
-            appModel: model
-        )
+        self.model = InternalModel(staticModel: model)
 
         self.middleware = middleware
 
@@ -41,9 +41,6 @@ public class Store: ObservableObject {
             })
 
         self.update(Start())
-        self.update(Setup())
-        self.middleware.forEach { $0.setup(store: self) }
-        self.update(SetupDidComplete())
 
         // TODO: Build up a list of substate type -> path segment mappings
         // Then at runtime use Mirror.descendant(a, b, c) to grab the value, rather than iterating every time
@@ -94,7 +91,7 @@ public class Store: ObservableObject {
 
     // TODO: Better naming
     public var rootModel: Model {
-        model.appModel
+        model.staticModel
     }
 
     // TODO: Better naming

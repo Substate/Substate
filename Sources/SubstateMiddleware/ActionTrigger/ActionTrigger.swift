@@ -13,10 +13,6 @@ public class ActionTrigger: Middleware {
 
     // MARK: - Middleware API
 
-    public var model: Model?
-
-    public func setup(store: Store) {}
-
     public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { action in

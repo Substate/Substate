@@ -3,6 +3,8 @@ import Substate
 
 extension ModelSaver {
 
+    struct Setup: Action {}
+
     // MARK: - Loading
 
     /// Load a model from persistent storage.
@@ -56,7 +58,7 @@ extension ModelSaver {
     public struct Save: Action {
         public let type: Model.Type
 
-        public init(_ type: Model.Type) {
+        public init<T>(_ type: T.Type) where T: Model, T: SavedModel {
             self.type = type
         }
     }

@@ -14,8 +14,6 @@ public class ActionTimer: Middleware {
         self.filter = filter
     }
 
-    public let model: Model? = nil
-
     // TODO: Plain numeric values with a custom print formatter
     private struct Values {
         let action: String
@@ -32,8 +30,6 @@ public class ActionTimer: Middleware {
             self.avg = avg
         }
     }
-
-    public func setup(store: Store) {}
 
     public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in

@@ -22,20 +22,22 @@ public class ActionFunneller: Middleware {
 
     // MARK: - Middleware API
 
-    public var model: Model? = nil // { initialConfiguration } // For now since the Store isn’t fully recursive, we’re tracking our own state.
-
-    public func setup(store: Store) {
-        store.update(Start())
-    }
-
     public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { action in
+                if action is Store.Start {
+                    store.update(Self.Start())
+                    next(action)
+                    return
+                }
+
+
                 next(action)
                 // ...
 
 //                if let configuration = store.find(Configuration.self) {
 //                  ...
+                // TODO: When store supports full recursion, use it for our config here
 //                }
 
                 // Extremely clunky, but it’s a start!

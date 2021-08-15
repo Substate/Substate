@@ -43,8 +43,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3716C80C26B21FF2005B9ACA /* Counter--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Counter--iOS--Info.plist"; sourceTree = "<group>"; };
-		3716C80D26B22150005B9ACA /* Counter--macOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Counter--macOS--Info.plist"; sourceTree = "<group>"; };
 		3716C81126B224AE005B9ACA /* Counter (macOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Counter (macOS).entitlements"; sourceTree = "<group>"; };
 		3763BB2F26AA1E80001BEE76 /* CounterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterApp.swift; sourceTree = "<group>"; };
 		3763BB3026AA1E80001BEE76 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
@@ -100,8 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				3716C81126B224AE005B9ACA /* Counter (macOS).entitlements */,
-				3716C80D26B22150005B9ACA /* Counter--macOS--Info.plist */,
-				3716C80C26B21FF2005B9ACA /* Counter--iOS--Info.plist */,
 				3763BB2E26AA1E80001BEE76 /* Shared */,
 				3763BB4426AA1E81001BEE76 /* Tests iOS */,
 				3763BB4E26AA1E81001BEE76 /* Tests macOS */,
@@ -492,7 +488,6 @@
 				DEVELOPMENT_TEAM = W48Z9ZM8JR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Counter--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -523,7 +518,6 @@
 				DEVELOPMENT_TEAM = W48Z9ZM8JR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Counter--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -560,7 +554,6 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Counter--macOS--Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -591,7 +584,6 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Counter--macOS--Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

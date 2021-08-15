@@ -14,7 +14,7 @@ extension ActionLogger {
     /// ```
     ///
     public struct Configuration: Model {
-        public var isActive = false
+        public var isActive = true
 
         public mutating func update(action: Action) {
             switch action {

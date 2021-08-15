@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		3716C81B26B2308D005B9ACA /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBE026AB84EF001BEE76 /* ListRowView.swift */; };
+		3730CA8E26BD863F001B1558 /* CreateTaskScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3730CA8D26BD863F001B1558 /* CreateTaskScreen.swift */; };
+		3730CA9026BD86D7001B1558 /* CreateTaskScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3730CA8F26BD86D7001B1558 /* CreateTaskScreenModel.swift */; };
+		3730CA9226BD8D41001B1558 /* swish.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3730CA9126BD8D41001B1558 /* swish.wav */; };
+		3730CA9426BD8E56001B1558 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3730CA9326BD8E56001B1558 /* click.wav */; };
+		3730CA9626BDECE3001B1558 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3730CA9526BDECE3001B1558 /* NotificationView.swift */; };
 		373DA22926BA078D008E77BA /* twinkle.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22526BA078D008E77BA /* twinkle.wav */; };
 		373DA22A26BA078D008E77BA /* twinkle.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22526BA078D008E77BA /* twinkle.wav */; };
 		373DA22B26BA078D008E77BA /* warp.wav in Resources */ = {isa = PBXBuildFile; fileRef = 373DA22626BA078D008E77BA /* warp.wav */; };
@@ -51,6 +56,17 @@
 		3763BBE126AB84EF001BEE76 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBE026AB84EF001BEE76 /* ListRowView.swift */; };
 		376FEA6426B36A23004BD597 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376FEA6326B36A23004BD597 /* Filter.swift */; };
 		376FEA6526B36A23004BD597 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376FEA6326B36A23004BD597 /* Filter.swift */; };
+		37752A4826BC911000730E7D /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A4726BC911000730E7D /* Tabs.swift */; };
+		37752A4B26BCA15E00730E7D /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A4A26BCA15E00730E7D /* SettingsScreen.swift */; };
+		37752A4E26BCA18800730E7D /* TasksScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A4D26BCA18800730E7D /* TasksScreen.swift */; };
+		37752A5126BCA2AE00730E7D /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A5026BCA2AE00730E7D /* Themes.swift */; };
+		37752A5326BCA32100730E7D /* Theme+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A5226BCA32100730E7D /* Theme+UI.swift */; };
+		37752A5526BCA3A900730E7D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A5426BCA3A900730E7D /* Settings.swift */; };
+		37752A5726BCA48A00730E7D /* SaveTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A5626BCA48A00730E7D /* SaveTriggers.swift */; };
+		37752A5926BCA51B00730E7D /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A5826BCA51B00730E7D /* Tab.swift */; };
+		37752A5B26BCA5DC00730E7D /* TabsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A5A26BCA5DC00730E7D /* TabsContainer.swift */; };
+		37752A5D26BCA7B600730E7D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A5C26BCA7B600730E7D /* Theme.swift */; };
+		37752A5F26BCAA5500730E7D /* Settings+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A5E26BCAA5500730E7D /* Settings+UI.swift */; };
 		37C428EC26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */; };
 		37C428ED26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */; };
 		37C428EF26B9936200C26503 /* TodosAppFunnels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EE26B9936200C26503 /* TodosAppFunnels.swift */; };
@@ -89,6 +105,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3730CA8D26BD863F001B1558 /* CreateTaskScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTaskScreen.swift; sourceTree = "<group>"; };
+		3730CA8F26BD86D7001B1558 /* CreateTaskScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTaskScreenModel.swift; sourceTree = "<group>"; };
+		3730CA9126BD8D41001B1558 /* swish.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = swish.wav; sourceTree = "<group>"; };
+		3730CA9326BD8E56001B1558 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
+		3730CA9526BDECE3001B1558 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		373DA22526BA078D008E77BA /* twinkle.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = twinkle.wav; sourceTree = "<group>"; };
 		373DA22626BA078D008E77BA /* warp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = warp.wav; sourceTree = "<group>"; };
 		373DA22726BA078D008E77BA /* pow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pow.wav; sourceTree = "<group>"; };
@@ -113,6 +134,17 @@
 		3763BBD226AAB8F1001BEE76 /* TitlebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitlebarView.swift; sourceTree = "<group>"; };
 		3763BBE026AB84EF001BEE76 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
 		376FEA6326B36A23004BD597 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		37752A4726BC911000730E7D /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
+		37752A4A26BCA15E00730E7D /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		37752A4D26BCA18800730E7D /* TasksScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksScreen.swift; sourceTree = "<group>"; };
+		37752A5026BCA2AE00730E7D /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
+		37752A5226BCA32100730E7D /* Theme+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+UI.swift"; sourceTree = "<group>"; };
+		37752A5426BCA3A900730E7D /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		37752A5626BCA48A00730E7D /* SaveTriggers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveTriggers.swift; sourceTree = "<group>"; };
+		37752A5826BCA51B00730E7D /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
+		37752A5A26BCA5DC00730E7D /* TabsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsContainer.swift; sourceTree = "<group>"; };
+		37752A5C26BCA7B600730E7D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		37752A5E26BCAA5500730E7D /* Settings+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+UI.swift"; sourceTree = "<group>"; };
 		37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notifications+ShowForTask.swift"; sourceTree = "<group>"; };
 		37C428EE26B9936200C26503 /* TodosAppFunnels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppFunnels.swift; sourceTree = "<group>"; };
 		37C428F226B9E3D000C26503 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
@@ -168,6 +200,7 @@
 				37D99C5E26B60D390015FEEE /* AppTriggers.swift */,
 				373DA23226BA8FEF008E77BA /* SoundTriggers.swift */,
 				373DA23526BA8FF6008E77BA /* NotificationTriggers.swift */,
+				37752A5626BCA48A00730E7D /* SaveTriggers.swift */,
 			);
 			path = Triggers;
 			sourceTree = "<group>";
@@ -191,12 +224,11 @@
 				3763BBBF26AA3B04001BEE76 /* TodosAppModel.swift */,
 				37C428EE26B9936200C26503 /* TodosAppFunnels.swift */,
 				373DA23126BA8FD9008E77BA /* Triggers */,
+				37752A4526BC90B400730E7D /* Features */,
 				37D99C6A26B7D8110015FEEE /* Task */,
 				3763BBBE26AA3AE8001BEE76 /* List */,
 				3763BBD426AAB8F4001BEE76 /* Titlebar */,
 				3763BBC126AA4086001BEE76 /* Toolbar */,
-				37D99C6B26B81AA00015FEEE /* Notifications */,
-				37C428F126B9E3A400C26503 /* Sound */,
 				3763BB6D26AA1E99001BEE76 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -264,6 +296,59 @@
 			path = Titlebar;
 			sourceTree = "<group>";
 		};
+		37752A4526BC90B400730E7D /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				37752A4626BC90FD00730E7D /* Tabs */,
+				37752A4C26BCA17D00730E7D /* Tasks */,
+				37752A4926BCA15300730E7D /* Settings */,
+				37752A4F26BCA28F00730E7D /* Themes */,
+				37D99C6B26B81AA00015FEEE /* Notifications */,
+				37C428F126B9E3A400C26503 /* Sound */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		37752A4626BC90FD00730E7D /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				37752A5826BCA51B00730E7D /* Tab.swift */,
+				37752A4726BC911000730E7D /* Tabs.swift */,
+				37752A5A26BCA5DC00730E7D /* TabsContainer.swift */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
+		37752A4926BCA15300730E7D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				37752A5426BCA3A900730E7D /* Settings.swift */,
+				37752A5E26BCAA5500730E7D /* Settings+UI.swift */,
+				37752A4A26BCA15E00730E7D /* SettingsScreen.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		37752A4C26BCA17D00730E7D /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				37752A4D26BCA18800730E7D /* TasksScreen.swift */,
+				3730CA8D26BD863F001B1558 /* CreateTaskScreen.swift */,
+				3730CA8F26BD86D7001B1558 /* CreateTaskScreenModel.swift */,
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
+		37752A4F26BCA28F00730E7D /* Themes */ = {
+			isa = PBXGroup;
+			children = (
+				37752A5C26BCA7B600730E7D /* Theme.swift */,
+				37752A5226BCA32100730E7D /* Theme+UI.swift */,
+				37752A5026BCA2AE00730E7D /* Themes.swift */,
+			);
+			path = Themes;
+			sourceTree = "<group>";
+		};
 		37C428F126B9E3A400C26503 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,6 +357,8 @@
 				373DA22826BA078D008E77BA /* pop.wav */,
 				373DA22726BA078D008E77BA /* pow.wav */,
 				373DA22526BA078D008E77BA /* twinkle.wav */,
+				3730CA9126BD8D41001B1558 /* swish.wav */,
+				3730CA9326BD8E56001B1558 /* click.wav */,
 				373DA22626BA078D008E77BA /* warp.wav */,
 			);
 			path = Sound;
@@ -293,6 +380,7 @@
 				37D99C6C26B81AAD0015FEEE /* Notifications.swift */,
 				37D99C6F26B81BC70015FEEE /* NotificationsView.swift */,
 				37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */,
+				3730CA9526BDECE3001B1558 /* NotificationView.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -433,6 +521,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				373DA22B26BA078D008E77BA /* warp.wav in Resources */,
+				3730CA9426BD8E56001B1558 /* click.wav in Resources */,
+				3730CA9226BD8D41001B1558 /* swish.wav in Resources */,
 				373DA22D26BA078D008E77BA /* pow.wav in Resources */,
 				373DA22F26BA078D008E77BA /* pop.wav in Resources */,
 				3763BB9126AA1E99001BEE76 /* Assets.xcassets in Resources */,
@@ -473,11 +563,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37752A5B26BCA5DC00730E7D /* TabsContainer.swift in Sources */,
 				37D99C6826B7D7DC0015FEEE /* Titlebar.swift in Sources */,
 				3763BBCD26AA4117001BEE76 /* Task.swift in Sources */,
 				3763BBD326AAB8F1001BEE76 /* TitlebarView.swift in Sources */,
 				3763BBC826AA40A8001BEE76 /* ListView.swift in Sources */,
+				37752A4E26BCA18800730E7D /* TasksScreen.swift in Sources */,
 				3763BBCA26AA40AF001BEE76 /* ListViewModel.swift in Sources */,
+				3730CA9026BD86D7001B1558 /* CreateTaskScreenModel.swift in Sources */,
 				37D99C5F26B60D390015FEEE /* AppTriggers.swift in Sources */,
 				37D99C7026B81BC70015FEEE /* NotificationsView.swift in Sources */,
 				37C428EC26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */,
@@ -489,12 +582,23 @@
 				37C428EF26B9936200C26503 /* TodosAppFunnels.swift in Sources */,
 				3763BBCF26AA411F001BEE76 /* TaskList.swift in Sources */,
 				3763BB8D26AA1E99001BEE76 /* TodosApp.swift in Sources */,
+				37752A4B26BCA15E00730E7D /* SettingsScreen.swift in Sources */,
+				37752A5526BCA3A900730E7D /* Settings.swift in Sources */,
 				3763BBC326AA4090001BEE76 /* ToolbarView.swift in Sources */,
 				376FEA6426B36A23004BD597 /* Filter.swift in Sources */,
+				3730CA8E26BD863F001B1558 /* CreateTaskScreen.swift in Sources */,
 				37C428F326B9E3D000C26503 /* SoundPlayer.swift in Sources */,
+				37752A5726BCA48A00730E7D /* SaveTriggers.swift in Sources */,
+				37752A5126BCA2AE00730E7D /* Themes.swift in Sources */,
+				37752A5F26BCAA5500730E7D /* Settings+UI.swift in Sources */,
+				37752A5D26BCA7B600730E7D /* Theme.swift in Sources */,
 				3763BBC026AA3B04001BEE76 /* TodosAppModel.swift in Sources */,
 				3763BBE126AB84EF001BEE76 /* ListRowView.swift in Sources */,
+				37752A5326BCA32100730E7D /* Theme+UI.swift in Sources */,
+				37752A5926BCA51B00730E7D /* Tab.swift in Sources */,
+				37752A4826BC911000730E7D /* Tabs.swift in Sources */,
 				373DA23626BA8FF6008E77BA /* NotificationTriggers.swift in Sources */,
+				3730CA9626BDECE3001B1558 /* NotificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

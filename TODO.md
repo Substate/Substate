@@ -29,6 +29,16 @@
 
 - Add ActionDebouncer and ActionThrottler into ActionDelayer and make it one middleware. Call it something like ActionTimer.
 
+- Expand StateLogger to show smart diffs, eg:
+  ▿ Substate.State
+    - Settings.appearance.tint { "green" → "orange" } 
+    - Settings.appearance.theme { "midnight" → "sunbeam" }
+
+- Expand loggers
+  - More formatting options, show timestamp etc
+  - Allow a predicate to select items to log?
+  - Probably provide a whole configuration struct like trigger
+
 - Undo manager!
   - Tag actions as undoable
   - Different undo contexts (also specified on the actions)

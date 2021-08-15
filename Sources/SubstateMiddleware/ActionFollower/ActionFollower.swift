@@ -6,10 +6,6 @@ public class ActionFollower: Middleware {
 
     public init() {}
 
-    public let model: Model? = nil
-
-    public func setup(store: Store) {}
-
     public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { action in

@@ -13,12 +13,6 @@ public class ModelLogger: Middleware {
         self.output = output
     }
 
-    public let model: Model? = nil
-
-    public func setup(store: Store) {
-        fire(store: store)
-    }
-
     public func update(store: Store) -> (@escaping Update) -> Update {
         return { next in
             return { [self] action in
