@@ -23,7 +23,7 @@ final class ActionPublisherTests: XCTestCase {
             .store(in: &subscriptions)
 
         XCTAssertFalse(actionWasPublished)
-        store.update(Action1())
+        store.send(Action1())
         XCTAssertTrue(actionWasPublished)
     }
 
@@ -37,7 +37,7 @@ final class ActionPublisherTests: XCTestCase {
         }
 
         XCTAssertFalse(actionWasPublished)
-        store.update(Action1())
+        store.send(Action1())
         XCTAssertTrue(actionWasPublished)
     }
 

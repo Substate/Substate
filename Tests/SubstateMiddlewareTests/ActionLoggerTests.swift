@@ -23,11 +23,11 @@ final class ActionLoggerTests: XCTestCase {
         var output = ""
         let logger = ActionLogger { output.append($0) }
         let store = Store(model: Component(), middleware: [logger])
-        store.update(Action1())
+        store.send(Action1())
         XCTAssert(output.contains("Action1"))
-        store.update(Action2(property: 1))
+        store.send(Action2(property: 1))
         XCTAssert(output.contains("Action2"))
-        store.update(Action3(property: 2))
+        store.send(Action3(property: 2))
         XCTAssert(output.contains("Action3"))
     }
 
@@ -35,11 +35,11 @@ final class ActionLoggerTests: XCTestCase {
         var output = ""
         let logger = ActionLogger(filter: false) { output.append($0) }
         let store = Store(model: Component(), middleware: [logger])
-        store.update(Action1())
+        store.send(Action1())
         XCTAssert(output.contains("Action1"))
-        store.update(Action2(property: 1))
+        store.send(Action2(property: 1))
         XCTAssert(output.contains("Action2"))
-        store.update(Action3(property: 2))
+        store.send(Action3(property: 2))
         XCTAssert(output.contains("Action3"))
     }
 
@@ -47,9 +47,9 @@ final class ActionLoggerTests: XCTestCase {
         var output = ""
         let logger = ActionLogger(filter: true) { output.append($0) }
         let store = Store(model: Component(), middleware: [logger])
-        store.update(Action2(property: 1))
+        store.send(Action2(property: 1))
         XCTAssert(output.contains("Action2"))
-        store.update(Action3(property: 2))
+        store.send(Action3(property: 2))
         XCTAssert(output.contains("Action3"))
     }
 
@@ -57,7 +57,7 @@ final class ActionLoggerTests: XCTestCase {
         var output = ""
         let logger = ActionLogger(filter: true) { output.append($0) }
         let store = Store(model: Component(), middleware: [logger])
-        store.update(Action1())
+        store.send(Action1())
         XCTAssertFalse(output.contains("Action1"))
     }
 
@@ -65,26 +65,26 @@ final class ActionLoggerTests: XCTestCase {
         var output = ""
         let logger = ActionLogger { output.append($0) }
         let store = Store(model: Component(), middleware: [logger])
-        store.update(Action2(property: 1))
+        store.send(Action2(property: 1))
         XCTAssert(output.contains("property: 1"))
-        store.update(Action3(property: 2))
+        store.send(Action3(property: 2))
         XCTAssert(output.contains("property: 2"))
     }
 
     func testRealConsoleOutput() throws {
         let store = Store(model: Component(), middleware: [ActionLogger()])
-        store.update(Action1())
-        store.update(Action2(property: 1))
-        store.update(Action3(property: 2))
+        store.send(Action1())
+        store.send(Action2(property: 1))
+        store.send(Action3(property: 2))
     }
 
     func testStopActionDisablesOutput() throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
         let store = Store(model: Component(), middleware: [logger])
-        store.update(ActionLogger.Stop())
+        store.send(ActionLogger.Stop())
         output = ""
-        store.update(Action1())
+        store.send(Action1())
         XCTAssertEqual(output, "")
     }
 
@@ -92,10 +92,10 @@ final class ActionLoggerTests: XCTestCase {
         var output = ""
         let logger = ActionLogger { output.append($0) }
         let store = Store(model: Component(), middleware: [logger])
-        store.update(ActionLogger.Stop())
+        store.send(ActionLogger.Stop())
         output = ""
-        store.update(ActionLogger.Start())
-        store.update(Action1())
+        store.send(ActionLogger.Start())
+        store.send(Action1())
         XCTAssertNotEqual(output, "")
     }
 
@@ -111,9 +111,9 @@ final class ActionLoggerTests: XCTestCase {
 
     func testLoggerStateChangesWhenStartAndStopAreDispatched() throws {
         let store = Store(model: Component(), middleware: [ActionLogger()])
-        store.update(ActionLogger.Stop())
+        store.send(ActionLogger.Stop())
         XCTAssertFalse(try XCTUnwrap(store.find(ActionLogger.Configuration.self)).isActive)
-        store.update(ActionLogger.Start())
+        store.send(ActionLogger.Start())
         XCTAssertTrue(try XCTUnwrap(store.find(ActionLogger.Configuration.self)).isActive)
     }
 

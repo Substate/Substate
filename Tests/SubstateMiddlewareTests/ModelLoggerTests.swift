@@ -50,7 +50,7 @@ final class ModelLoggerTests: XCTestCase {
         var output = ""
         let logger = ModelLogger { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.update(Action1())
+        store.send(Action1())
         XCTAssert(output.contains("Component1"))
     }
 
@@ -58,7 +58,7 @@ final class ModelLoggerTests: XCTestCase {
         var output = ""
         let logger = ModelLogger(filter: false) { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.update(Action1())
+        store.send(Action1())
         XCTAssert(output.contains("Component1"))
     }
 
@@ -66,7 +66,7 @@ final class ModelLoggerTests: XCTestCase {
         var output = ""
         let logger = ModelLogger(filter: true) { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.update(Action1())
+        store.send(Action1())
         XCTAssert(output.contains("Component2"))
         XCTAssert(output.contains("Component3"))
     }
@@ -75,7 +75,7 @@ final class ModelLoggerTests: XCTestCase {
         var output = ""
         let logger = ModelLogger(filter: true) { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.update(Action1())
+        store.send(Action1())
         XCTAssertFalse(output.contains("Component1"))
     }
 
@@ -83,13 +83,13 @@ final class ModelLoggerTests: XCTestCase {
         var output = ""
         let logger = ModelLogger { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.update(Action1())
+        store.send(Action1())
         XCTAssert(output.contains("property: 123"))
     }
 
     func testRealConsoleOutput() throws {
         let store = Store(model: Component1(), middleware: [ModelLogger()])
-        store.update(Action1())
+        store.send(Action1())
     }
 
     func testStoreInternalStateIsNotLeaked() throws {

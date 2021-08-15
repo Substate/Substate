@@ -8,7 +8,7 @@ public class ActionPublisher: Middleware {
     private let publisher = PassthroughSubject<Action, Never>()
     private var subscriptions: [AnyCancellable] = []
 
-    public func update(update: @escaping Update, find: Find) -> (@escaping Update) -> Update {
+    public func update(send: @escaping Send, find: Find) -> (@escaping Send) -> Send {
         return { next in
             return { action in
                 self.publisher.send(action)

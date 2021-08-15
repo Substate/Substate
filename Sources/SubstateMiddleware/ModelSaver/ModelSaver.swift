@@ -12,7 +12,7 @@ public class ModelSaver: Middleware {
 
     private let actionSubject = PassthroughSubject<Action, Never>()
     private var saveTrigger: AnyPublisher<Void, Never>
-    private var cachedUpdateFunction: Update? // TODO: How can we get around this?
+    private var cachedSendFunction: Send? // TODO: How can we get around this?
 
     private var initialConfiguration: Configuration
 
@@ -44,31 +44,31 @@ public class ModelSaver: Middleware {
         }
 
         saveTrigger
-            .sink { self.cachedUpdateFunction?(SaveAll()) }
+            .sink { self.cachedSendFunction?(SaveAll()) }
             .store(in: &subscriptions)
     }
 
     // MARK: - Middleware API
 
-    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
+    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
         { next in
             { [self] action in
                 switch action {
                 case is Store.Start:
-                    update(Store.Register(model: initialConfiguration))
-                    update(Setup())
+                    send(Store.Register(model: initialConfiguration))
+                    send(Setup())
                 case is Setup:
                     // TODO: Factor out
-                    cachedUpdateFunction = update
+                    cachedSendFunction = send
                     let configuration = find(Configuration.self).first as! Configuration
 
                     if configuration.loadStrategy == .automatic {
-                        update(LoadAll())
+                        send(LoadAll())
                     }
-                case let action as Load: load(type: action.type, using: find, and: update)
-                case let action as Save: save(type: action.type, using: find, and: update)
-                case is LoadAll: loadAll(using: find, and: update)
-                case is SaveAll: saveAll(using: find, and: update)
+                case let action as Load: load(type: action.type, using: find, and: send)
+                case let action as Save: save(type: action.type, using: find, and: send)
+                case is LoadAll: loadAll(using: find, and: send)
+                case is SaveAll: saveAll(using: find, and: send)
 
                 case is LoadDidSucceed, is LoadDidFail: ()
                 case is SaveDidSucceed, is SaveDidFail: ()
@@ -88,19 +88,19 @@ public class ModelSaver: Middleware {
 
     // MARK: - Loading
 
-    private func loadAll(using find: Find, and update: @escaping Update) {
+    private func loadAll(using find: Find, and send: @escaping Send) {
         find(nil).forEach { model in
             if model is SavedModel {
-                load(type: type(of: model), using: find, and: update)
+                load(type: type(of: model), using: find, and: send)
             }
         }
     }
 
-    private func load(type: Model.Type, using find: Find, and update: @escaping Update) {
+    private func load(type: Model.Type, using find: Find, and send: @escaping Send) {
         let configuration = find(Configuration.self).first as! Configuration
 
         guard let savedModelType = type as? SavedModel.Type else {
-            update(LoadDidFail(for: type, with: .modelIsNotASavedModel))
+            send(LoadDidFail(for: type, with: .modelIsNotASavedModel))
             return
         }
 
@@ -108,18 +108,18 @@ public class ModelSaver: Middleware {
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 if case .failure(let error) = completion {
-                    update(LoadDidFail(for: type, with: error))
+                    send(LoadDidFail(for: type, with: error))
                 }
             } receiveValue: { model in
                 let loadedType = Swift.type(of: model)
                 if loadedType == type {
-                    update(LoadDidSucceed(with: model))
+                    send(LoadDidSucceed(with: model))
                     if configuration.updateStrategy == .automatic {
-                        update(Store.Replace(model: model))
-                        update(UpdateDidComplete(type: type))
+                        send(Store.Replace(model: model))
+                        send(UpdateDidComplete(type: type))
                     }
                 } else {
-                    update(LoadDidFail(for: type, with: .wrongModelTypeReturned))
+                    send(LoadDidFail(for: type, with: .wrongModelTypeReturned))
                 }
 
             }
@@ -128,24 +128,24 @@ public class ModelSaver: Middleware {
 
     // MARK: - Saving
 
-    private func saveAll(using find: Find, and update: @escaping Update) {
+    private func saveAll(using find: Find, and send: @escaping Send) {
         find(nil).forEach { model in
             if model is SavedModel {
-                save(type: type(of: model), using: find, and: update)
+                save(type: type(of: model), using: find, and: send)
             }
         }
     }
 
-    private func save(type: Model.Type, using find: Find, and update: @escaping Update) {
+    private func save(type: Model.Type, using find: Find, and send: @escaping Send) {
         let configuration = find(Configuration.self).first as! Configuration
 
         guard let match = find(nil).first(where: { Swift.type(of: $0) == type }) else {
-            update(SaveDidFail(for: type, with: .modelNotFound))
+            send(SaveDidFail(for: type, with: .modelNotFound))
                 return
             }
 
         guard let model = match as? SavedModel else {
-            update(SaveDidFail(for: type, with: .modelIsNotASavedModel))
+            send(SaveDidFail(for: type, with: .modelIsNotASavedModel))
             return
         }
 
@@ -154,9 +154,9 @@ public class ModelSaver: Middleware {
             .sink { completion in
                 switch completion {
                 case .finished:
-                    update(SaveDidSucceed(for: type))
+                    send(SaveDidSucceed(for: type))
                 case .failure(let error):
-                    update(SaveDidFail(for: type, with: error))
+                    send(SaveDidFail(for: type, with: error))
                 }
             } receiveValue: { _ in }
             .store(in: &self.subscriptions)

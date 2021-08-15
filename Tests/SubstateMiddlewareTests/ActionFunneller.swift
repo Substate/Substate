@@ -38,11 +38,11 @@ final class ActionFunnellerTests: XCTestCase {
         let funneller = ActionFunneller(funnels: janeLoggedIn, johnLoggedIn, janeCompletedASession)
         let store = Store(model: Model1(), middleware: [ActionLogger(), funneller])
 
-        store.update(UserLoggedIn(id: "jane"))
+        store.send(UserLoggedIn(id: "jane"))
         // > FunnelDidComplete / Jane Logged In
 
-        store.update(UserCheckedMessages())
-        store.update(UserLoggedOut())
+        store.send(UserCheckedMessages())
+        store.send(UserLoggedOut())
         // > FunnelDidComplete / Jane Completed a Session
     }
 

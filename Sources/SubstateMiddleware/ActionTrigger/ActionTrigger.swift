@@ -13,11 +13,11 @@ public class ActionTrigger: Middleware {
 
     // MARK: - Middleware API
 
-    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
+    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
         return { next in
             return { action in
                 self.triggers.forEach { trigger in
-                    trigger(action, find).map(update)
+                    trigger(action, find).map(send)
                 }
 
                 next(action)

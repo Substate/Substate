@@ -13,7 +13,7 @@ public class ModelLogger: Middleware {
         self.output = output
     }
 
-    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
+    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
         return { next in
             return { [self] action in
                 next(action)

@@ -25,9 +25,9 @@ import Substate
 
         nonmutating set {
             if let action = action {
-                store.update(action(newValue))
+                store.send(action(newValue))
             } else {
-                store.update(Store.Replace(model: newValue))
+                store.send(Store.Replace(model: newValue))
             }
         }
     }
@@ -74,9 +74,9 @@ import Substate
             model[keyPath: keyPath] = newValue
 
             if let action = action {
-                store.update(action(newValue))
+                store.send(action(newValue))
             } else {
-                store.update(Store.Replace(model: model))
+                store.send(Store.Replace(model: model))
             }
         }
     }

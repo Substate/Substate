@@ -5,7 +5,7 @@ import Combine
 
 struct CounterView: View {
 
-    @Update var update
+    @Send var send
     @Model var counter: Counter
 
     let font = Font
@@ -18,21 +18,21 @@ struct CounterView: View {
             Text(String(counter.value))
 
             HStack {
-                Button(action: update(Counter.Decrement())) {
+                Button(action: send(Counter.Decrement())) {
                     Image(systemName: "minus.circle.fill")
                         .foregroundColor(.green)
                         .accessibility(label: Text("Decrement"))
                 }
                 .disabled(!counter.canDecrement)
 
-                Button(action: update(Counter.Reset())) {
+                Button(action: send(Counter.Reset())) {
                     Image(systemName: "trash.circle.fill")
                         .foregroundColor(.red)
                         .accessibility(label: Text("Reset"))
                 }
                 .disabled(!counter.canReset)
 
-                Button(action: update(Counter.Increment())) {
+                Button(action: send(Counter.Increment())) {
                     Image(systemName: "plus.circle.fill")
                         .foregroundColor(.green)
                         .accessibility(label: Text("Increment"))

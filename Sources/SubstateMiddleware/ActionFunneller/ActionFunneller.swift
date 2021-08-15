@@ -22,11 +22,11 @@ public class ActionFunneller: Middleware {
 
     // MARK: - Middleware API
 
-    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
+    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
         return { next in
             return { action in
                 if action is Store.Start {
-                    update(Self.Start())
+                    send(Self.Start())
                     next(action)
                     return
                 }
@@ -45,8 +45,8 @@ public class ActionFunneller: Middleware {
                     self.configuration.funnels[index].update(action: action)
 
                     if self.configuration.funnels[index].isComplete && !self.configuration.funnels[index].hasSentCompletion {
-                        update(Complete(target: type(of: self.configuration.funnels[index].action)))
-                        update(self.configuration.funnels[index].action)
+                        send(Complete(target: type(of: self.configuration.funnels[index].action)))
+                        send(self.configuration.funnels[index].action)
                         self.configuration.funnels[index].hasSentCompletion = true
 
                     }

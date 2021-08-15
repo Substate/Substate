@@ -79,33 +79,33 @@ final class StoreTests: XCTestCase {
     func testActionDispatch() throws {
         let store = Store(model: Counter())
 
-        store.update(Counter.Increment())
+        store.send(Counter.Increment())
         XCTAssertEqual(store.find(Counter.self)?.value, 1)
 
-        store.update(Counter.Decrement())
-        store.update(Counter.Decrement())
+        store.send(Counter.Decrement())
+        store.send(Counter.Decrement())
         XCTAssertEqual(store.find(Counter.self)?.value, -1)
 
-        store.update(Counter.Reset(toValue: 100))
+        store.send(Counter.Reset(toValue: 100))
         XCTAssertEqual(store.find(Counter.self)?.value, 100)
     }
 
     func testChildActionDispatch() throws {
         let store = Store(model: Counter())
 
-        store.update(SubCounter.Increment())
+        store.send(SubCounter.Increment())
         XCTAssertEqual(store.find(SubCounter.self)?.value, 1)
     }
 
     func testReplaceAction() throws {
         let store = Store(model: Counter(value: 123))
 
-        store.update(Store.Replace(model: Counter(value: 456)))
+        store.send(Store.Replace(model: Counter(value: 456)))
         XCTAssertEqual(store.find(Counter.self)?.value, 456)
         // Double-check child model state was not changed
         XCTAssertEqual(store.find(SubCounter.self)?.value, 0)
 
-        store.update(Store.Replace(model: SubCounter(value: 789)))
+        store.send(Store.Replace(model: SubCounter(value: 789)))
         XCTAssertEqual(store.find(SubCounter.self)?.value, 789)
         // Double-check parent model state was not changed
         XCTAssertEqual(store.find(Counter.self)?.value, 456)

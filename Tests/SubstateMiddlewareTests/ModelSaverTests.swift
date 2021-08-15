@@ -65,7 +65,7 @@ final class ModelSaverTests: XCTestCase {
         let logger = ActionLogger()
         let store = Store(model: Model1(), middleware: [logger, saver])
 
-        store.update(ModelSaver.Save(Model1.self))
+        store.send(ModelSaver.Save(Model1.self))
         // TODO: Test SaveDidSucceed is received
 
         wait(for: [saveFunctionExpectation], timeout: 1)
@@ -84,7 +84,7 @@ final class ModelSaverTests: XCTestCase {
         let logger = ActionLogger()
         let store = Store(model: Model1(), middleware: [logger, saver])
 
-        store.update(ModelSaver.Load(Model1.self))
+        store.send(ModelSaver.Load(Model1.self))
         // TODO: Test LoadDidSucceed is received
 
         wait(for: [loadFunctionExpectation], timeout: 1)
@@ -97,12 +97,12 @@ final class ModelSaverTests: XCTestCase {
         let saver1 = ModelSaver()
         let actionLogger1 = ActionLogger()
         let store1 = Store(model: model1, middleware: [actionLogger1, saver1])
-        store1.update(ModelSaver.Save(Model1.self))
+        store1.send(ModelSaver.Save(Model1.self))
 
         let saver2 = ModelSaver()
         let actionLogger2 = ActionLogger()
         let store2 = Store(model: model2, middleware: [actionLogger2, saver2])
-        store2.update(ModelSaver.Load(Model1.self))
+        store2.send(ModelSaver.Load(Model1.self))
 
         let expectation = XCTestExpectation()
 

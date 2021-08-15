@@ -21,7 +21,7 @@ public class Store: ObservableObject {
     // Don’t really need this to be published, can handle the single objectWillChange() call manually?
     @Published private var model: InternalModel
     private let middleware: [Middleware]
-    private var updateFunction: Update!
+    private var updateFunction: Send!
 
     // TODO: Provide a publisher/AsyncSequence for easy subscription to model changes
 
@@ -34,20 +34,20 @@ public class Store: ObservableObject {
 
         self.updateFunction = self.middleware
             .reversed()
-            .reduce({ [unowned self] in self.performUpdate(action: $0) }, { update, middleware in
-                let weakUpdate: Update = { [weak self] in self?.update($0) }
+            .reduce({ [weak self] in self?.performSend(action: $0) }, { update, middleware in
+                let weakSend: Send = { [weak self] in self?.send($0) }
                 let weakFind: Find = { [weak self] in self?.uncheckedFind($0) ?? [] }
 
-                return middleware.update(update: weakUpdate, find: weakFind)(update)
+                return middleware.update(send: weakSend, find: weakFind)(update)
             })
 
-        self.update(Start())
+        self.send(Start())
 
         // TODO: Build up a list of substate type -> path segment mappings
         // Then at runtime use Mirror.descendant(a, b, c) to grab the value, rather than iterating every time
     }
 
-    public func update(_ action: Action) {
+    public func send(_ action: Action) {
         precondition(Thread.isMainThread, "Update must be called on the main thread!")
         if isUpdating {
             queue.append(action)
@@ -62,14 +62,14 @@ public class Store: ObservableObject {
         isUpdating = false
 
         if !queue.isEmpty {
-            self.update(queue.removeFirst())
+            self.send(queue.removeFirst())
         }
     }
 
     var isUpdating = false
     var queue: [Action] = []
 
-    private func performUpdate(action: Action) {
+    private func performSend(action: Action) {
         precondition(Thread.isMainThread, "Update must be called on the main thread!")
         model = reduce(model: model, action: action)
     }

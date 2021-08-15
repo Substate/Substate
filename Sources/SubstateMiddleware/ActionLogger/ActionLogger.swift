@@ -13,12 +13,12 @@ public class ActionLogger: Middleware {
         self.output = output
     }
 
-    public func update(update: @escaping Update, find: @escaping Find) -> (@escaping Update) -> Update {
+    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
         return { next in
             return { [self] action in
                 if action is Store.Start {
-                    update(Store.Register(model: ActionLogger.Configuration()))
-                    update(Start())
+                    send(Store.Register(model: ActionLogger.Configuration()))
+                    send(Start())
                 }
 
                 let isActive = (find(ActionLogger.Configuration.self).first as? Configuration)?.isActive ?? true

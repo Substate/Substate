@@ -92,23 +92,25 @@ struct CounterView: View {
 }
 ```
 
-Use an `@Update` property to trigger model updates.
+Use an `@Send` property to trigger model updates.
 
 ```swift
 struct CounterView: View {
-    @Update var update
+    @Send var send
 
     var body: some View {
-        Button("Increment", action: update(Counter.Increment()))
-        Button("Decrement", action: update(Counter.Decrement()))
+        Button("Increment", action: send(Counter.Increment()))
+        Button("Decrement", action: send(Counter.Decrement()))
     }
 }
 ```
 
 Learn more about views:
 
+- [`@Send`](https://substate.dev/documentation/substateui/send)
 - [`@Model`](https://substate.dev/documentation/substateui/model)
-- [`@Update`](https://substate.dev/documentation/substateui/update)
+- [`@Value`](https://substate.dev/documentation/substateui/value)
+- [View Bindings & Value Selection](https://substate.dev/documentation/substateui/view-bindings-&-value-selection)
 
 ## 🌟 Previews
 
@@ -159,10 +161,10 @@ store.find(Counter.self) // => Optional<Counter>
 store.find(SubCounter.self) // => Optional<SubCounter>
 ```
 
-Update your app’s model directly by passing an action to `update(_:)`.
+Update your app’s model directly by passing an action to `send(_:)`.
 
 ```swift
-store.update(Counter.Increment())
+store.send(Counter.Increment())
 ```
 
 - ``Store``
@@ -182,7 +184,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ```swift
 let store = Store(model: Counter(), middleware: [StateLogger(), ActionLogger()])
-store.update(Counter.Reset(to: 100))
+store.send(Counter.Reset(to: 100))
 ```
 
 ```swift
@@ -203,7 +205,7 @@ store.update(Counter.Reset(to: 100))
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
 
 ```swift
-struct DismissModal: DelayedAction {
+struct DismissMessage: DelayedAction {
     let id: UUID
     let delay: TimeInterval = 5
 }
@@ -274,7 +276,7 @@ let threeTasksCreatedFunnel = ActionFunnel(for: Milestones.ThreeTasksCreated()) 
 }
 ```
 
-- [`ActionMapper`](https://substate.dev/documentation/substatemiddleware/actionmapper)
+- [`ActionTrigger`](https://substate.dev/documentation/substatemiddleware/actiontrigger)
 - [`ActionFunnel`](https://substate.dev/documentation/substatemiddleware/actionfunnel)
 
 ### Debugging
@@ -303,15 +305,15 @@ func testCounter() throws {
     let store = Store(model: Counter())
     XCTAssertEqual(store.find(Counter.self)?.value, 0)
 
-    store.update(Counter.Increment())
+    store.send(Counter.Increment())
     XCTAssertEqual(store.find(Counter.self)?.value, 1)
 
-    store.update(SubCounter.Increment())
+    store.send(SubCounter.Increment())
     XCTAssertEqual(store.find(SubCounter.self)?.value, 1)
 }
 ```
 
-Pass in alternate services to provide behaviour appropriate for your tests. Anything goes — no need to subclass or otherwise hijack your production services unless you want to.
+Pass in alternate services to provide behaviour appropriate for your tests. Anything goes — no need to subclass or mock or otherwise hijack your production services.
 
 ```swift
 class FixedNumberFetcher: Service {

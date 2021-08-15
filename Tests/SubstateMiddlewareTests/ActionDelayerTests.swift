@@ -25,13 +25,13 @@ final class ActionDelayerTests: XCTestCase {
 
     func testNonDelayedActionIsReceivedImmediately() throws {
         let store = Store(model: Component(), middleware: [ActionDelayer()])
-        store.update(Action1())
+        store.send(Action1())
         XCTAssertTrue(try XCTUnwrap(store.find(Component.self)).action1Received)
     }
 
     func testDelayedActionIsNotReceivedImmediately() throws {
         let store = Store(model: Component(), middleware: [ActionDelayer()])
-        store.update(Action2())
+        store.send(Action2())
         XCTAssertFalse(try XCTUnwrap(store.find(Component.self)).action2Received)
     }
 
@@ -50,7 +50,7 @@ final class ActionDelayerTests: XCTestCase {
             expectation.fulfill()
         }
 
-        store.update(Action2())
+        store.send(Action2())
         wait(for: [expectation], timeout: 1.5)
     }
 

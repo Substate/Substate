@@ -49,7 +49,7 @@ final class ReusableModelTests: XCTestCase {
 
     func testFirstChildUpdates() throws {
         let store = Store(model: AppModel())
-        store.update(Pager<NewsScreen>.Next())
+        store.send(Pager<NewsScreen>.Next())
 
         XCTAssertEqual(store.find(Pager<NewsScreen>.self)?.page, 2)
         XCTAssertEqual(store.find(Pager<ProductsScreen>.self)?.page, 1)
@@ -57,7 +57,7 @@ final class ReusableModelTests: XCTestCase {
 
     func testSecondChildUpdates() throws {
         let store = Store(model: AppModel())
-        store.update(Pager<ProductsScreen>.Next())
+        store.send(Pager<ProductsScreen>.Next())
 
         XCTAssertEqual(store.find(Pager<NewsScreen>.self)?.page, 1)
         XCTAssertEqual(store.find(Pager<ProductsScreen>.self)?.page, 2)
