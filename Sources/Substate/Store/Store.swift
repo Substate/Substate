@@ -3,6 +3,21 @@ import Runtime
 
 /// Stores all models and allows them to be mutated by actions.
 ///
+/// TODO: Integrate the 'walker' (renamed!) into the store
+/// - cache the structure ('paths') of all models upfront; and when registering new ones
+/// - on send action, iterate through all paths and run the update (without walking the entire state tree)
+/// - optimise the find function since it can just query the cached paths and go straight to a matching one
+///   should work for both find functions
+/// - maybe store this whole damn info in the 'model'
+/// - implement 'replace' as a special case that only visits the relevant path (if found)
+///   - can still send action after so client models can see it
+///   - find out if we can do this with a generic so you can catch `Store.Replace<MyModel>`
+/// - do the same with register, we have custom behaviour there too.
+///
+/// - On second thoughts, with both replace and register why don’t we dogfood our own system and
+///   catch them within our internal model? Including caching?
+///   - And also for the initial model load in?
+///
 public class Store: ObservableObject {
 
     // TODO: Put any other previously-special-cased operations into this model as official store

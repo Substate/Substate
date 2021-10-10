@@ -10,8 +10,8 @@ public protocol Model {
 
 }
 
-extension Array: Model where Element == Model {
-    public mutating func update(action: Action) {
-        indices.forEach { self[$0].update(action: action) }
-    }
-}
+//extension Array: Model where Element == Model {
+//    public mutating func update(action: Action) {
+//        indices.forEach { self[$0].update(action: action) }
+//    }
+//}

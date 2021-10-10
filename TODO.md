@@ -6,10 +6,7 @@
 - Make the store not conform to ObservableObject so users can’t pass it as to .environmentObject() directly
   - To be able to prevent crashes due to a missing store, we want control over its passing in to the view hierarchy
   - Can probably use some wrapper type that binds to the store and conforms to ObservableObject and is used by the .store() and .state() wrappers
-  - Might be able to overload .environmentObject(Substate.Store) and provide an Xcode error message to explain why it’s deprecated/not possible? 
-
-- Maybe go back to `send()` for sending actions, easier to refer to 'sending' in the docs. Keep `update()` for models and middleware
-- Maybe also look again at `Model` for states. Does work nicely with view model naming
+  - Might be able to overload .environmentObject(Substate.Store) and provide an Xcode error message to explain why it’s deprecated/not possible?
 
 - Optimise state selection by computing a full tree on init
 - Provide some kind of helper on the store to create bindings for SwiftUI that take a setter action
@@ -24,14 +21,72 @@
     eg. struct MyComponent: State, AutoBindingState { let setter: ... }
     too coarse-grained? Provide map of bindable props? { bindableList = [\.isActive : SetActive.self, ...] }
 - Remove dependency on the Runtime library
+- Add an `oldValue` property to the `Replace` store action so models can observe changes if they want
+- Is there any possible way to get a nice `Replace<MyModel>` generic type?
 
 # Middleware
+
+- Effects system? At present it’s cumbersome to hook up service dependencies to receive and return actions.
+    - Maybe keep the API here super simple on purpose to force all mapping/referencing of model state through ActionTrigger
+    - Otherwise this could just become a version of ActionTrigger that duplicates all the same functionality and is really easy to abuse
+    - May need to think carefully about naming: `trigger()` may be out if we want to extend `Action` like this 
+```
+protocol Service {
+    var effects: Effects { get }
+}
+
+extension AudioRecorder: Service {
+
+    struct Start: Action {}
+    struct Started: Action {}
+
+    struct Stop: Action {}
+    struct Stopped: Action {}
+
+    struct ReceivedBuffer {
+        let buffer: AVAudioPCMBuffer
+        let time: AVAudioTime
+    }
+    
+    struct State: Model {
+        var isRecording: Bool = false
+        
+        mutating func update(action: Action) {
+            switch action {
+            case is AudioRecorder.Started: isRecording = true
+            case is AudioRecorder.Stopped: isRecording = false
+            default: ()
+            }
+        }
+    }
+   
+    var model: Model = State()
+
+    var effects: Effects {
+        Start
+            .trigger(start)
+            .success(Started.init)
+            .failure(Failed.init)
+
+        Stop
+            .trigger(stop)
+            .success(Stopped.init)
+
+        buffersAsyncStream
+            .trigger(ReceivedBuffer.init)
+
+        buffersCombinePublisher
+            .trigger(ReceivedBuffer.init)
+    }
+
+}
+```
 
 - Add ActionDebouncer and ActionThrottler into ActionDelayer and make it one middleware. Call it something like ActionTimer.
 
 - Expand StateLogger to show smart diffs, eg:
   ▿ Substate.State
-    - Settings.appearance.tint { "green" → "orange" } 
+    - Settings.appearance.tint { "green" → "orange" }
     - Settings.appearance.theme { "midnight" → "sunbeam" }
 
 - Expand loggers

@@ -50,6 +50,10 @@ extension Action {
         ActionTriggerStepActionValueMap1(action: self, value: value)
     }
 
+    public static func compactMap<V1>(_ value: KeyPath<Self, V1?>) -> ActionTriggerStepActionOptionalValueMap1<Self, V1> {
+        ActionTriggerStepActionOptionalValueMap1(action: self, value: value)
+    }
+
     // TODO: Fill out 1+ action properties
 
     /// 5a. Mapping one or more models.
@@ -99,6 +103,21 @@ public struct ActionTriggerStepActionValueMap1<A1, V1> where A1: Action {
             { action, find in
                 guard let action = action as? A1 else { return nil }
                 return result(action[keyPath: value])
+            }
+        )
+    }
+}
+
+public struct ActionTriggerStepActionOptionalValueMap1<A1, V1> where A1: Action {
+    let action: A1.Type
+    let value: KeyPath<A1, V1?>
+
+    public func trigger<A2>(_ result: @escaping (V1) -> A2?) -> ActionTriggerFunctionWrapper where A2: Action {
+        ActionTriggerFunctionWrapper(trigger:
+            { action, find in
+                guard let action = action as? A1 else { return nil }
+                guard let val = action[keyPath: value] else { return nil }
+                return result(val)
             }
         )
     }

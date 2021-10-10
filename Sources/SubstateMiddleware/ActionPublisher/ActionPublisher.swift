@@ -25,4 +25,9 @@ public class ActionPublisher: Middleware {
         publisher(for: action).sink(receiveValue: callback).store(in: &subscriptions)
     }
 
+    @available(iOS 15.0, *)
+    public func actions<A:Action>(matching type: A.Type) -> AsyncStream<A> {
+        fatalError("TODO!")
+    }
+
 }

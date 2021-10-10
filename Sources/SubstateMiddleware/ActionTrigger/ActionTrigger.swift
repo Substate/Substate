@@ -20,7 +20,7 @@ public class ActionTrigger: Middleware {
         return { next in
             return { action in
                 self.triggers.forEach { trigger in
-                    trigger(action, find).map(send)
+                    trigger(action, { find($0).first }).map(send)
                 }
 
                 next(action)
