@@ -1,7 +1,7 @@
 import Substate
 import SubstateMiddleware
 
-let appTriggers = ActionTriggerList {
+let appTriggers = ActionTriggers {
 
     soundTriggers
     notificationTriggers
@@ -10,11 +10,11 @@ let appTriggers = ActionTriggerList {
     // Titlebar
 
     ModelSaver.UpdateDidComplete
-        .map(\Tasks.all.count)
+        .replace(with: \Tasks.all.count)
         .trigger(Titlebar.UpdateCount.init)
 
     Tasks.Changed
-        .map(\Tasks.all.count)
+        .replace(with: \Tasks.all.count)
         .trigger(Titlebar.UpdateCount.init)
 
     // Toolbar
@@ -23,11 +23,12 @@ let appTriggers = ActionTriggerList {
         .trigger(Toolbar.Reset())
 
     Toolbar.SaveButtonWasPressed
-        .map(\Toolbar.newTaskBody)
+        .replace(with: \Toolbar.newTaskBody)
         .trigger(Tasks.Create.init(body:))
 
     Tasks.Toggle
-        .map(\.id, \Tasks.all)
+        .map(\.id)
+        .combine(with: \Tasks.all)
         .trigger { id, tasks -> Notifications.Show? in
             if let index = tasks.firstIndex(where: { $0.id == id }) {
                 return Notifications.Show(for: tasks[index], at: index)

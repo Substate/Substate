@@ -26,5 +26,5 @@ struct TodosAppModel: Model {
 }
 
 extension TodosAppModel {
-    static let preview = TodosAppModel()
+    static let preview = TodosAppModel(tasks: .sample)
 }

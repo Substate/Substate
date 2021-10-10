@@ -3,7 +3,7 @@ import SubstateUI
 
 struct TitlebarView: View {
 
-    @Update var update
+    @Send var send
     @Model var model: Titlebar
     // @ModelBinding(\TitlebarViewModel.filter.category, Filter.Update(category:)) var $category
 

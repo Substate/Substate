@@ -3,7 +3,7 @@ import SubstateUI
 
 struct ListView: View {
 
-    @Update var update
+    @Send var send
 
     @Model var filter: Filter
     @Model var list: Tasks
@@ -16,9 +16,9 @@ struct ListView: View {
                         // TODO: Filter!
                         ForEach(list.all) { task in
                             ListRowView(task: task, onTap: { id in
-                                update(Tasks.Toggle(id: id))
+                                send(Tasks.Toggle(id: id))
                             }, onDelete: { id in
-                                update(Tasks.Delete(id: id))
+                                send(Tasks.Delete(id: id))
                             })
                         }
                     }

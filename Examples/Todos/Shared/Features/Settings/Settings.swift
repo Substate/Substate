@@ -1,19 +1,7 @@
 import Substate
 import SubstateMiddleware
 
-protocol CustomSettableModel {
-    func setter(_ value: Self) -> Action
-    var update: (Self) -> Action { get }
-//    var setter: (Self) -> Action { get }
-    // Hmmm is there a clean concise way of expressing this requirement? With a property?
-    // Problem is a property affects codable conformance.
-}
-
-struct Settings: Model, SavedModel, CustomSettableModel {
-//    var update: (Settings) -> Action { { Update.init(settings: $0) } }
-    let update: (Self) -> Action = Update.init(settings:)
-    func update(_ value: Self) -> Action { Update.init(settings: value) }
-    func setter(_ value: Self) -> Action { Update.init(settings: value) }
+struct Settings: Model, SavedModel {
 
     struct Update: Action, FollowupAction {
         let settings: Settings

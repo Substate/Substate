@@ -9,7 +9,7 @@ let publisher = ActionPublisher()
 
 let store = Store(model: TodosAppModel(), middleware: [
     ActionLogger(),
-    ActionTrigger(sources: appTriggers),
+    appTriggers,
     ActionFunneller(funnels: taskToggledFunnel, threeTasksCreatedFunnel, taskDeletedFunnel),
     ActionFollower(),
     ActionDelayer(),

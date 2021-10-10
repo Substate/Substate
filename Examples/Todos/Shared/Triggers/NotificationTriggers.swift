@@ -1,6 +1,6 @@
 import SubstateMiddleware
 
-let notificationTriggers = ActionTriggerList {
+let notificationTriggers = ActionTriggers {
 
     Tasks.Create.trigger(Notifications.Show(message: .taskCreated))
     Tasks.Delete.trigger(Notifications.Show(message: .taskDeleted))
@@ -15,7 +15,7 @@ let notificationTriggers = ActionTriggerList {
     // ModelSaver.SaveDidSucceed.trigger(Notifications.Show(message: "Tasks saved to disk"))
 
     Notifications.Changed
-        .map(\Notifications.notifications.count)
+        .replace(with: \Notifications.notifications.count)
         .trigger { $0 > 0 ? Notifications.DismissAfterDelay() : nil }
 
 }

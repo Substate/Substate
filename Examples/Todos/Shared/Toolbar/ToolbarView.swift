@@ -3,7 +3,7 @@ import SubstateUI
 
 struct ToolbarView: View {
 
-    @Update var update
+    @Send var send
     @Model var model: Toolbar
 
     var body: some View {
@@ -17,16 +17,16 @@ struct ToolbarView: View {
                 HStack {
                     let binding = Binding<String> (
                         get: { string },
-                        set: { update(Toolbar.AddBodyDidChange(body: $0)) }
+                        set: { send(Toolbar.AddBodyDidChange(body: $0)) }
                     )
 
                     TextField("Body...", text: binding)
                         .submitLabel(.done)
                         .onSubmit {
-                            update(Toolbar.SaveButtonWasPressed())
+                            send(Toolbar.SaveButtonWasPressed())
                         }
 
-                    Button(action: update(Toolbar.SaveButtonWasPressed())) {
+                    Button(action: send(Toolbar.SaveButtonWasPressed())) {
                         Text("Save")
                     }
                     .disabled(!model.canSaveAddedTask)
@@ -37,7 +37,7 @@ struct ToolbarView: View {
             }
 
             HStack {
-                Button(action: update(Toolbar.AddButtonWasPressed())) {
+                Button(action: send(Toolbar.AddButtonWasPressed())) {
                     VStack {
                         Image(systemName: "plus.circle.fill")
                         Text("Add")
@@ -46,7 +46,7 @@ struct ToolbarView: View {
 
                 Spacer()
 
-                Button(action: update(Toolbar.SearchButtonWasPressed())) {
+                Button(action: send(Toolbar.SearchButtonWasPressed())) {
                     VStack {
                         Image(systemName: "magnifyingglass.circle.fill")
                         Text("Search")

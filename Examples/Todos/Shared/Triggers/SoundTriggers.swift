@@ -1,7 +1,7 @@
 import Substate
 import SubstateMiddleware
 
-let soundTriggers = ActionTriggerList {
+let soundTriggers = ActionTriggers {
 
     Tabs.Select.trigger(Sound.Play(.click))
 

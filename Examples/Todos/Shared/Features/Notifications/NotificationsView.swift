@@ -3,7 +3,7 @@ import SubstateUI
 
 struct NotificationsView: View {
 
-    @Update var update
+    @Send var send
     @Model var model: Notifications
 
     var body: some View {
@@ -17,7 +17,7 @@ struct NotificationsView: View {
                     .offset(x: 0, y: i * -8)
                     .opacity(isLast ? 1 : 0.25)
                     .scaleEffect(1 - i * 0.05)
-                    .onTapGesture { update(Notifications.Dismiss(id: model.notifications[index].id)) }
+                    .onTapGesture { send(Notifications.Dismiss(id: model.notifications[index].id)) }
                     .id(model.notifications[index].id)
                     .transition(.move(edge: .bottom).animation(.default))
                     .animation(.default)
