@@ -111,6 +111,7 @@ public class ModelSaver: Middleware {
                     send(LoadDidFail(for: type, with: error))
                 }
             } receiveValue: { model in
+                assert(Thread.isMainThread)
                 let loadedType = Swift.type(of: model)
                 if loadedType == type {
                     send(LoadDidSucceed(with: model))

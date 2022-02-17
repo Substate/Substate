@@ -28,6 +28,7 @@ public class Store: ObservableObject {
 
         mutating func update(action: Action) {
             if let register = action as? Register {
+                print("Actioning 'Register' action")
                 dynamicModels.append(register.model)
             }
         }
@@ -95,7 +96,7 @@ public class Store: ObservableObject {
     // mode (and log the error!)
     public func find<ModelType:Model>(_ type: ModelType.Type) -> ModelType? {
         // TODO: Don’t do this search every time, cache in init!
-        flatten(object: model).first(where: { $0 is ModelType }) as? ModelType
+        return flatten(object: model).first(where: { $0 is ModelType }) as? ModelType
     }
 
     public func uncheckedFind(_ modelType: Model.Type? = nil) -> [Model] {
@@ -165,6 +166,8 @@ public class Store: ObservableObject {
                     let property = try! info.property(named: child.label!)
                     try! property.set(value: reducedChildValue, on: &model)
                 }
+            } else if let childValue = child.value as? [Model] {
+                // TODO: There’s a major issue here in that we don’t handle arrays properly!
             }
         }
 

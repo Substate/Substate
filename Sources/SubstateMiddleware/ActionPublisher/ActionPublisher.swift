@@ -27,7 +27,16 @@ public class ActionPublisher: Middleware {
 
     @available(iOS 15.0, *)
     public func actions<A:Action>(matching type: A.Type) -> AsyncStream<A> {
-        fatalError("TODO!")
+        AsyncStream { continuation in
+            publisher(for: type)
+                .handleEvents(
+                    receiveOutput: { continuation.yield($0) },
+                    receiveCompletion: { _ in continuation.finish() },
+                    receiveCancel: { continuation.finish() }
+                )
+                .sink { _ in }
+                .store(in: &subscriptions)
+        }
     }
 
 }

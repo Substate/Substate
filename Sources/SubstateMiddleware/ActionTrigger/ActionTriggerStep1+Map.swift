@@ -4,7 +4,7 @@ extension ActionTriggerStep1 {
     ///
     public func map<V1>(_ transform: @escaping (Output) -> V1) -> ActionTriggerStep1<V1> {
         ActionTriggerStep1<V1> { action, find in
-            run(action: action, find: find).map(transform)
+            await run(action: action, find: find).map(transform)
         }
     }
 
@@ -12,7 +12,7 @@ extension ActionTriggerStep1 {
     ///
     public func map<V1, V2>(_ transform1: @escaping (Output) -> V1, _ transform2: @escaping (Output) -> V2) -> ActionTriggerStep2<V1, V2> {
         ActionTriggerStep2 { action, find in
-            run(action: action, find: find).map { (transform1($0), transform2($0)) }
+            await run(action: action, find: find).map { (transform1($0), transform2($0)) }
         }
     }
 
@@ -20,7 +20,7 @@ extension ActionTriggerStep1 {
     ///
     public func map<V1, V2, V3>(_ transform1: @escaping (Output) -> V1, _ transform2: @escaping (Output) -> V2, _ transform3: @escaping (Output) -> V3) -> ActionTriggerStep3<V1, V2, V3> {
         ActionTriggerStep3 { action, find in
-            run(action: action, find: find).map { (transform1($0), transform2($0), transform3($0)) }
+            await run(action: action, find: find).map { (transform1($0), transform2($0), transform3($0)) }
         }
     }
 
@@ -28,7 +28,7 @@ extension ActionTriggerStep1 {
     ///
     public func compactMap<V1>(_ transform: @escaping (Output) -> V1?) -> ActionTriggerStep1<V1> {
         ActionTriggerStep1<V1> { action, find in
-            run(action: action, find: find).flatMap(transform)
+            await run(action: action, find: find).flatMap(transform)
         }
     }
 

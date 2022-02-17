@@ -2,10 +2,10 @@ import Substate
 
 public struct ActionTriggerStepFinal<ActionType:Action> {
 
-    let closure: (Action, (Model.Type) -> Model?) -> ActionType?
+    let closure: (Action, (Model.Type) -> Model?) async -> ActionType?
 
-    func run(action: Action, find: (Model.Type) -> Model?) -> ActionType? {
-        closure(action, find)
+    func run(action: Action, find: (Model.Type) -> Model?) async -> ActionType? {
+        await closure(action, find)
     }
 
 }

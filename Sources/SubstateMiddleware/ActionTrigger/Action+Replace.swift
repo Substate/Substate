@@ -1,5 +1,7 @@
 import Substate
 
+/// TODO: We have to add some error logging when using the model value overloads.
+/// TODO: It’s infuriating to have triggers not fire because you forgot to add the model.
 extension Action {
 
     /// Replace action with 1 constant value.
@@ -31,6 +33,14 @@ extension Action {
     public static func replace<M1:Model>(with model: M1.Type) -> ActionTriggerStep1<M1> {
         ActionTriggerStep1 { action, find in
             (action as? Self).flatMap { _ in find(model) as? M1 }
+        }
+    }
+
+    /// Replace action using a closure.
+    ///
+    public static func replace<V1>(with closure: @escaping () -> V1) -> ActionTriggerStep1<V1> {
+        ActionTriggerStep1 { action, find in
+            (action as? Self).map { _ in closure() }
         }
     }
 

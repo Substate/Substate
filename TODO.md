@@ -183,6 +183,10 @@ let step = Journey.Step(
 # UI
 
 - TextView.onSubmit(send: Model.TextWasSubmitted(text: string))
+- Some way to automatically tap changes in environment values to get nice clean ActionTriggers?
+  - Eg. automatically send a ScenePhase.Changed(oldValue: ScenePhase, newValue: ScenePhase) action
+  - How to register for these events though? There would be loads.
+  - Another middleware, providing events from SwiftUI environment values with opt-in?
 
 # Logging
 
