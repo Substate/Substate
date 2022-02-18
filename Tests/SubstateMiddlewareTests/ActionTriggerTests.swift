@@ -1489,15 +1489,7 @@ final class ActionTriggerTests: XCTestCase {
 //        //        .map { Optional($0) }
 //        //        .trigger()
 //    }
-
-    // MARK: - Async Effects
-
-    func test_async_effect() async throws {
-        let _: ActionTriggerStep1<Void> =
-            Action1
-                .perform { try await Task.sleep(nanoseconds: 1) }
-    }
-
+//
 //    // MARK: - Public API
 //
 //    func testResultBuilderAPI() throws {

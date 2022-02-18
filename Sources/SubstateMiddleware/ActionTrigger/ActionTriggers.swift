@@ -23,16 +23,26 @@ public struct ActionTriggers {
 
     #endif
 
-    func run(action: Action, find: (Model.Type) -> Model?) async -> [Action] {
-        var actions: [Action] = []
+    // TODO: Add a version of run here which is async -> [Action] for use in testing, where we
+    // don’t really want to subscribe to a stream we just want to await the whole list of actions.
 
-        for trigger in triggers {
-            if let output = await trigger(action, find) {
-                actions.append(output)
+    func run(action: Action, find: @escaping (Model.Type) -> Model?) -> AsyncStream<Action> {
+        AsyncStream { continuation in
+            Task {
+                await withTaskGroup(of: Void.self) { group in
+                    for trigger in triggers {
+                        group.addTask {
+                            if let action = await trigger(action, find) {
+                                continuation.yield(action)
+                            }
+                        }
+                    }
+
+                    await group.waitForAll()
+                    continuation.finish()
+                }
             }
         }
-
-        return actions
     }
 
 }
@@ -43,17 +53,14 @@ extension ActionTriggers: Middleware {
     public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
         return { next in
             return { action in
-                self.triggers.forEach { trigger in
-                    // We use DispatchQueue.main here as a stopgap while the rest of the codebase is
-                    // refactored for Swift Concurrency. Otherwise, the trigger will not be on main.
-                    DispatchQueue.main.async {
-                        Task { await trigger(action, { find($0).first }).map(send) }
+                next(action)
+
+                Task { @MainActor in
+                    for await output in run(action: action, find: { find($0).first }) {
+                        send(output)
                     }
                 }
-
-                next(action)
             }
         }
     }
 }
-
