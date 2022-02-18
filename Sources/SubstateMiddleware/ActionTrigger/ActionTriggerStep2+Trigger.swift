@@ -11,7 +11,17 @@ extension ActionTriggerStep2 {
     ///
     public func trigger<A1:Action>(_ result: @autoclosure @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find).flatMap { _, _ in result() }
+            AsyncStream { continuation in
+                Task {
+                    for await _ in run(action: action, find: find) {
+                        if let result = result() {
+                            continuation.yield(result)
+                        }
+                    }
+                }
+
+                continuation.finish()
+            }
         }
     }
 
@@ -19,7 +29,17 @@ extension ActionTriggerStep2 {
     ///
     public func trigger<A1:Action>(_ result: @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find).flatMap { _ in result() }
+            AsyncStream { continuation in
+                Task {
+                    for await _ in run(action: action, find: find) {
+                        if let result = result() {
+                            continuation.yield(result)
+                        }
+                    }
+                }
+
+                continuation.finish()
+            }
         }
     }
 
@@ -27,7 +47,17 @@ extension ActionTriggerStep2 {
     ///
     public func trigger<A1:Action>(_ transform: @escaping (Output1, Output2) -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find).flatMap(transform)
+            AsyncStream { continuation in
+                Task {
+                    for await output in run(action: action, find: find) {
+                        if let result = transform(output.0, output.1) {
+                            continuation.yield(result)
+                        }
+                    }
+                }
+
+                continuation.finish()
+            }
         }
     }
 

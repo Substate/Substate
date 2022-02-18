@@ -2,19 +2,49 @@ extension ActionTriggerStep3 {
 
     public func accept(when constant: @autoclosure @escaping () -> Bool?) -> ActionTriggerStep3<Output1, Output2, Output3> {
         ActionTriggerStep3 { action, find in
-            await run(action: action, find: find).flatMap { constant() == true ? ($0, $1, $2) : nil }
+            AsyncStream { continuation in
+                Task {
+                    for await value in run(action: action, find: find) {
+                        if constant() == true {
+                            continuation.yield(value)
+                        }
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 
     public func accept(when condition: @escaping (Output1, Output2, Output3) -> Bool) -> ActionTriggerStep3<Output1, Output2, Output3> {
         ActionTriggerStep3 { action, find in
-            await run(action: action, find: find).flatMap { condition($0, $1, $2) ? ($0, $1, $2) : nil }
+            AsyncStream { continuation in
+                Task {
+                    for await value in run(action: action, find: find) {
+                        if condition(value.0, value.1, value.2) == true {
+                            continuation.yield(value)
+                        }
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 
     public func accept(when condition: @escaping (Output1, Output2, Output3) -> Bool?) -> ActionTriggerStep3<Output1, Output2, Output3> {
         ActionTriggerStep3 { action, find in
-            await run(action: action, find: find).flatMap { condition($0, $1, $2) == true ? ($0, $1, $2) : nil }
+            AsyncStream { continuation in
+                Task {
+                    for await value in run(action: action, find: find) {
+                        if condition(value.0, value.1, value.2) == true {
+                            continuation.yield(value)
+                        }
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 

@@ -11,7 +11,17 @@ extension ActionTriggerStep3 {
     ///
     public func trigger<A1:Action>(_ result: @autoclosure @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find).flatMap { _, _, _ in result() }
+            AsyncStream { continuation in
+                Task {
+                    for await _ in run(action: action, find: find) {
+                        if let value = result() {
+                            continuation.yield(value)
+                        }
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 
@@ -19,7 +29,17 @@ extension ActionTriggerStep3 {
     ///
     public func trigger<A1:Action>(_ result: @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find).flatMap { _ in result() }
+            AsyncStream { continuation in
+                Task {
+                    for await _ in run(action: action, find: find) {
+                        if let value = result() {
+                            continuation.yield(value)
+                        }
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 
@@ -27,7 +47,17 @@ extension ActionTriggerStep3 {
     ///
     public func trigger<A1:Action>(_ transform: @escaping (Output1, Output2, Output3) -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find).flatMap(transform)
+            AsyncStream { continuation in
+                Task {
+                    for await value in run(action: action, find: find) {
+                        if let result = transform(value.0, value.1, value.2) {
+                            continuation.yield(result)
+                        }
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 

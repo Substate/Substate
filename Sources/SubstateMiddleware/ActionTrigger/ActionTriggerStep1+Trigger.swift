@@ -11,7 +11,17 @@ extension ActionTriggerStep1 {
     ///
     public func trigger<A1:Action>(_ result: @autoclosure @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find).flatMap { _ in result() }
+            AsyncStream { continuation in
+                Task {
+                    for await _ in run(action: action, find: find) {
+                        if let output = result() {
+                            continuation.yield(output)
+                        }
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 
@@ -19,7 +29,17 @@ extension ActionTriggerStep1 {
     ///
     public func trigger<A1:Action>(_ result: @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find).flatMap { _ in result() }
+            AsyncStream { continuation in
+                Task {
+                    for await _ in run(action: action, find: find) {
+                        if let output = result() {
+                            continuation.yield(output)
+                        }
+
+                        continuation.finish()
+                    }
+                }
+            }
         }
     }
 
@@ -27,7 +47,17 @@ extension ActionTriggerStep1 {
     ///
     public func trigger<A1:Action>(_ transform: @escaping (Output) -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find).flatMap(transform)
+            AsyncStream { continuation in
+                Task {
+                    for await value in run(action: action, find: find) {
+                        if let output = transform(value) {
+                            continuation.yield(output)
+                        }
+
+                        continuation.finish()
+                    }
+                }
+            }
         }
     }
 
@@ -37,7 +67,7 @@ extension ActionTriggerStep1 where Output: Action {
 
     public func trigger() -> ActionTriggerStepFinal<Output> {
         ActionTriggerStepFinal { action, find in
-            await run(action: action, find: find)
+            run(action: action, find: find)
         }
     }
 

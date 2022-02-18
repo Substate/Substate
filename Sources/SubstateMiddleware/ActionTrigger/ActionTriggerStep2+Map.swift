@@ -6,7 +6,16 @@ extension ActionTriggerStep2 {
     ///
     public func map<V1>(_ transform: @escaping (Output1, Output2) -> V1) -> ActionTriggerStep1<V1> {
         ActionTriggerStep1 { action, find in
-            await run(action: action, find: find).map(transform)
+            AsyncStream { continuation in
+                Task {
+                    for await output in run(action: action, find: find) {
+                        let result = transform(output.0, output.1)
+                        continuation.yield(result)
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 
@@ -14,7 +23,18 @@ extension ActionTriggerStep2 {
     ///
     public func compactMap<V1>(_ transform: @escaping (Output1, Output2) -> V1?) -> ActionTriggerStep1<V1> {
         ActionTriggerStep1<V1> { action, find in
-            await run(action: action, find: find).flatMap(transform)
+
+            AsyncStream { continuation in
+                Task {
+                    for await output in run(action: action, find: find) {
+                        if let result = transform(output.0, output.1) {
+                            continuation.yield(result)
+                        }
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 

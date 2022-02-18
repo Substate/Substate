@@ -2,19 +2,49 @@ extension ActionTriggerStep2 {
 
     public func accept(when constant: @autoclosure @escaping () -> Bool?) -> ActionTriggerStep2<Output1, Output2> {
         ActionTriggerStep2 { action, find in
-            await run(action: action, find: find).flatMap { constant() == true ? ($0, $1) : nil }
+            AsyncStream { continuation in
+                Task {
+                    for await output in run(action: action, find: find) {
+                        if constant() == true {
+                            continuation.yield(output)
+                        }
+                    }
+                }
+
+                continuation.finish()
+            }
         }
     }
 
     public func accept(when condition: @escaping (Output1, Output2) -> Bool) -> ActionTriggerStep2<Output1, Output2> {
         ActionTriggerStep2 { action, find in
-            await run(action: action, find: find).flatMap { condition($0, $1) ? ($0, $1) : nil }
+            AsyncStream { continuation in
+                Task {
+                    for await output in run(action: action, find: find) {
+                        if condition(output.0, output.1) == true {
+                            continuation.yield(output)
+                        }
+                    }
+                }
+
+                continuation.finish()
+            }
         }
     }
 
     public func accept(when condition: @escaping (Output1, Output2) -> Bool?) -> ActionTriggerStep2<Output1, Output2> {
         ActionTriggerStep2 { action, find in
-            await run(action: action, find: find).flatMap { condition($0, $1) == true ? ($0, $1) : nil }
+            AsyncStream { continuation in
+                Task {
+                    for await output in run(action: action, find: find) {
+                        if condition(output.0, output.1) == true {
+                            continuation.yield(output)
+                        }
+                    }
+                }
+
+                continuation.finish()
+            }
         }
     }
 
@@ -30,8 +60,16 @@ extension ActionTriggerStep2 {
     //
     public func accept(when constant1: @autoclosure @escaping () -> Output1, _ constant2: @autoclosure @escaping () -> Output2) -> ActionTriggerStep2<Output1, Output2> where Output1 : Equatable, Output2 : Equatable {
         ActionTriggerStep2 { action, find in
-            await run(action: action, find: find).flatMap { output1, output2 in
-                constant1() == output1 && constant2() == output2 ? (output1, output2) : nil
+            AsyncStream { continuation in
+                Task {
+                    for await output in run(action: action, find: find) {
+                        if constant1() == output.0 && constant2() == output.1 {
+                            continuation.yield(output)
+                        }
+                    }
+                }
+
+                continuation.finish()
             }
         }
     }

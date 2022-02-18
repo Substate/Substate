@@ -14,7 +14,15 @@ extension Action {
     ///
     public static func trigger<A1:Action>(_ result: @autoclosure @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            action is Self ? result() : nil
+            AsyncStream { continuation in
+                Task {
+                    if action is Self, let output = result() {
+                        continuation.yield(output)
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 
@@ -25,7 +33,15 @@ extension Action {
     ///
     public static func trigger<A1:Action>(_ result: @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            action is Self ? result() : nil
+            AsyncStream { continuation in
+                Task {
+                    if action is Self, let output = result() {
+                        continuation.yield(output)
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 
@@ -36,7 +52,15 @@ extension Action {
     ///
     public static func trigger<A1:Action>(_ result: @escaping (Self) -> A1?) -> ActionTriggerStepFinal<A1> {
         ActionTriggerStepFinal { action, find in
-            (action as? Self).flatMap(result)
+            AsyncStream { continuation in
+                Task {
+                    if let action = action as? Self, let output = result(action) {
+                        continuation.yield(output)
+                    }
+
+                    continuation.finish()
+                }
+            }
         }
     }
 

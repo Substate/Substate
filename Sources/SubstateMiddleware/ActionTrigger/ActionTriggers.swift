@@ -32,8 +32,8 @@ public struct ActionTriggers {
                 await withTaskGroup(of: Void.self) { group in
                     for trigger in triggers {
                         group.addTask {
-                            if let action = await trigger(action, find) {
-                                continuation.yield(action)
+                            for await result in trigger(action, find) {
+                                continuation.yield(result)
                             }
                         }
                     }

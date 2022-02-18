@@ -1,8 +1,7 @@
 import XCTest
 import Combine
-import Substate
-import SubstateMiddleware
 
+@testable import Substate
 @testable import SubstateMiddleware
 
 final class ActionTriggerAsyncTests: XCTestCase {
@@ -28,10 +27,14 @@ final class ActionTriggerAsyncTests: XCTestCase {
 
     // MARK: - Async Effects
 
-    func test_async_effect2() async throws {
-        let _: ActionTriggerStep1<Void> =
+    func testPerformAsyncClosure() async throws {
+        let step: ActionTriggerStepFinal<Action2> =
             Action1
                 .perform { try await Task.sleep(nanoseconds: 1) }
+                .trigger(Action2())
+
+        let result = await step.run(action: Action1(), find: find).reduce([]) { $0 + [$1] }
+        XCTAssertEqual(result[0], Action2())
     }
 
     func testParallelExecution() async throws {
@@ -63,28 +66,44 @@ final class ActionTriggerAsyncTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(result[2] as? Action2), Action2())
     }
 
-    func testSubscribingToAsyncStream() async throws {
-//        class Service {
-//            var results: AsyncStream<Int> {
-//                AsyncStream { continuation in
-//                    for i in 0..<10 {
-//                        continuation.yield(i)
-//                    }
-//                    continuation.finish()
-//                }
-//            }
-//        }
-//
-//        let triggers = ActionTriggers {
-//            let service = Service()
-//
-//            Action1
-//                .subscribe(to: service.results)
-//                .trigger(Action2())
-//        }
-//
-//        let result = await triggers.run(action: Action1(), find: find).reduce([]) { $0 + [$1] }
-//        print(result)
+    class NumberService {
+        var numbers: AsyncStream<Int> {
+            AsyncStream { continuation in
+                for i in 0..<10 {
+                    continuation.yield(i)
+                }
+                continuation.finish()
+            }
+        }
+    }
+
+    struct NumberAction: Action, Equatable {
+        let number: Int
+    }
+
+    func testAsyncSequenceTriggerWithoutValue() async throws {
+        let triggers = ActionTriggers {
+            let service = NumberService()
+
+            service.numbers
+                .trigger(Action2())
+        }
+
+        let result = await triggers.run(action: Store.Start(), find: find).reduce([]) { $0 + [$1] }
+        XCTAssertEqual(try XCTUnwrap(result[0] as? Action2), Action2())
+    }
+
+    func testAsyncSequenceTriggerWithValue() async throws {
+        let triggers = ActionTriggers {
+            let service = NumberService()
+
+            service.numbers
+                .trigger(NumberAction.init(number:))
+        }
+
+        let result = await triggers.run(action: Store.Start(), find: find).reduce([]) { $0 + [$1] }
+        XCTAssertEqual(try XCTUnwrap(result[0] as? NumberAction), NumberAction(number: 0))
+        XCTAssertEqual(try XCTUnwrap(result[9] as? NumberAction), NumberAction(number: 9))
     }
     
 }
