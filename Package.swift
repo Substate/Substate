@@ -6,7 +6,7 @@ let package = Package(
     name: "Substate",
 
     platforms: [
-        .iOS(.v14), .macOS(.v10_15)
+        .iOS(.v15), .macOS(.v12)
     ],
 
     products: [

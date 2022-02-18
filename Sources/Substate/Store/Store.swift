@@ -166,7 +166,7 @@ public class Store: ObservableObject {
                     let property = try! info.property(named: child.label!)
                     try! property.set(value: reducedChildValue, on: &model)
                 }
-            } else if let childValue = child.value as? [Model] {
+            } else if let _ = child.value as? [Model] {
                 // TODO: There’s a major issue here in that we don’t handle arrays properly!
             }
         }

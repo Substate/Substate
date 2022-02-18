@@ -87,6 +87,7 @@ final class ActionTriggerAsyncTests: XCTestCase {
     }
 
     class NumberService {
+        @Published var currentNumber: Int = 0
         var numbers: AsyncStream<Int> {
             AsyncStream { continuation in
                 for i in 0..<10 {
@@ -125,5 +126,31 @@ final class ActionTriggerAsyncTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(result[0] as? NumberAction), NumberAction(number: 0))
         XCTAssertEqual(try XCTUnwrap(result[9] as? NumberAction), NumberAction(number: 9))
     }
-    
+
+    func testPublishedTriggerWithoutValue() async throws {
+        let service = NumberService()
+
+        let triggers = ActionTriggers {
+            service.$currentNumber
+                .trigger(Action2())
+        }
+
+        let result = await triggers.run(action: Store.Start(), find: find).prefix(1).reduce([]) { $0 + [$1] }
+        print(result)
+        XCTAssertEqual(try XCTUnwrap(result[0] as? Action2), Action2())
+    }
+
+    func testPublishedTriggerWithValue() async throws {
+        let service = NumberService()
+
+        let triggers = ActionTriggers {
+            service.$currentNumber
+                .trigger(NumberAction.init(number:))
+        }
+
+        service.currentNumber = 5
+        let result = await triggers.run(action: Store.Start(), find: find).prefix(1).reduce([]) { $0 + [$1] }
+        XCTAssertEqual(try XCTUnwrap(result[0] as? NumberAction), NumberAction(number: 5))
+    }
+
 }
