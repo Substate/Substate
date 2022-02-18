@@ -24,25 +24,50 @@ extension Action {
         }
     }
 
-//    /// Subscribe to an AsyncStream
-//    ///
-//    public static func subscribe<V1>(to stream: AsyncStream<V1>) -> ActionTriggerStep1<V1> {
-//        ActionTriggerStep1 { action, find in
-//            print("Step 1", action)
-//
-//            for await value in stream {
-//                print("VALUE RECEIVED", value)
-//                return value
-//            }
-////            hmmmmmm
-//            return nil
-////            if action is Self, let value = try? await effect() {
-////                return value
-////            } else {
-////                return nil
-////            }
-//        }
-//    }
+    public static func perform(_ effect: @escaping () async throws -> Void) -> ActionTriggerStepFinal<VoidAction> {
+        ActionTriggerStepFinal { action, find in
+            AsyncStream { continuation in
+                Task {
+                    if action is Self {
+                        try? await effect()
+                        continuation.yield(VoidAction())
+                    }
+
+                    continuation.finish()
+                }
+            }
+        }
+    }
+
+    public static func perform<V1>(_ effect: @escaping (Self) async throws -> V1) -> ActionTriggerStep1<V1> {
+        ActionTriggerStep1 { action, find in
+            AsyncStream { continuation in
+                Task {
+                    if let action = action as? Self {
+                        if let result = try? await effect(action) {
+                            continuation.yield(result)
+                        }
+                    }
+
+                    continuation.finish()
+                }
+            }
+        }
+    }
+
+    public static func perform(_ effect: @escaping (Self) async throws -> Void) -> ActionTriggerStepFinal<VoidAction> {
+        ActionTriggerStepFinal { action, find in
+            AsyncStream { continuation in
+                Task {
+                    if let action = action as? Self {
+                        try? await effect(action)
+                        continuation.yield(VoidAction())
+                    }
+                    continuation.finish()
+                }
+            }
+        }
+    }
 
 }
-
+public struct VoidAction:Action{}

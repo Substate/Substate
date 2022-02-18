@@ -37,6 +37,26 @@ final class ActionTriggerAsyncTests: XCTestCase {
         XCTAssertEqual(result[0], Action2())
     }
 
+    func testPerformVariantDeclarations() async throws {
+        let _: ActionTriggerStepFinal<VoidAction> =
+            Action1
+                .perform { try await Task.sleep(nanoseconds: 1) }
+
+        let _: ActionTriggerStepFinal<VoidAction> =
+            Action1
+                .perform { action in try await Task.sleep(nanoseconds: 1) }
+
+        let _: ActionTriggerStepFinal<Action2> =
+            Action1
+                .perform { try await Task.sleep(nanoseconds: 1) }
+                .trigger(Action2())
+
+        let _: ActionTriggerStepFinal<Action2> =
+            Action1
+                .perform { action in try await Task.sleep(nanoseconds: 1) }
+                .trigger(Action2())
+    }
+
     func testParallelExecution() async throws {
         // let longSleepTime: UInt64 = 3 * 1_000_000_000
         let shortSleepTime: UInt64 = 1
