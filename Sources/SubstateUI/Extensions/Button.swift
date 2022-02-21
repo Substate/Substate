@@ -2,9 +2,9 @@ import SwiftUI
 
 extension Button {
 
-    public init(action: @autoclosure @escaping () -> Void, @ViewBuilder label: () -> Label) {
-        self.init(action: action, label: label)
-    }
+//    public init(action: @autoclosure @escaping () -> Void, @ViewBuilder label: () -> Label) {
+//        self.init(action: action, label: label)
+//    }
 
 //    ?
 //    public init(_ titleKey: LocalizedStringKey, action: @autoclosure @escaping () -> Void) {
