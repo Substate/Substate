@@ -3,7 +3,7 @@ import Substate
 
 extension ModelSaver {
 
-    struct Setup: Action {}
+    struct Start: Action {}
 
     // MARK: - Loading
 
@@ -41,8 +41,12 @@ extension ModelSaver {
 
     /// Automatic update of a loaded model completed.
     /// 
-    public struct UpdateDidComplete: Action {
+    public struct LoadDidComplete: Action {
         public let type: Model.Type
+
+        public init(type: Model.Type) {
+            self.type = type
+        }
     }
 
     /// Load all `SavedModel`s from persistent storage.

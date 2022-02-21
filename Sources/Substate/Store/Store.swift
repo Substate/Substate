@@ -28,7 +28,6 @@ public class Store: ObservableObject {
 
         mutating func update(action: Action) {
             if let register = action as? Register {
-                print("Actioning 'Register' action")
                 dynamicModels.append(register.model)
             }
         }
@@ -57,7 +56,9 @@ public class Store: ObservableObject {
                 return middleware.update(send: weakSend, find: weakFind)(update)
             })
 
-        self.send(Start())
+        DispatchQueue.main.async {
+            self.send(Start())
+        }
 
         // TODO: Build up a list of substate type -> path segment mappings
         // Then at runtime use Mirror.descendant(a, b, c) to grab the value, rather than iterating every time

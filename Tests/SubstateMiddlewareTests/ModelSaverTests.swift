@@ -35,9 +35,37 @@ final class ModelSaverTests: XCTestCase {
 
     // MARK: - Loading
 
-//    func testLoadAllModels() throws {
-//
-//    }
+    //    func testLoadAllModels() throws {
+    //
+    //    }
+
+    func testRestoreDidCompleteAction() async throws {
+        struct MyModel: Model, SavedModel {
+            mutating func update(action: Action) {}
+        }
+
+        let model = MyModel()
+
+        let load: ModelSaver.Configuration.LoadFunction = { _ in
+            Just(model)
+                .setFailureType(to: ModelSaver.LoadError.self)
+                .eraseToAnyPublisher()
+        }
+
+        let logger = ActionLogger()
+        let catcher = ActionCatcher()
+        let saver = ModelSaver(configuration: .init(load: load, loadStrategy: .automatic))
+        let store = Store(model: model, middleware: [logger, saver, catcher])
+
+        print(catcher.actions)
+
+        // TODO: Examine catcher.actions after store has finished dispatching...
+
+//        ModelSaver.RestoreAllDidComplete
+//            .trigger(Usage.RegisterAppLaunch())
+
+    }
+
 
     // MARK: - Saving
 

@@ -16,8 +16,8 @@ extension ModelSaver {
             load: @escaping LoadFunction = initial.load,
             save: @escaping SaveFunction = initial.save,
             loadStrategy: LoadStrategy = initial.loadStrategy,
-            saveStrategy: SaveStrategy = initial.saveStrategy,
-            updateStrategy: UpdateStrategy = initial.updateStrategy) {
+            saveStrategy: SaveStrategy = initial.saveStrategy
+        ) {
             self.load = load
             self.save = save
             self.loadStrategy = loadStrategy
@@ -35,7 +35,6 @@ extension ModelSaver {
 
         public var loadStrategy: LoadStrategy = .automatic
         public var saveStrategy: SaveStrategy = .debounced(1.5)
-        public var updateStrategy: UpdateStrategy = .automatic
 
         // MARK: - Types
 
@@ -52,16 +51,6 @@ extension ModelSaver {
             case periodic(TimeInterval)
             case debounced(TimeInterval)
             case throttled(TimeInterval)
-        }
-
-        public enum UpdateStrategy {
-            case manual
-            case automatic
-
-            // Maybe change to 'replace' and 'update'
-            // Where replace is the direct store replace
-            // And update throws out an Update<ModelType> action
-            // Maybe update isn’t the best name though
         }
 
         // MARK: - Update

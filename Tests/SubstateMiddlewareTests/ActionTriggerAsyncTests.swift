@@ -14,6 +14,10 @@ final class ActionTriggerAsyncTests: XCTestCase {
 
     struct Action2: Action, Equatable {}
 
+    struct Action3: Action, Equatable {
+        let int: Int
+    }
+
     struct Model1: Model, Equatable {
         let int: Int = 4
         let double: Double = 5

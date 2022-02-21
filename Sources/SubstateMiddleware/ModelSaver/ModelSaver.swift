@@ -56,8 +56,8 @@ public class ModelSaver: Middleware {
                 switch action {
                 case is Store.Start:
                     send(Store.Register(model: initialConfiguration))
-                    send(Setup())
-                case is Setup:
+                    send(Start())
+                case is Start:
                     // TODO: Factor out
                     cachedSendFunction = send
                     let configuration = find(Configuration.self).first as! Configuration
@@ -89,6 +89,7 @@ public class ModelSaver: Middleware {
     // MARK: - Loading
 
     private func loadAll(using find: Find, and send: @escaping Send) {
+        // TODO: Keep track of these tasks, await them all, and provide a 'RestoreAllDidComplete' action.
         find(nil).forEach { model in
             if model is SavedModel {
                 load(type: type(of: model), using: find, and: send)
@@ -115,12 +116,11 @@ public class ModelSaver: Middleware {
                 let loadedType = Swift.type(of: model)
                 if loadedType == type {
                     send(LoadDidSucceed(with: model))
-                    if configuration.updateStrategy == .automatic {
-                        send(Store.Replace(model: model))
-                        send(UpdateDidComplete(type: type))
-                    }
+                    send(Store.Replace(model: model))
+                    send(LoadDidComplete(type: type))
                 } else {
                     send(LoadDidFail(for: type, with: .wrongModelTypeReturned))
+                    send(LoadDidComplete(type: type))
                 }
 
             }
