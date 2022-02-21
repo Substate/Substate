@@ -89,6 +89,16 @@ extension ModelSaver {
         }
     }
 
+    /// Automatic save of a model completed.
+    ///
+    public struct SaveDidComplete: Action {
+        public let type: Model.Type
+
+        public init(for type: Model.Type) {
+            self.type = type
+        }
+    }
+
     /// Save all `SavedModel`s to persistent storage.
     /// 
     public struct SaveAll: Action {

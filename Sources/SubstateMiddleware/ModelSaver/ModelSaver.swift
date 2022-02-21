@@ -156,8 +156,10 @@ public class ModelSaver: Middleware {
                 switch completion {
                 case .finished:
                     send(SaveDidSucceed(for: type))
+                    send(SaveDidComplete(for: type))
                 case .failure(let error):
                     send(SaveDidFail(for: type, with: error))
+                    send(SaveDidComplete(for: type))
                 }
             } receiveValue: { _ in }
             .store(in: &self.subscriptions)

@@ -56,9 +56,7 @@ public class Store: ObservableObject {
                 return middleware.update(send: weakSend, find: weakFind)(update)
             })
 
-        DispatchQueue.main.async {
-            self.send(Start())
-        }
+        self.send(Start())
 
         // TODO: Build up a list of substate type -> path segment mappings
         // Then at runtime use Mirror.descendant(a, b, c) to grab the value, rather than iterating every time
