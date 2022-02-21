@@ -110,6 +110,7 @@ public class ModelSaver: Middleware {
             .sink { completion in
                 if case .failure(let error) = completion {
                     send(LoadDidFail(for: type, with: error))
+                    send(LoadDidComplete(type: type))
                 }
             } receiveValue: { model in
                 assert(Thread.isMainThread)
