@@ -70,8 +70,8 @@ public class ModelSaver: Middleware {
                 case is LoadAll: loadAll(using: find, and: send)
                 case is SaveAll: saveAll(using: find, and: send)
 
-                case is LoadDidSucceed, is LoadDidFail: ()
-                case is SaveDidSucceed, is SaveDidFail: ()
+                case is LoadDidSucceed, is LoadDidFail, is LoadDidComplete: ()
+                case is SaveDidSucceed, is SaveDidFail, is SaveDidComplete: ()
 
                 // TODO: Handle any setup needed after a configuration update.
                 // NOTE: Would need to let the middleware chain complete to get new config value
