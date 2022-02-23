@@ -1,12 +1,14 @@
 import XCTest
 @testable import Substate
 
+protocol Marker {}
+
 final class PropertyTests: XCTestCase {
 
     // MARK: - Finding
 
     func testFindLabelledProperties() throws {
-        struct Person { var first = "Jane"; var last = "Doe" }
+        struct Person { let first = "Jane"; let last = "Doe" }
         let person = Person()
 
         let strings = Property<String>.all(on: person)
@@ -18,7 +20,8 @@ final class PropertyTests: XCTestCase {
     }
 
     func testFindLabelledDynamicProperties() throws {
-        struct Person { var first = "Jane"; var last = "Doe" }
+        XCTExpectFailure("We’re hoping to remove support for Property<Any> and the 'matching' dynamic property")
+        struct Person { let first = "Jane"; let last = "Doe" }
         let person = Person()
 
         let strings = Property<Any>.all(matching: String.self, on: person)
@@ -45,21 +48,8 @@ final class PropertyTests: XCTestCase {
         XCTAssertEqual(doubles, [doubleItem])
     }
 
-    func testFindExistentiallyIndexedProperties() throws {
-        struct Person: Marker { var age: Int }
-        let people: [Marker] = [Person(age: 1), Person(age: 2), Person(age: 3)]
-
-        let ages = Property<Int>.all(on: people)
-
-        let age1 = Property<Int>(path: .index(0), .label("age"))
-        let age2 = Property<Int>(path: .index(1), .label("age"))
-        let age3 = Property<Int>(path: .index(2), .label("age"))
-
-        XCTAssertEqual(ages, [age1, age2, age3])
-    }
-
     func testFindNestedLabelledProperties() throws {
-        struct Pet { var name = "Fido" }
+        struct Pet { let name = "Fido" }
         struct Person { var pet1 = Pet(); var pet2 = Pet() }
 
         let person = Person()
@@ -72,8 +62,8 @@ final class PropertyTests: XCTestCase {
     }
 
     func testFindNestedIndexedProperties() throws {
-        struct Pet { var name = "Fido" }
-        struct Person { var pets = [Pet(), Pet()] }
+        struct Pet { let name = "Fido" }
+        struct Person { let pets = [Pet(), Pet()] }
 
         let person = Person()
 
@@ -84,10 +74,23 @@ final class PropertyTests: XCTestCase {
         XCTAssertEqual(pets, [pet1, pet2])
     }
 
+    func testFindNestedLabelledPropertiesInArray() throws {
+        struct Person { let age: Int }
+
+        let people = [Person(age: 1), Person(age: 2), Person(age: 3)]
+
+        let ages = Property<Int>.all(on: people)
+        let age1 = Property<Int>(path: .index(0), .label("age"))
+        let age2 = Property<Int>(path: .index(1), .label("age"))
+        let age3 = Property<Int>(path: .index(2), .label("age"))
+
+        XCTAssertEqual(ages, [age1, age2, age3])
+    }
+
     func testFindDeeplyNestedLabelledProperties() throws {
-        struct Parent { var child1 = Child1() }
-        struct Child1 { var child2 = Child2() }
-        struct Child2 { var child3 = 3 }
+        struct Parent { let child1 = Child1() }
+        struct Child1 { let child2 = Child2() }
+        struct Child2 { let child3 = 3 }
 
         let parent = Parent()
 
@@ -98,9 +101,9 @@ final class PropertyTests: XCTestCase {
     }
 
     func testFindDeeplyNestedIndexedProperties() throws {
-        struct Parent { var child1 = Child1() }
-        struct Child1 { var child2s = [Child2(), Child2(), Child2()] }
-        struct Child2 { var child3 = 3 }
+        struct Parent { let child1 = Child1() }
+        struct Child1 { let child2s = [Child2(), Child2(), Child2()] }
+        struct Child2 { let child3 = 3 }
 
         let parent = Parent()
         let integers = Property<Int>.all(on: parent)
@@ -112,6 +115,48 @@ final class PropertyTests: XCTestCase {
         ]
 
         XCTAssertEqual(integers, integer3s)
+    }
+
+    func testFindDifferentlyNestedPropertiesByPrimitiveType() throws {
+        struct Parent { let child1 = Child1(); let child2 = Child2() }
+        struct Child1 { let int: Int = 5 }
+        struct Child2 { let int: Int = 10; let child3 = Child3() }
+        struct Child3 { let int: Int = 15; let otherInt: Int = 20 }
+
+        let parent = Parent()
+        let integers = Property<Int>.all(on: parent)
+
+        let expected = [
+            Property<Int>(path: [.label("child1"), .label("int")]),
+            Property<Int>(path: [.label("child2"), .label("int")]),
+            Property<Int>(path: [.label("child2"), .label("child3"), .label("int")]),
+            Property<Int>(path: [.label("child2"), .label("child3"), .label("otherInt")])
+        ]
+
+        XCTAssertEqual(integers, expected)
+    }
+
+    func testFindDifferentlyNestedPropertiesByMarkerType() throws {
+        struct Parent { let child1 = Child1(); let child2 = Child2() }
+        struct Child1: Marker { let child3 = Child3() }
+        struct Child2: Marker {}
+        struct Child3 { let child4 = Child4() }
+        struct Child4 { let child5 = Child5() }
+        struct Child5: Marker { let items: [Any] = [Child6(), Child7()] }
+        struct Child6: Marker {}
+        struct Child7 {}
+
+        let parent = Parent()
+        let markers = Property<Marker>.all(on: parent)
+
+        let expected = [
+            Property<Marker>(path: [.label("child1")]),
+            Property<Marker>(path: [.label("child1"), .label("child3"), .label("child4"), .label("child5")]),
+            Property<Marker>(path: [.label("child1"), .label("child3"), .label("child4"), .label("child5"), .label("items"), .index(0)]),
+            Property<Marker>(path: [.label("child2")])
+        ]
+
+        XCTAssertEqual(markers, expected)
     }
 
     // MARK: - Getting
@@ -132,7 +177,7 @@ final class PropertyTests: XCTestCase {
         XCTAssertEqual(name.get(on: person) as? String, "Jane")
     }
 
-    func testGetIndexedProperty() throws {
+    func testGetIndexedProperties() throws {
         let list: [Any] = [1, "String", 2.0]
 
         let integer = Property<Int>(path: .index(0))
@@ -145,35 +190,152 @@ final class PropertyTests: XCTestCase {
         XCTAssertEqual(double.get(on: list), 2.0)
     }
 
-//
-//    // MARK: - Setting
-//
-//    func testSetTopLevelLabelledValue() throws {
-//        struct Model1 { var value = 1 }
-//
-//        var model1 = Model1()
-//        try ObjectPathFinder.setValue(at: [.label("value")], to: 2, on: &model1)
-//
-//        XCTAssertEqual(model1.value, 2)
-//    }
-//
-//    func testSetTopLevelIndexedValue() throws {
-//        var model1 = [1, 2 ,3]
-//        try ObjectPathFinder.setValue(at: [.index(1)], to: 4, on: &model1)
-//
-//        XCTAssertEqual(model1, [1, 4, 3])
-//    }
-//
-////    Fails because the system doesn’t yet work with arrays declared by protocol.
-////    func testSetTopLevelProtocolIndexedValue() throws {
-////        struct Model0 { var models: [HasInt] = [Model1(int: 1)] }
-////        struct Model1: HasInt { var int: Int }
-////
-////        var model0 = Model0()
-////        try ObjectPathFinder.setValue(at: [.label("models"), .index(0), .label("int")], to: 2, on: &model0)
-////        XCTAssertEqual((model0.models[0] as! Model1).int, 2)
-////    }
-//
+    func testGetNestedLabelledProperties() throws {
+        struct Pet { let name: String }
+        struct Person { var pet1 = Pet(name: "Fido"); var pet2 = Pet(name: "Rex") }
+
+        let person = Person()
+
+        let pet1Name = Property<String>(path: .label("pet1"), .label("name"))
+        XCTAssertEqual(pet1Name.get(on: person), "Fido")
+
+        let pet2Name = Property<String>(path: .label("pet2"), .label("name"))
+        XCTAssertEqual(pet2Name.get(on: person), "Rex")
+    }
+
+    func testGetNestedIndexedProperties() throws {
+        struct Pet: Equatable { let name: String }
+        struct Person { let pets = [Pet(name: "Fido"), Pet(name: "Rex")] }
+
+        let person = Person()
+
+        let pet1 = Property<Pet>(path: .label("pets"), .index(0))
+        XCTAssertEqual(pet1.get(on: person), Pet(name: "Fido"))
+
+        let pet2 = Property<Pet>(path: .label("pets"), .index(1))
+        XCTAssertEqual(pet2.get(on: person), Pet(name: "Rex"))
+    }
+
+    func testGetNestedLabelledPropertiesInArray() throws {
+        struct Person { let age: Int }
+
+        let people: [Person] = [Person(age: 1), Person(age: 2), Person(age: 3)]
+
+        let age1 = Property<Int>(path: .index(0), .label("age"))
+        XCTAssertEqual(age1.get(on: people), 1)
+
+        let age2 = Property<Int>(path: .index(1), .label("age"))
+        XCTAssertEqual(age2.get(on: people), 2)
+
+        let age3 = Property<Int>(path: .index(2), .label("age"))
+        XCTAssertEqual(age3.get(on: people), 3)
+    }
+
+    func testGetDeeplyNestedLabelledProperties() throws {
+        struct Parent { let child1 = Child1() }
+        struct Child1 { let child2 = Child2() }
+        struct Child2 { let child3 = 3 }
+
+        let parent = Parent()
+
+        let integer = Property<Int>(path: .label("child1"), .label("child2"), .label("child3"))
+        XCTAssertEqual(integer.get(on: parent), 3)
+    }
+
+    func testGetDeeplyNestedIndexedProperties() throws {
+        struct Parent { let child1 = Child1() }
+        struct Child1 { let child2s = [Child2(int: 1), Child2(int: 2), Child2(int: 3)] }
+        struct Child2 { let int: Int }
+
+        let parent = Parent()
+
+        let int1 = Property<Int>(path: .label("child1"), .label("child2s"), .index(0), .label("int"))
+        XCTAssertEqual(int1.get(on: parent), 1)
+
+        let int2 = Property<Int>(path: .label("child1"), .label("child2s"), .index(1), .label("int"))
+        XCTAssertEqual(int2.get(on: parent), 2)
+
+        let int3 = Property<Int>(path: .label("child1"), .label("child2s"), .index(2), .label("int"))
+        XCTAssertEqual(int3.get(on: parent), 3)
+    }
+
+    func testGetDifferentlyNestedPropertiesByPrimitiveType() throws {
+        struct Parent { let child1 = Child1(); let child2 = Child2() }
+        struct Child1 { let int: Int = 5 }
+        struct Child2 { let int: Int = 10; let child3 = Child3() }
+        struct Child3 { let int: Int = 15; let otherInt: Int = 20 }
+
+        let parent = Parent()
+
+        let int1 = Property<Int>(path: [.label("child1"), .label("int")])
+        XCTAssertEqual(int1.get(on: parent), 5)
+
+        let int2 = Property<Int>(path: [.label("child2"), .label("int")])
+        XCTAssertEqual(int2.get(on: parent), 10)
+
+        let int3 = Property<Int>(path: [.label("child2"), .label("child3"), .label("int")])
+        XCTAssertEqual(int3.get(on: parent), 15)
+
+        let int4 = Property<Int>(path: [.label("child2"), .label("child3"), .label("otherInt")])
+        XCTAssertEqual(int4.get(on: parent), 20)
+    }
+
+    func testGetDifferentlyNestedPropertiesByMarkerType() throws {
+        struct Parent { let child1 = Child1(); let child2 = Child2() }
+        struct Child1: Marker { let child3 = Child3() }
+        struct Child2: Marker, Equatable {}
+        struct Child3 { let child4 = Child4() }
+        struct Child4 { let child5 = Child5() }
+        struct Child5: Marker { let items: [Any] = [Child6(), Child7()] }
+        struct Child6: Marker {}
+        struct Child7: Marker, Equatable {}
+
+        let parent = Parent()
+
+        let child2 = Property<Marker>(path: [.label("child2")])
+        XCTAssertEqual(child2.get(on: parent) as? Child2, Child2())
+
+        let child7 = Property<Marker>(path: [.label("child1"), .label("child3"), .label("child4"), .label("child5"), .label("items"), .index(1)])
+        XCTAssertEqual(child7.get(on: parent) as? Child7, Child7())
+    }
+
+    // MARK: - Setting
+
+    func testSetTopLevelLabelledValue() throws {
+        struct Person { var name = "Joe" }
+
+        var person = Person()
+
+        let name = Property<String>(path: [.label("name")])
+        try name.set(to: "Jane", on: &person)
+
+        XCTAssertEqual(person.name, "Jane")
+    }
+
+    func testSetTopLevelIndexedValue() throws {
+        var numbers = [1, 2 ,3]
+
+        let secondNumber = Property<Int>(path: [.index(1)])
+        try secondNumber.set(to: 5, on: &numbers)
+
+        XCTAssertEqual(numbers, [1, 5, 3])
+    }
+
+    func testSetTopLevelProtocolIndexedValue() throws {
+        // Array must be set to Any here: if it’s set to a protocol, because of the way that’s stored
+        // we crash.
+        struct Model0 { var models: [Any] = [Model1(int: 1)] }
+        struct Model1: Marker { var int: Int }
+
+        var model0 = Model0()
+
+        let integer = Property<Int>(path: [.label("models"), .index(0), .label("int")])
+        try integer.set(to: 3, on: &model0)
+
+//        try ObjectPathFinder.setValue(at: [.label("models"), .index(0), .label("int")], to: 2, on: &model0)
+        XCTAssertEqual((model0.models[0] as! Model1).int, 3)
+    }
+
 //    func testSetSecondLevelLabelledValue() throws {
 //        struct Model1 { var value = Model2() }
 //        struct Model2 { var value = 1 }
@@ -338,5 +500,3 @@ final class PropertyTests: XCTestCase {
 //    }
 
 }
-
-protocol Marker {}

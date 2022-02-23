@@ -19,6 +19,7 @@ final class StoreTests: XCTestCase {
             switch action {
             case is Increment: value += 1
             case is Decrement: value -= 1
+            case is DeepState.Change: value = 10000
             case let action as Reset: value = action.toValue
             default: ()
             }
@@ -112,10 +113,12 @@ final class StoreTests: XCTestCase {
     }
 
 //    Full recursion is not yet implemented!
-//    func testDeeplyNestedChildActionDispatch() throws {
-//        let store = Store(model: Counter())
-//        store.update(DeepState.Change())
-//        XCTAssertEqual(store.find(DeepState.self)?.value, 1)
-//    }
+    @MainActor func testDeeplyNestedChildActionDispatch() async throws {
+        let store = Store(model: Counter())
+        store.send(DeepState.Change())
+        try await Task.sleep(nanoseconds: 100)
+        XCTAssertEqual(store.find(DeepState.self)?.value, 456)
+        XCTAssertEqual(store.find(Counter.self)?.value, 1000000)
+    }
 
 }

@@ -40,3 +40,19 @@ extension Property: Equatable {
         lhs.type == rhs.type && lhs.path == rhs.path
     }
 }
+
+extension PropertyPathSegment: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .index(let value): return "\(value)"
+        case .label(let value): return "\(value)"
+        }
+    }
+}
+
+extension Property: CustomStringConvertible {
+    public var description: String {
+        let path = path.map(String.init(describing:)).joined(separator: " › ")
+        return "Substate.Property<\(String(describing: Value.self))>(type: \(type.self), path: [\(path)])"
+    }
+}

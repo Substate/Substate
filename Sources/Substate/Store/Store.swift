@@ -26,9 +26,22 @@ public class Store: ObservableObject {
         var staticModel: Model
         var dynamicModels: [Model] = []
 
+        private(set) var modelPropertyList: [Property<Model>] = []
+
+        mutating func updateModelPropertyList() {
+            modelPropertyList = Property<Model>.all(on: self)
+            print(modelPropertyList)
+        }
+
+        init(staticModel: Model) {
+            self.staticModel = staticModel
+            updateModelPropertyList()
+        }
+
         mutating func update(action: Action) {
             if let register = action as? Register {
                 dynamicModels.append(register.model)
+                updateModelPropertyList()
             }
         }
     }
@@ -37,6 +50,7 @@ public class Store: ObservableObject {
     @Published private var model: InternalModel
     private let middleware: [Middleware]
     private var updateFunction: Send!
+
 
     // TODO: Provide a publisher/AsyncSequence for easy subscription to model changes
 
@@ -87,6 +101,18 @@ public class Store: ObservableObject {
     private func performSend(action: Action) {
         precondition(Thread.isMainThread, "Update must be called on the main thread!")
         model = reduce(model: model, action: action)
+
+        // TODO: The new setup will be something like this, doesn’t work at present though.
+        // TODO: Could even move this logic into the InternalModel and have it take care of all its children!
+//        for property in model.modelPropertyList {
+//            print(property)
+//            var existing = property.get(on: model)!
+//            print("EXISTING", existing)
+//            existing.update(action: action)
+//            print("UDPATED", existing)
+//            try! property.set(to: existing, on: &model)
+//            print(model)
+//        }
     }
 
     // NOTE: This will always have to be optional. But using a view helper in the same way as
