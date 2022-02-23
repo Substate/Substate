@@ -3,7 +3,7 @@ import Substate
 /// Transform tagged actions into a payload suitable for analytics tracking.
 ///
 /// - At present this middleware doesn’t actually need to be included — just tagging actions with
-///   `TrackedAction` is sufficient.
+///   `TrackedAction` is sufficient to get some tracking data to use.
 ///
 /// ```swift
 /// struct BasicTrackedAction: Action, TrackedAction {}

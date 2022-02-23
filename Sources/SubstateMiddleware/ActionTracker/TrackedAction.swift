@@ -1,4 +1,4 @@
-protocol TrackedAction {
+public protocol TrackedAction {
 
     /// An name suitable for sending to an analytics backend.
     ///
@@ -10,7 +10,7 @@ protocol TrackedAction {
 
 }
 
-extension TrackedAction {
+public extension TrackedAction {
 
     /// Provides a default tracking name for the action based on type information.
     ///

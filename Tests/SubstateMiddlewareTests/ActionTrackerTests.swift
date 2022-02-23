@@ -1,8 +1,8 @@
 import XCTest
 import Combine
 
-@testable import Substate
-@testable import SubstateMiddleware
+import Substate
+import SubstateMiddleware
 
 final class ActionTrackerAsyncTests: XCTestCase {
 
