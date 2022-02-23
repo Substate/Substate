@@ -63,6 +63,7 @@ extension Action {
                         try? await effect(action)
                         continuation.yield(VoidAction())
                     }
+                    
                     continuation.finish()
                 }
             }

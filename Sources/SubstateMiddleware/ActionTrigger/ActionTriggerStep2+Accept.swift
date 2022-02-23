@@ -9,9 +9,9 @@ extension ActionTriggerStep2 {
                             continuation.yield(output)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -25,9 +25,9 @@ extension ActionTriggerStep2 {
                             continuation.yield(output)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -41,9 +41,9 @@ extension ActionTriggerStep2 {
                             continuation.yield(output)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -67,9 +67,9 @@ extension ActionTriggerStep2 {
                             continuation.yield(output)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }

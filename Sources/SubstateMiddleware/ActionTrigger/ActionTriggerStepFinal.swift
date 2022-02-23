@@ -31,6 +31,7 @@ extension ActionTriggerStepFinal: ActionTriggerProvider {
                         for await action in self.run(action: action, find: find) {
                             continuation.yield(action)
                         }
+
                         continuation.finish()
                     }
                 }

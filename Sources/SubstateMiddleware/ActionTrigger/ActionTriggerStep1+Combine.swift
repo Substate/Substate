@@ -12,9 +12,9 @@ extension ActionTriggerStep1 {
                         let result = (output, value())
                         continuation.yield(result)
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -29,9 +29,9 @@ extension ActionTriggerStep1 {
                         let result = (output, value1(), value2())
                         continuation.yield(result)
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -48,9 +48,9 @@ extension ActionTriggerStep1 {
                             continuation.yield(result)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -68,9 +68,9 @@ extension ActionTriggerStep1 {
                             continuation.yield(result)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -87,9 +87,9 @@ extension ActionTriggerStep1 {
                             continuation.yield(result)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -107,9 +107,9 @@ extension ActionTriggerStep1 {
                             continuation.yield(result)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }

@@ -2,8 +2,7 @@ import Substate
 
 /// Transform tagged actions into a payload suitable for analytics tracking.
 ///
-/// - At present this middleware doesn’t actually need to be included — just tagging actions with
-///   `TrackedAction` is sufficient to get some tracking data to use.
+/// Usage:
 ///
 /// ```swift
 /// struct BasicTrackedAction: Action, TrackedAction {}
@@ -14,6 +13,17 @@ import Substate
 /// }
 /// ```
 ///
+/// Usage with ActionTriggers:
+///
+/// ```swift
+/// let appTriggers = ActionTriggers {
+///     let analytics = AnalyticsBackendDependency()
+///
+///     ActionTracker.Event
+///         .perform { analytics.trackEvent(name: $0.name, payload: $0.metadata) }
+/// }
+/// ```
+///
 public class ActionTracker: Middleware {
 
     public init() {}
@@ -21,12 +31,10 @@ public class ActionTracker: Middleware {
     public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
         return { next in
             return { action in
-                // At present we don’t actually do anything here, as TrackedActions are already
-                // easily caught from, for example, the ActionTrigger middleware just using type
-                // information. We could add a custom closure to this middleware that is triggered
-                // when TrackedActions are seen. Or decorate tracked actions with more metadata,
-                // for examply by pulling data from the store according to some new methods defined
-                // on TrackedAction.
+                if let action = action as? TrackedAction {
+                    send(Event(action: action))
+                }
+
                 next(action)
             }
         }

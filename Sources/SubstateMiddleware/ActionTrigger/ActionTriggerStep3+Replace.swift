@@ -12,9 +12,9 @@ extension ActionTriggerStep3 {
                         let result = value()
                         continuation.yield(result)
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -29,9 +29,9 @@ extension ActionTriggerStep3 {
                         let result = (value1(), value2())
                         continuation.yield(result)
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -46,9 +46,9 @@ extension ActionTriggerStep3 {
                         let result = (value1(), value2(), value3())
                         continuation.yield(result)
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -64,9 +64,9 @@ extension ActionTriggerStep3 {
                             continuation.yield(m1)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -83,9 +83,9 @@ extension ActionTriggerStep3 {
                             continuation.yield((m1, m2))
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -103,9 +103,9 @@ extension ActionTriggerStep3 {
                             continuation.yield((m1, m2, m3))
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -122,9 +122,9 @@ extension ActionTriggerStep3 {
                             continuation.yield(v1)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -143,9 +143,9 @@ extension ActionTriggerStep3 {
                             continuation.yield((v1, v2))
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -166,9 +166,9 @@ extension ActionTriggerStep3 {
                             continuation.yield((v1, v2, v3))
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }

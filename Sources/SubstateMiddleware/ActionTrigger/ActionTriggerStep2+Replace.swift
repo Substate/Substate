@@ -11,9 +11,9 @@ extension ActionTriggerStep2 {
                     for await _ in run(action: action, find: find) {
                         continuation.yield(value())
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -27,9 +27,9 @@ extension ActionTriggerStep2 {
                     for await _ in run(action: action, find: find) {
                         continuation.yield((value1(), value2()))
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -43,9 +43,9 @@ extension ActionTriggerStep2 {
                     for await _ in run(action: action, find: find) {
                         continuation.yield((value1(), value2(), value3()))
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -61,9 +61,9 @@ extension ActionTriggerStep2 {
                             continuation.yield(m1)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -80,9 +80,9 @@ extension ActionTriggerStep2 {
                             continuation.yield((m1, m2))
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -100,9 +100,9 @@ extension ActionTriggerStep2 {
                             continuation.yield((m1, m2, m3))
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -119,9 +119,9 @@ extension ActionTriggerStep2 {
                             continuation.yield(v1)
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -140,9 +140,9 @@ extension ActionTriggerStep2 {
                             continuation.yield((v1, v2))
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -163,9 +163,9 @@ extension ActionTriggerStep2 {
                             continuation.yield((v1, v2, v3))
                         }
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }

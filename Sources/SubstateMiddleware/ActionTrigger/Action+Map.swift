@@ -14,9 +14,9 @@ extension Action {
                         let result = transform(action)
                         continuation.yield(result)
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -33,9 +33,9 @@ extension Action {
                         let result = (transform1(action), transform2(action))
                         continuation.yield(result)
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -52,9 +52,9 @@ extension Action {
                         let result = (transform1(action), transform2(action), transform3(action))
                         continuation.yield(result)
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }
@@ -70,9 +70,9 @@ extension Action {
                     if let action = action as? Self, let result = transform(action) {
                         continuation.yield(result)
                     }
-                }
 
-                continuation.finish()
+                    continuation.finish()
+                }
             }
         }
     }

@@ -35,9 +35,9 @@ extension ActionTriggerStep1 {
                         if let output = result() {
                             continuation.yield(output)
                         }
-
-                        continuation.finish()
                     }
+
+                    continuation.finish()
                 }
             }
         }
@@ -53,9 +53,9 @@ extension ActionTriggerStep1 {
                         if let output = transform(value) {
                             continuation.yield(output)
                         }
-
-                        continuation.finish()
                     }
+
+                    continuation.finish()
                 }
             }
         }
