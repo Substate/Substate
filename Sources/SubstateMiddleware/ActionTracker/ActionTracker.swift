@@ -5,11 +5,16 @@ import Substate
 /// Usage:
 ///
 /// ```swift
-/// struct BasicTrackedAction: Action, TrackedAction {}
+/// struct RecordingStarted: Action, TrackedAction {}
 ///
-/// struct CustomTrackedAction: Action, TrackedAction {
-///     let trackingName: String = "custom-tracking-name"
-///     let trackingMetadata: [String:Any] = ["some": "value"]
+/// struct VolumeChanged: Action, TrackedAction {
+///     let volume: Float
+///     let trackingName = "volume:changed"
+///     let trackingProperties: [String:Any] {[
+///         "volume": TrackedValue(\Self.volume),
+///         "headphones": TrackedValue(\Audio.headphonesAreActive),
+///         "device": UIDevice.current.name
+///     ]}
 /// }
 /// ```
 ///
@@ -17,10 +22,10 @@ import Substate
 ///
 /// ```swift
 /// let appTriggers = ActionTriggers {
-///     let analytics = AnalyticsBackendDependency()
+///     let analytics = AnalyticsService()
 ///
 ///     ActionTracker.Event
-///         .perform { analytics.trackEvent(name: $0.name, payload: $0.metadata) }
+///         .perform { analytics.trackEvent(name: $0.name, properties: $0.properties) }
 /// }
 /// ```
 ///
@@ -31,8 +36,16 @@ public class ActionTracker: Middleware {
     public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
         return { next in
             return { action in
-                if let action = action as? TrackedAction {
-                    send(Event(action: action))
+                if let trackedAction = action as? TrackedAction {
+                    var properties = trackedAction.trackingProperties
+
+                    for (key, value) in properties {
+                        if let value = value as? TrackedValue {
+                            properties[key] = value.resolve(action, find)
+                        }
+                    }
+
+                    send(Event(name: trackedAction.trackingName, properties: properties))
                 }
 
                 next(action)
