@@ -4,7 +4,7 @@ import Combine
 import Substate
 import SubstateMiddleware
 
-final class ActionTrackerTests: XCTestCase {
+@MainActor final class ActionTrackerTests: XCTestCase {
 
     struct MyUntrackedAction: Action {}
     struct MyTrackedAction: Action, TrackedAction {}
@@ -15,24 +15,24 @@ final class ActionTrackerTests: XCTestCase {
 
     // MARK: - Event Output
 
-    func testTrackerProducesNoEventForUntrackedActions() throws {
+    func testTrackerProducesNoEventForUntrackedActions() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
         let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
-        store.send(MyUntrackedAction())
+        try await store.dispatch(MyUntrackedAction())
 
         let events = catcher.find(ActionTracker.Event.self)
 
         XCTAssertEqual(events.count, 0)
     }
 
-    func testTrackerProducesEventForTrackedActions() throws {
+    func testTrackerProducesEventForTrackedActions() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
         let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
-        store.send(MyTrackedAction())
+        try await store.dispatch(MyTrackedAction())
 
         let events = catcher.find(ActionTracker.Event.self)
 
@@ -41,12 +41,12 @@ final class ActionTrackerTests: XCTestCase {
 
     // MARK: - Event Name
 
-    func testTrackerProducesCorrectDefaultEventName() throws {
+    func testTrackerProducesCorrectDefaultEventName() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
         let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
-        store.send(MyTrackedAction())
+        try await store.dispatch(MyTrackedAction())
 
         let events = catcher.find(ActionTracker.Event.self)
         let name = try XCTUnwrap(events.first).name
@@ -54,12 +54,12 @@ final class ActionTrackerTests: XCTestCase {
         XCTAssertEqual(name, "SubstateMiddlewareTests.ActionTrackerTests.MyTrackedAction")
     }
 
-    func testTrackerProducesCorrectDefaultNestedEventName() throws {
+    func testTrackerProducesCorrectDefaultNestedEventName() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
         let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
-        store.send(MyActions.MyTrackedAction())
+        try await store.dispatch(MyActions.MyTrackedAction())
 
         let events = catcher.find(ActionTracker.Event.self)
         let name = try XCTUnwrap(events.first).name
@@ -67,14 +67,14 @@ final class ActionTrackerTests: XCTestCase {
         XCTAssertEqual(name, "SubstateMiddlewareTests.ActionTrackerTests.MyActions.MyTrackedAction")
     }
 
-    func testTrackerProducesCorrectCustomEventName() throws {
+    func testTrackerProducesCorrectCustomEventName() async throws {
         struct MyCustomAction: Action, TrackedAction { let trackingName = "custom-name" }
 
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
         let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
-        store.send(MyCustomAction())
+        try await store.dispatch(MyCustomAction())
 
         let events = catcher.actions.compactMap { $0 as? ActionTracker.Event }
         let name = try XCTUnwrap(events.first).name
@@ -84,12 +84,12 @@ final class ActionTrackerTests: XCTestCase {
 
     // MARK: - Event Properties
 
-    func testTrackerProducesEmptyDefaultPropertyList() throws {
+    func testTrackerProducesEmptyDefaultPropertyList() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
         let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
-        store.send(MyTrackedAction())
+        try await store.dispatch(MyTrackedAction())
 
         let events = catcher.find(ActionTracker.Event.self)
         let properties = try XCTUnwrap(events.first).properties
@@ -97,7 +97,7 @@ final class ActionTrackerTests: XCTestCase {
         XCTAssertEqual(properties.count, 0)
     }
 
-    func testTrackerProducesConstantPropertyValues() throws {
+    func testTrackerProducesConstantPropertyValues() async throws {
         struct MyCustomAction: Action, TrackedAction {
             let trackingProperties: [String : Any] = [
                 "custom-property": "custom-property-value"
@@ -108,7 +108,7 @@ final class ActionTrackerTests: XCTestCase {
         let catcher = ActionCatcher()
         let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
-        store.send(MyCustomAction())
+        try await store.dispatch(MyCustomAction())
 
         let events = catcher.find(ActionTracker.Event.self)
         let properties = try XCTUnwrap(events.first).properties
@@ -117,8 +117,8 @@ final class ActionTrackerTests: XCTestCase {
         XCTAssertEqual(value, "custom-property-value")
     }
 
-    func testTrackerProducesActionPropertyValues() throws {
-        struct MyCustomAction: Action, TrackedAction {
+    func testTrackerProducesActionPropertyValues() async throws {
+        @MainActor struct MyCustomAction: Action, TrackedAction {
             let myValue = 123
             let trackingProperties: [String : Any] = [
                 "custom-property": TrackedValue(\Self.myValue)
@@ -129,7 +129,7 @@ final class ActionTrackerTests: XCTestCase {
         let catcher = ActionCatcher()
         let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
-        store.send(MyCustomAction())
+        try await store.dispatch(MyCustomAction())
 
         let events = catcher.find(ActionTracker.Event.self)
         let properties = try XCTUnwrap(events.first).properties
@@ -138,13 +138,13 @@ final class ActionTrackerTests: XCTestCase {
         XCTAssertEqual(value, 123)
     }
 
-    func testTrackerProducesModelPropertyValues() throws {
+    func testTrackerProducesModelPropertyValues() async throws {
         struct MyModel: Model {
             let myValue = 456
             mutating func update(action: Action) {}
         }
 
-        struct MyCustomAction: Action, TrackedAction {
+        @MainActor struct MyCustomAction: Action, TrackedAction {
             let trackingProperties: [String : Any] = [
                 "custom-property": TrackedValue(\MyModel.myValue)
             ]
@@ -154,7 +154,7 @@ final class ActionTrackerTests: XCTestCase {
         let catcher = ActionCatcher()
         let store = Store(model: MyModel(), middleware: [tracker, catcher])
 
-        store.send(MyCustomAction())
+        try await store.dispatch(MyCustomAction())
 
         let events = catcher.find(ActionTracker.Event.self)
         let properties = try XCTUnwrap(events.first).properties

@@ -13,21 +13,21 @@ public class ActionLogger: Middleware {
         self.output = output
     }
 
-    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
-        return { next in
-            return { [self] action in
+    public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
+        { next in
+            { [self] action in
                 if action is Store.Start {
-                    send(Store.Register(model: ActionLogger.Configuration()))
-                    send(Start())
+                    try await store.dispatch(Store.Register(model: ActionLogger.Configuration()))
+                    try await store.dispatch(Start())
                 }
 
-                let isActive = (find(ActionLogger.Configuration.self).first as? Configuration)?.isActive ?? true
+                let configuration = store.find(ActionLogger.Configuration.self)!
 
-                if isActive && (!filter || (filter && action is LoggedAction)) {
+                if configuration.isActive && (!filter || (filter && action is LoggedAction)) {
                     output(format(action: action))
                 }
 
-                next(action)
+                try await next(action)
             }
         }
     }

@@ -4,19 +4,19 @@ import Substate
 ///
 public class ActionCatcher: Middleware {
 
-    public var actions: [Action] = []
+    @MainActor public var actions: [Action] = []
 
-    public func find<A:Action>(_: A.Type) -> [A] {
+    @MainActor public func find<A:Action>(_: A.Type) -> [A] {
         actions.compactMap { $0 as? A }
     }
 
     public init() {}
 
-    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
-        return { next in
-            return { action in
+    public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
+        { next in
+            { action in
                 self.actions.append(action)
-                next(action)
+                try await next(action)
             }
         }
     }

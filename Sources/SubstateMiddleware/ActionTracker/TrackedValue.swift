@@ -3,7 +3,7 @@ import Substate
 
 /// Wrapper allowing action and model properties to be included in tracking property dictionaries.
 ///
-public struct TrackedValue {
+@MainActor public struct TrackedValue {
 
     let resolve: (Action, Find) -> Any?
 

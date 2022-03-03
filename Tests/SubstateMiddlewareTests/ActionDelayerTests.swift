@@ -2,7 +2,7 @@ import XCTest
 import Substate
 import SubstateMiddleware
 
-final class ActionDelayerTests: XCTestCase {
+@MainActor final class ActionDelayerTests: XCTestCase {
 
     struct Action1: Action {}
 
@@ -23,19 +23,19 @@ final class ActionDelayerTests: XCTestCase {
         }
     }
 
-    func testNonDelayedActionIsReceivedImmediately() throws {
+    func testNonDelayedActionIsReceivedImmediately() async throws {
         let store = Store(model: Component(), middleware: [ActionDelayer()])
-        store.send(Action1())
+        try await store.dispatch(Action1())
         XCTAssertTrue(try XCTUnwrap(store.find(Component.self)).action1Received)
     }
 
-    func testDelayedActionIsNotReceivedImmediately() throws {
+    func testDelayedActionIsNotReceivedImmediately() async throws {
         let store = Store(model: Component(), middleware: [ActionDelayer()])
-        store.send(Action2())
+        try await store.dispatch(Action2())
         XCTAssertFalse(try XCTUnwrap(store.find(Component.self)).action2Received)
     }
 
-    func testDelayedActionIsReceivedOnTime() throws {
+    func testDelayedActionIsReceivedOnTime() async throws {
         let delayer = ActionDelayer()
         let publisher = ActionPublisher()
         let store = Store(model: Component(), middleware: [delayer, publisher])
@@ -50,7 +50,7 @@ final class ActionDelayerTests: XCTestCase {
             expectation.fulfill()
         }
 
-        store.send(Action2())
+        try await store.dispatch(Action2())
         wait(for: [expectation], timeout: 1.5)
     }
 

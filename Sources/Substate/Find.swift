@@ -11,4 +11,4 @@
 /// find(.model(Settings.self))
 /// ```
 ///
-public typealias Find = (Model.Type?) -> [Model]
+public typealias Find = @MainActor (Model.Type?) -> [Model]

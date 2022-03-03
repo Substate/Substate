@@ -1,3 +1,3 @@
 /// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
 ///
-public typealias Send = (Action) -> Void
+public typealias Send = @MainActor (Action) -> Void

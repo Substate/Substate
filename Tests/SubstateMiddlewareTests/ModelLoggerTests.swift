@@ -2,7 +2,7 @@ import XCTest
 import Substate
 import SubstateMiddleware
 
-final class ModelLoggerTests: XCTestCase {
+@MainActor final class ModelLoggerTests: XCTestCase {
 
     /// TODO: Test whether sub-states have been logged as part of a parent, or individually.
 
@@ -46,50 +46,50 @@ final class ModelLoggerTests: XCTestCase {
         XCTAssert(output.contains("Component3"))
     }
 
-    func testRootStateIsLoggedByDefault() throws {
+    func testRootStateIsLoggedByDefault() async throws {
         var output = ""
         let logger = ModelLogger { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.send(Action1())
+        try await store.dispatch(Action1())
         XCTAssert(output.contains("Component1"))
     }
 
-    func testRootStateIsLoggedWhenFilterIsInactive() throws {
+    func testRootStateIsLoggedWhenFilterIsInactive() async throws {
         var output = ""
         let logger = ModelLogger(filter: false) { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.send(Action1())
+        try await store.dispatch(Action1())
         XCTAssert(output.contains("Component1"))
     }
 
-    func testTaggedStatesAreLoggedWhenFilterIsActive() throws {
+    func testTaggedStatesAreLoggedWhenFilterIsActive() async throws {
         var output = ""
         let logger = ModelLogger(filter: true) { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.send(Action1())
+        try await store.dispatch(Action1())
         XCTAssert(output.contains("Component2"))
         XCTAssert(output.contains("Component3"))
     }
 
-    func testUntaggedStateIsNotLoggedWhenFilterIsActive() throws {
+    func testUntaggedStateIsNotLoggedWhenFilterIsActive() async throws {
         var output = ""
         let logger = ModelLogger(filter: true) { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.send(Action1())
+        try await store.dispatch(Action1())
         XCTAssertFalse(output.contains("Component1"))
     }
 
-    func testPropertiesAreLogged() throws {
+    func testPropertiesAreLogged() async throws {
         var output = ""
         let logger = ModelLogger { output.append($0) }
         let store = Store(model: Component1(), middleware: [logger])
-        store.send(Action1())
+        try await store.dispatch(Action1())
         XCTAssert(output.contains("property: 123"))
     }
 
-    func testRealConsoleOutput() throws {
+    func testRealConsoleOutput() async throws {
         let store = Store(model: Component1(), middleware: [ModelLogger()])
-        store.send(Action1())
+        try await store.dispatch(Action1())
     }
 
     func testStoreInternalStateIsNotLeaked() throws {

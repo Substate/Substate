@@ -7,8 +7,8 @@ import Substate
 
     public init() {}
 
-    public var wrappedValue: Substate.Send {
-        get { store.send }
+    public var wrappedValue: Substate.DispatchFunction {
+        get { store.dispatch }
     }
 
 }

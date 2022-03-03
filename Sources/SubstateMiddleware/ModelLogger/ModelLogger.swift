@@ -13,18 +13,19 @@ public class ModelLogger: Middleware {
         self.output = output
     }
 
-    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
-        return { next in
-            return { [self] action in
-                next(action)
-                fire(find: find)
+    public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
+        { next in
+            { [self] action in
+                try await next(action)
+                fire(find: store.uncheckedFind)
             }
         }
     }
 
     /// TODO: This isn’t great behaviour for the non-filter case. We used to have access to the root
     /// model, but now that’s gone from the middleware API. What to do?
-    private func fire(find: Find) {
+    /// TODO: We now have full access to the store, so we can refactor this default behaviour.
+    @MainActor private func fire(find: Find) {
         if filter {
             find(nil)
                 .filter { $0 is LoggedModel }

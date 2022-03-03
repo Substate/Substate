@@ -3,7 +3,7 @@ import Combine
 import Substate
 import SubstateMiddleware
 
-final class ActionPublisherTests: XCTestCase {
+@MainActor final class ActionPublisherTests: XCTestCase {
 
     struct Action1: Action {}
 
@@ -13,7 +13,7 @@ final class ActionPublisherTests: XCTestCase {
 
     var subscriptions: [AnyCancellable] = []
 
-    func testActionIsPublishedUsingCombine() throws {
+    func testActionIsPublishedUsingCombine() async throws {
         let publisher = ActionPublisher()
         let store = Store(model: Component(), middleware: [publisher])
         var actionWasPublished = false
@@ -23,11 +23,11 @@ final class ActionPublisherTests: XCTestCase {
             .store(in: &subscriptions)
 
         XCTAssertFalse(actionWasPublished)
-        store.send(Action1())
+        try await store.dispatch(Action1())
         XCTAssertTrue(actionWasPublished)
     }
 
-    func testActionIsPublishedUsingCallback() throws {
+    func testActionIsPublishedUsingCallback() async throws {
         let publisher = ActionPublisher()
         let store = Store(model: Component(), middleware: [publisher])
         var actionWasPublished = false
@@ -37,7 +37,7 @@ final class ActionPublisherTests: XCTestCase {
         }
 
         XCTAssertFalse(actionWasPublished)
-        store.send(Action1())
+        try await store.dispatch(Action1())
         XCTAssertTrue(actionWasPublished)
     }
 

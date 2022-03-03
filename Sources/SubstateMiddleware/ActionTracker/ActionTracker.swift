@@ -33,22 +33,22 @@ public class ActionTracker: Middleware {
 
     public init() {}
 
-    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
-        return { next in
-            return { action in
+    public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
+        { next in
+            { action in
                 if let trackedAction = action as? TrackedAction {
                     var properties = trackedAction.trackingProperties
 
                     for (key, value) in properties {
                         if let value = value as? TrackedValue {
-                            properties[key] = value.resolve(action, find)
+                            properties[key] = value.resolve(action, store.uncheckedFind)
                         }
                     }
 
-                    send(Event(name: trackedAction.trackingName, properties: properties))
+                    try await store.dispatch(Event(name: trackedAction.trackingName, properties: properties))
                 }
 
-                next(action)
+                try await next(action)
             }
         }
     }

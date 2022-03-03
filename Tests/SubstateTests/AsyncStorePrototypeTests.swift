@@ -11,29 +11,29 @@ import Substate
     struct Action1: Action, Equatable {}
     enum MyError: Error { case test }
 
-    class LoggerMiddleware: AsyncMiddleware {
-        func run(dispatch: @escaping DispatchFunction) -> (@escaping DispatchFunction) -> DispatchFunction {
+    class LoggerMiddleware: Middleware {
+        func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
             { next in
                 { action in
                     print("ACTION", action)
-                    // throw MyError.test
                     try await next(action)
                 }
             }
         }
     }
 
-    class DelayerMiddlerware: AsyncMiddleware {
+    class DelayerMiddlerware: Middleware {
         struct ScheduleSet: Action { let target: Action }
         struct ScheduleComplete: Action { let target: Action }
-        func run(dispatch: @escaping DispatchFunction) -> (@escaping DispatchFunction) -> DispatchFunction {
+        func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
             { next in
                 { action in
                     if action is Action1 {
-                        try await dispatch(ScheduleSet(target: action))
+                        try await store.dispatch(ScheduleSet(target: action))
                         try await Task.sleep(nanoseconds: 3 * NSEC_PER_SEC)
+                        guard !Task.isCancelled else { return }
                         try await next(action)
-                        try await dispatch(ScheduleComplete(target: action))
+                        try await store.dispatch(ScheduleComplete(target: action))
                     } else {
                         try await next(action)
                     }
@@ -42,8 +42,8 @@ import Substate
         }
     }
 
-    class ExceptionHandlerMiddlerware: AsyncMiddleware {
-        func run(dispatch: @escaping DispatchFunction) -> (@escaping DispatchFunction) -> DispatchFunction {
+    class ExceptionHandlerMiddlerware: Middleware {
+        func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
             { next in
                 { action in
                     do { try await next(action) } catch {
@@ -54,12 +54,12 @@ import Substate
         }
     }
 
-    class ActionCatcher: AsyncMiddleware {
+    class ActionCatcher: Middleware {
         var actions: [Action] = []
         func find<A:Action>(_: A.Type) -> [A] {
             actions.compactMap { $0 as? A }
         }
-        func run(dispatch: @escaping DispatchFunction) -> (@escaping DispatchFunction) -> DispatchFunction {
+        func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
             { next in
                 { action in
                     self.actions.append(action)
@@ -74,9 +74,9 @@ import Substate
         let delayer = DelayerMiddlerware()
         let exceptionHandler = ExceptionHandlerMiddlerware()
         let catcher = ActionCatcher()
-        let store = AsyncStorePrototype(state: MyModel(), middleware: [exceptionHandler, logger, delayer, catcher])
+        let store = Store(model: MyModel(), middleware: [exceptionHandler, logger, delayer, catcher])
 
-        await store.dispatch(action: Action1())
+        try await store.dispatch(Action1())
         XCTAssertEqual(catcher.actions.count, 3)
         XCTAssertEqual(catcher.find(Action1.self), [Action1()])
     }

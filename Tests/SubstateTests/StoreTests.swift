@@ -1,7 +1,7 @@
 import XCTest
 import Substate
 
-final class StoreTests: XCTestCase {
+@MainActor final class StoreTests: XCTestCase {
 
     struct Counter: Model {
         var value = 0
@@ -73,57 +73,69 @@ final class StoreTests: XCTestCase {
         XCTAssertEqual(store.find(NestedState.self)?.value, 123)
     }
 
-    func testActionDispatch() throws {
+    func testActionDispatch() async throws {
         let store = Store(model: Counter())
 
-        store.send(Counter.Increment())
+        try await store.dispatch(Counter.Increment())
         XCTAssertEqual(store.find(Counter.self)?.value, 1)
 
-        store.send(Counter.Decrement())
-        store.send(Counter.Decrement())
+        try await store.dispatch(Counter.Decrement())
+        try await store.dispatch(Counter.Decrement())
         XCTAssertEqual(store.find(Counter.self)?.value, -1)
 
-        store.send(Counter.Reset(toValue: 100))
+        try await store.dispatch(Counter.Reset(toValue: 100))
         XCTAssertEqual(store.find(Counter.self)?.value, 100)
     }
 
-    func testChildActionDispatch() throws {
+    func testChildActionDispatch() async throws {
         let store = Store(model: Counter())
 
-        store.send(Counter.Increment())
+        try await store.dispatch(Counter.Increment())
         XCTAssertEqual(store.find(Counter.self)?.value, 1)
 
-        store.send(SubCounter.Increment())
+        try await store.dispatch(SubCounter.Increment())
         XCTAssertEqual(store.find(SubCounter.self)?.value, 1)
     }
 
-    func testReplaceAction() throws {
+    func testReplaceAction() async throws {
         let store = Store(model: Counter(value: 123))
 
-        store.send(Store.Replace(model: Counter(value: 456)))
+        try await store.dispatch(Store.Replace(model: Counter(value: 456)))
         XCTAssertEqual(store.find(Counter.self)?.value, 456)
         // Double-check child model state was not changed
         XCTAssertEqual(store.find(SubCounter.self)?.value, 0)
 
-        store.send(Store.Replace(model: SubCounter(value: 789)))
+        try await store.dispatch(Store.Replace(model: SubCounter(value: 789)))
         XCTAssertEqual(store.find(SubCounter.self)?.value, 789)
         // Double-check parent model state was not changed
         XCTAssertEqual(store.find(Counter.self)?.value, 456)
     }
 
-    func testDeeplyNestedChildActionDispatch() throws {
+    func testDeeplyNestedChildActionDispatch() async throws {
         let store = Store(model: Counter())
 
-        store.send(NestedState.Change())
+        try await store.dispatch(NestedState.Change())
         XCTAssertEqual(store.find(NestedState.self)?.value, 456)
         XCTAssertEqual(store.find(Counter.self)?.value, 10000)
     }
 
-    func testParentModelSeesChangesInChild() throws {
+    func testParentModelSeesChangesInChild() async throws {
         let store = Store(model: Counter())
 
-        store.send(SubCounter.Increment())
+        try await store.dispatch(SubCounter.Increment())
         XCTAssertEqual(store.find(Counter.self)?.subCounterValueWasChanged, true)
     }
+
+//    TODO: Make this work and test dispatch performance.
+//    func testDispatchPerformance() async throws {
+//        let store = Store(model: Counter())
+//        self.measureMetrics([.wallClockTime], automaticallyStartMeasuring: true) {
+//            Task { @MainActor in
+//                self.startMeasuring()
+//                try await store.dispatch(Counter.Increment())
+//                self.stopMeasuring()
+//            }
+//        }
+//    }
 
 }

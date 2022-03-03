@@ -5,19 +5,18 @@ public class ActionDelayer: Middleware {
 
     public init() {}
 
-    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
-        return { next in
-            return { action in
-                // TODO: We don’t need to capture self here!
+    public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
+        { next in
+            { action in
                 if let delayedAction = action as? DelayedAction {
+                    // TODO: Dispatch an action instead of printing here
                     self.output(message: self.description(for: delayedAction))
-                    // TODO: Use a private serial queue
-                    DispatchQueue.main.asyncAfter(deadline: .now() + delayedAction.delay) {
-                        next(action)
-                    }
-                } else {
-                    next(action)
+                    let nanoseconds = UInt64(delayedAction.delay * TimeInterval(NSEC_PER_SEC))
+                    try await Task.sleep(nanoseconds: nanoseconds)
+                    guard !Task.isCancelled else { return }
                 }
+
+                try await next(action)
             }
         }
     }
@@ -29,7 +28,5 @@ public class ActionDelayer: Middleware {
     private func output(message: String) {
         print(message) // TODO: Use some kind of more general shared logger
     }
-
-
 
 }

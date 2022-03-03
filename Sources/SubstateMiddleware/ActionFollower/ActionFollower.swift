@@ -6,17 +6,19 @@ public class ActionFollower: Middleware {
 
     public init() {}
 
-    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
-        return { next in
-            return { action in
-                next(action)
+    public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
+        { next in
+            { action in
+                try await next(action)
 
                 if let action = action as? FollowupAction {
-                    send(action.followup)
+                    try await store.dispatch(action.followup)
                 }
 
                 if let action = action as? MultipleFollowupAction {
-                    action.followup.forEach(send)
+                    for action in action.followup {
+                        try await store.dispatch(action)
+                    }
                 }
             }
         }

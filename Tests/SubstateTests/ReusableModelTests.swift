@@ -1,13 +1,13 @@
 import XCTest
 import Substate
 
-/// Reusable models is a pattern where models are made generic and 'tagged' with a parent type in
+/// Reusable models is a pattern where models are made generic and 'tagged' with a phantom type in
 /// order to be identified and updated separately.
 ///
 /// This setup has the advantage of providing multiple free instance-specific actions too, as long
 /// as the actions are nested within the model.
 ///
-final class ReusableModelTests: XCTestCase {
+@MainActor final class ReusableModelTests: XCTestCase {
 
     struct Pager<ID>: Model {
         var page = 1
@@ -49,7 +49,7 @@ final class ReusableModelTests: XCTestCase {
 
     func testFirstChildUpdates() throws {
         let store = Store(model: AppModel())
-        store.send(Pager<NewsScreen>.Next())
+        store.dispatch(Pager<NewsScreen>.Next())
 
         XCTAssertEqual(store.find(Pager<NewsScreen>.self)?.page, 2)
         XCTAssertEqual(store.find(Pager<ProductsScreen>.self)?.page, 1)
@@ -57,7 +57,7 @@ final class ReusableModelTests: XCTestCase {
 
     func testSecondChildUpdates() throws {
         let store = Store(model: AppModel())
-        store.send(Pager<ProductsScreen>.Next())
+        store.dispatch(Pager<ProductsScreen>.Next())
 
         XCTAssertEqual(store.find(Pager<NewsScreen>.self)?.page, 1)
         XCTAssertEqual(store.find(Pager<ProductsScreen>.self)?.page, 2)

@@ -25,9 +25,9 @@ import Substate
 
         nonmutating set {
             if let action = action {
-                store.send(action(newValue))
+                store.dispatch(action(newValue))
             } else {
-                store.send(Store.Replace(model: newValue))
+                store.dispatch(Store.Replace(model: newValue))
             }
         }
     }
@@ -39,6 +39,7 @@ import Substate
 }
 
 /// TODO: Tidy up and split out
+/// Or even better, try and merge with Model<V>
 ///
 @propertyWrapper public struct Value<M, V>: DynamicProperty where M: Substate.Model {
 
@@ -74,9 +75,9 @@ import Substate
             model[keyPath: keyPath] = newValue
 
             if let action = action {
-                store.send(action(newValue))
+                store.dispatch(action(newValue))
             } else {
-                store.send(Store.Replace(model: model))
+                store.dispatch(Store.Replace(model: model))
             }
         }
     }

@@ -11,7 +11,7 @@ import Substate
     }
 
     public var wrappedValue: () -> Void {
-        get { { store.send(action) } }
+        get { { store.dispatch(action) } }
     }
 
 }

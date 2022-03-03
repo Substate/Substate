@@ -31,12 +31,12 @@ public class ActionTimer: Middleware {
         }
     }
 
-    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
-        return { next in
-            return { [self] action in
+    public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
+        { next in
+            { [self] action in
                 if (filter && action is TimedAction) || !filter {
                     let start = Date()
-                    next(action)
+                    try await next(action)
                     let elapsed = Date().timeIntervalSince(start)
 
                     // TODO: Actions from different modules will fall in same bucket?

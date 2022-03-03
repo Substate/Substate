@@ -23,8 +23,6 @@ public struct ActionTriggers {
 
     #endif
 
-    // TODO: Filter out VoidActions, or redo that whole system as it’s ugly!
-
     func run(action: Action, find: @escaping (Model.Type) -> Model?) -> AsyncStream<Action> {
         AsyncStream { continuation in
             Task {
@@ -32,6 +30,7 @@ public struct ActionTriggers {
                     for trigger in triggers {
                         group.addTask {
                             for await result in trigger(action, find) {
+                                if result is VoidAction { continue }
                                 continuation.yield(result)
                             }
                         }
@@ -49,15 +48,13 @@ public struct ActionTriggers {
 extension ActionTriggers: ActionTriggerProvider {}
 
 extension ActionTriggers: Middleware {
-    public func update(send: @escaping Send, find: @escaping Find) -> (@escaping Send) -> Send {
-        return { next in
-            return { action in
-                next(action)
+    public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
+        { next in
+            { action in
+                try await next(action)
 
-                Task { @MainActor in
-                    for await output in run(action: action, find: { find($0).first }) {
-                        send(output)
-                    }
+                for await action in run(action: action, find: { store.uncheckedFind($0).first }) {
+                    try await store.dispatch(action)
                 }
             }
         }
