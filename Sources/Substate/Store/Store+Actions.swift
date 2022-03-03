@@ -2,6 +2,9 @@ extension Store {
 
     /// Notification that the store will start.
     ///
+    /// This action is sent once only, when the store finishes its `init`. It can be used as a hook
+    /// to trigger other initialisation routines.
+    ///
     public struct Start: Action {}
 
     /// Dynamically register a model for use with the store.
@@ -30,7 +33,7 @@ extension Store {
     /// ```
     /// 
     /// > Warning: Bear in mind that this action has special baked-in store support, and is actioned
-    /// by the store directly without passing through the model’s ``Model/update(action:)`` method.
+    /// by the store directly before passing through the model’s ``Model/update(action:)`` method.
     ///
     public struct Replace: Action {
         let model: Model

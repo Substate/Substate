@@ -6,10 +6,15 @@ import SubstateMiddleware
 
     var body: some Scene {
         WindowGroup {
-            CounterView().store(model: Counter(), middleware: [
-                /* ModelLogger(), */ ActionLogger(), ModelSaver() /* Inspector() */
-            ])
+            CounterView().store(model: Counter(), middleware: middleware)
         }
     }
+
+    var middleware: [Middleware] {[
+        // ModelLogger(),
+        ActionLogger(),
+        ModelSaver()
+        // Inspector()
+    ]}
 
 }

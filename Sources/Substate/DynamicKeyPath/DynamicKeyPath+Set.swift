@@ -1,6 +1,6 @@
 import Runtime
 
-extension Property {
+extension DynamicKeyPath {
 
     enum SetError: Error {
         case castToArray
@@ -12,19 +12,14 @@ extension Property {
         case incorrectTypeAtBaseCase
     }
 
-    // TODO: Probably just start again with this.
-    // does it really have to be recursive? Can’t we just do a loop and update the objects in place?
-
-
-    /// - Note: Cannot yet set using `index` path segment option on arrays which are declared using
-    ///   a protocol.
-    /// - Unfortunately this means we currently don’t support indexing an array of models `[Model]`
+    /// - Note: Cannot yet set using `index` path segment option on arrays where we don’t have the
+    ///   compile-time type of the array, so for now we only operate on arrays of type [Model].
     ///
     func set<Object>(to value: Value, on object: inout Object) throws {
         object = try set(value: value, at: self.path, on: object)
     }
 
-    private func set<Object>(value: Any, at path: [PropertyPathSegment], on object: Object) throws -> Object {
+    private func set<Object>(value: Any, at path: [DynamicKeyPathSegment], on object: Object) throws -> Object {
         var object = object
         
         guard let currentSegment = path.first else {
@@ -40,16 +35,14 @@ extension Property {
         switch currentSegment {
 
         case .index(let index):
-            guard var array = object as? [Any] else {
+            guard var array = object as? [Model] else {
+                // THIS IS THE ERROR THAT WILL FIRE IF WE ENCOUNTER A NON- [Model] array
+                // We could warn about this on first init of the store.
                 throw SetError.castToArray
             }
 
             guard index < array.count else {
                 throw SetError.arrayLength
-            }
-
-            func cast<V>(val: Any, to valueType: V) -> V {
-                val as! V
             }
 
             array[index] = try set(value: value, at: nextLocation, on: array[index])
@@ -75,7 +68,7 @@ extension Property {
                 throw SetError.createPropertyInfo
             }
 
-            guard let existingObject = Property<Any>(path: currentSegment).get(on: object) else {
+            guard let existingObject = DynamicKeyPath<Any>(path: currentSegment).get(on: object) else {
                 throw SetError.getPropertyValue
             }
 

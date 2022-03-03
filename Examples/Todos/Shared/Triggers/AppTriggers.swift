@@ -9,7 +9,7 @@ let appTriggers = ActionTriggers {
 
     // Titlebar
 
-    ModelSaver.UpdateDidComplete
+    ModelSaver.LoadDidComplete
         .replace(with: \Tasks.all.count)
         .trigger(Titlebar.UpdateCount.init)
 

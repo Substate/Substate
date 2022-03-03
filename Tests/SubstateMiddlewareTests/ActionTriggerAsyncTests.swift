@@ -140,7 +140,6 @@ final class ActionTriggerAsyncTests: XCTestCase {
         }
 
         let result = await triggers.run(action: Store.Start(), find: find).prefix(1).reduce([]) { $0 + [$1] }
-        print(result)
         XCTAssertEqual(try XCTUnwrap(result[0] as? Action2), Action2())
     }
 

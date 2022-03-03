@@ -1,4 +1,4 @@
-extension Property {
+extension DynamicKeyPath {
 
     func get<Object>(on object: Object) -> Value? {
         if path.isEmpty {
@@ -11,7 +11,7 @@ extension Property {
             switch segment {
 
             case .index(let index):
-                guard let array = value as? [Any] else {
+                guard let array = value as? [Model] else {
                     return nil
                 }
 

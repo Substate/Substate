@@ -26,7 +26,7 @@ struct ToolbarView: View {
                             send(Toolbar.SaveButtonWasPressed())
                         }
 
-                    Button(action: send(Toolbar.SaveButtonWasPressed())) {
+                    Button(action: { send(Toolbar.SaveButtonWasPressed()) }) {
                         Text("Save")
                     }
                     .disabled(!model.canSaveAddedTask)
@@ -37,7 +37,7 @@ struct ToolbarView: View {
             }
 
             HStack {
-                Button(action: send(Toolbar.AddButtonWasPressed())) {
+                Button(action: { send(Toolbar.AddButtonWasPressed()) }) {
                     VStack {
                         Image(systemName: "plus.circle.fill")
                         Text("Add")
@@ -46,7 +46,7 @@ struct ToolbarView: View {
 
                 Spacer()
 
-                Button(action: send(Toolbar.SearchButtonWasPressed())) {
+                Button(action: { send(Toolbar.SearchButtonWasPressed()) }) {
                     VStack {
                         Image(systemName: "magnifyingglass.circle.fill")
                         Text("Search")

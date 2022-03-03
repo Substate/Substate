@@ -17,7 +17,7 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/wickwirew/Runtime", from: "2.2.2"),
+        .package(url: "https://github.com/wickwirew/Runtime", from: "2.2.4")
     ],
 
     targets: [

@@ -3,14 +3,14 @@ import Substate
 
 @propertyWrapper public struct Model<V>: DynamicProperty where V: Substate.Model {
 
-    let action: ((V) -> Action)?
+    let action: ((V) -> Substate.Action)?
     @EnvironmentObject var store: Store
 
     public init() {
         self.action = nil
     }
 
-    public init(_ action: @escaping (V) -> Action) {
+    public init(_ action: @escaping (V) -> Substate.Action) {
         self.action = action
     }
 
@@ -42,7 +42,7 @@ import Substate
 ///
 @propertyWrapper public struct Value<M, V>: DynamicProperty where M: Substate.Model {
 
-    let action: ((V) -> Action)?
+    let action: ((V) -> Substate.Action)?
     let keyPath: WritableKeyPath<M, V>
 
     @EnvironmentObject var store: Store
@@ -52,7 +52,7 @@ import Substate
         self.action = nil
     }
 
-    public init(_ keyPath: WritableKeyPath<M, V>, _ action: @escaping (V) -> Action) {
+    public init(_ keyPath: WritableKeyPath<M, V>, _ action: @escaping (V) -> Substate.Action) {
         self.keyPath = keyPath
         self.action = action
     }

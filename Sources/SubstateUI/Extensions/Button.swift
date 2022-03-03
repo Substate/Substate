@@ -1,41 +1,21 @@
 import SwiftUI
+import Substate
+
+// Holy grail API for actions in views:
+//
+//     Button("Increment", action: Counter.Increment(by: 10))
+//
+// Could we do this by putting a view inside the label which captures the store EnvironmentObject,
+// and somehow passes access to the store up to the action closure?
 
 extension Button {
 
-//    public init(action: @autoclosure @escaping () -> Void, @ViewBuilder label: () -> Label) {
-//        self.init(action: action, label: label)
+//    public init(title: String, action: Substate.Action) {
+//        self.init(action: {
+//
+//        }, label: {
+//            Text(title)
+//        })
 //    }
-
-//    ?
-//    public init(_ titleKey: LocalizedStringKey, action: @autoclosure @escaping () -> Void) {
-//        self.init(titleKey, action: action)
-//    }
-
-    // TODO: Review all Button initialisers and create correspondoing @autoclosure versions.
 
 }
-
-
-
-
-
-//import Substate
-//
-//extension Button {
-//
-//    // public init(action: @escaping () -> Void, @ViewBuilder label: () -> Label)
-//    public init(action: Substate.Action, @ViewBuilder label: () -> Label) {
-//        StoreProvider { store in
-//            Text("X")
-//        }
-//
-//
-//
-//
-//    }
-//
-//}
-
-// Still might be worth some work on this to see whether we can get the holy grail API:
-
-// Button("Increment", action: Counter.Increment())

@@ -7,6 +7,7 @@ final class StoreTests: XCTestCase {
         var value = 0
         var subCounter = SubCounter()
         var container = Container()
+        var subCounterValueWasChanged = false
 
         struct Increment: Action {}
         struct Decrement: Action {}
@@ -19,10 +20,12 @@ final class StoreTests: XCTestCase {
             switch action {
             case is Increment: value += 1
             case is Decrement: value -= 1
-            case is DeepState.Change: value = 10000
+            case is NestedState.Change: value = 10000
             case let action as Reset: value = action.toValue
             default: ()
             }
+
+            subCounterValueWasChanged = subCounter.value != 0
         }
     }
 
@@ -42,23 +45,16 @@ final class StoreTests: XCTestCase {
     }
 
     struct Container {
-        var container2 = Container2()
-        struct Container2 {
-            var container3 = Container3()
-            struct Container3 {
-                var container4 = Container4()
-                struct Container4 {
-                    var deepState = DeepState()
-                }
-            }
-        }
+        var nestedState = NestedState()
     }
 
-    struct DeepState: Model {
+    struct NestedState: Model {
         var value = 123
         struct Change: Action {}
         mutating func update(action: Action) {
-            value = 456
+            if action is Change {
+                value = 456
+            }
         }
     }
 
@@ -72,9 +68,9 @@ final class StoreTests: XCTestCase {
         XCTAssertEqual(store.find(SubCounter.self)?.value, 0)
     }
 
-    func testInitialDeeplyNestedChildState() throws {
+    func testInitialNestedChildState() throws {
         let store = Store(model: Counter())
-        XCTAssertEqual(store.find(DeepState.self)?.value, 123)
+        XCTAssertEqual(store.find(NestedState.self)?.value, 123)
     }
 
     func testActionDispatch() throws {
@@ -94,6 +90,9 @@ final class StoreTests: XCTestCase {
     func testChildActionDispatch() throws {
         let store = Store(model: Counter())
 
+        store.send(Counter.Increment())
+        XCTAssertEqual(store.find(Counter.self)?.value, 1)
+
         store.send(SubCounter.Increment())
         XCTAssertEqual(store.find(SubCounter.self)?.value, 1)
     }
@@ -112,13 +111,19 @@ final class StoreTests: XCTestCase {
         XCTAssertEqual(store.find(Counter.self)?.value, 456)
     }
 
-    @MainActor func testDeeplyNestedChildActionDispatch() async throws {
-        XCTExpectFailure("Full recursion is not yet implemented!")
+    func testDeeplyNestedChildActionDispatch() throws {
         let store = Store(model: Counter())
-        store.send(DeepState.Change())
-        try await Task.sleep(nanoseconds: 100)
-        XCTAssertEqual(store.find(DeepState.self)?.value, 456)
-        XCTAssertEqual(store.find(Counter.self)?.value, 1000000)
+
+        store.send(NestedState.Change())
+        XCTAssertEqual(store.find(NestedState.self)?.value, 456)
+        XCTAssertEqual(store.find(Counter.self)?.value, 10000)
+    }
+
+    func testParentModelSeesChangesInChild() throws {
+        let store = Store(model: Counter())
+
+        store.send(SubCounter.Increment())
+        XCTAssertEqual(store.find(Counter.self)?.subCounterValueWasChanged, true)
     }
 
 }

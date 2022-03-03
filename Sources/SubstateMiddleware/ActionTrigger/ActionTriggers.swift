@@ -23,8 +23,7 @@ public struct ActionTriggers {
 
     #endif
 
-    // TODO: Add a version of run here which is async -> [Action] for use in testing, where we
-    // don’t really want to subscribe to a stream we just want to await the whole list of actions.
+    // TODO: Filter out VoidActions, or redo that whole system as it’s ugly!
 
     func run(action: Action, find: @escaping (Model.Type) -> Model?) -> AsyncStream<Action> {
         AsyncStream { continuation in

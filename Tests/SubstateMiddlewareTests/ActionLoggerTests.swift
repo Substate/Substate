@@ -79,8 +79,6 @@ final class ActionLoggerTests: XCTestCase {
     }
 
     func testStopActionDisablesOutput() throws {
-        XCTExpectFailure("Currently, models added dynamically using Store.Register aren’t properly mutated.")
-
         var output = ""
         let logger = ActionLogger { output.append($0) }
         let store = Store(model: Component(), middleware: [logger])
@@ -112,8 +110,6 @@ final class ActionLoggerTests: XCTestCase {
     }
 
     func testLoggerStateChangesWhenStartAndStopAreDispatched() throws {
-        XCTExpectFailure("Currently, models added dynamically using Store.Register aren’t properly mutated.")
-
         let store = Store(model: Component(), middleware: [ActionLogger()])
         store.send(ActionLogger.Stop())
         XCTAssertFalse(try XCTUnwrap(store.find(ActionLogger.Configuration.self)).isActive)
