@@ -15,7 +15,7 @@ import SubstateMiddleware
 
     func testActionIsPublishedUsingCombine() async throws {
         let publisher = ActionPublisher()
-        let store = Store(model: Component(), middleware: [publisher])
+        let store = try await Store(model: Component(), middleware: [publisher])
         var actionWasPublished = false
 
         publisher.publisher(for: Action1.self)
@@ -29,7 +29,7 @@ import SubstateMiddleware
 
     func testActionIsPublishedUsingCallback() async throws {
         let publisher = ActionPublisher()
-        let store = Store(model: Component(), middleware: [publisher])
+        let store = try await Store(model: Component(), middleware: [publisher])
         var actionWasPublished = false
 
         publisher.callback(for: Action1.self) { _ in

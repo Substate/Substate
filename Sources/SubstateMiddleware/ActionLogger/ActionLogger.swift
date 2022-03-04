@@ -21,9 +21,9 @@ public class ActionLogger: Middleware {
                     try await store.dispatch(Start())
                 }
 
-                let configuration = store.find(ActionLogger.Configuration.self)!
+                let isActive = store.find(ActionLogger.Configuration.self)?.isActive ?? true
 
-                if configuration.isActive && (!filter || (filter && action is LoggedAction)) {
+                if isActive && (!filter || (filter && action is LoggedAction)) {
                     output(format(action: action))
                 }
 

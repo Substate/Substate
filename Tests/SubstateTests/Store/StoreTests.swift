@@ -58,8 +58,8 @@ import Substate
         }
     }
 
-    func testInitialState() throws {
-        let store = Store(model: Counter())
+    func testInitialState() async throws {
+        let store = try await Store(model: Counter())
         XCTAssertEqual(store.find(Counter.self)?.value, 0)
     }
 
@@ -74,7 +74,7 @@ import Substate
     }
 
     func testActionDispatch() async throws {
-        let store = Store(model: Counter())
+        let store = try await Store(model: Counter())
 
         try await store.dispatch(Counter.Increment())
         XCTAssertEqual(store.find(Counter.self)?.value, 1)
@@ -88,7 +88,7 @@ import Substate
     }
 
     func testChildActionDispatch() async throws {
-        let store = Store(model: Counter())
+        let store = try await Store(model: Counter())
 
         try await store.dispatch(Counter.Increment())
         XCTAssertEqual(store.find(Counter.self)?.value, 1)
@@ -98,7 +98,7 @@ import Substate
     }
 
     func testReplaceAction() async throws {
-        let store = Store(model: Counter(value: 123))
+        let store = try await Store(model: Counter(value: 123))
 
         try await store.dispatch(Store.Replace(model: Counter(value: 456)))
         XCTAssertEqual(store.find(Counter.self)?.value, 456)
@@ -112,7 +112,7 @@ import Substate
     }
 
     func testDeeplyNestedChildActionDispatch() async throws {
-        let store = Store(model: Counter())
+        let store = try await Store(model: Counter())
 
         try await store.dispatch(NestedState.Change())
         XCTAssertEqual(store.find(NestedState.self)?.value, 456)
@@ -120,7 +120,7 @@ import Substate
     }
 
     func testParentModelSeesChangesInChild() async throws {
-        let store = Store(model: Counter())
+        let store = try await Store(model: Counter())
 
         try await store.dispatch(SubCounter.Increment())
         XCTAssertEqual(store.find(Counter.self)?.subCounterValueWasChanged, true)

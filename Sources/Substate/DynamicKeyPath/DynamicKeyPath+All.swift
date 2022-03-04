@@ -1,7 +1,7 @@
 extension DynamicKeyPath {
 
     static func all<Object>(on object: Object, at subpath: [DynamicKeyPathSegment] = []) -> [Self] {
-         all(matching: Value.self, on: object)
+        all(matching: Value.self, on: object)
     }
 
     static func all<Object>(matching filter: Any.Type, on object: Object, at subpath: [DynamicKeyPathSegment] = []) -> [Self] {

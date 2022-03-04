@@ -24,10 +24,10 @@ import SubstateMiddleware
         mutating func update(action: Action) {}
     }
 
-    func testRootStateIsLoggedOnInitByDefault() throws {
+    func testRootStateIsLoggedOnInitByDefault() async throws {
         var output = ""
         let logger = ModelLogger { output.append($0) }
-        _ = Store(model: Component1(), middleware: [logger])
+        _ = try await Store(model: Component1(), middleware: [logger])
         XCTAssert(output.contains("Component1"))
     }
 
@@ -38,10 +38,10 @@ import SubstateMiddleware
         XCTAssertFalse(output.contains("Component1"))
     }
 
-    func testTaggedStatesAreLoggedOnInitWhenFilterIsActive() throws {
+    func testTaggedStatesAreLoggedOnInitWhenFilterIsActive() async throws {
         var output = ""
         let logger = ModelLogger(filter: true) { output.append($0) }
-        _ = Store(model: Component1(), middleware: [logger])
+        _ = try await Store(model: Component1(), middleware: [logger])
         XCTAssert(output.contains("Component2"))
         XCTAssert(output.contains("Component3"))
     }
@@ -49,7 +49,7 @@ import SubstateMiddleware
     func testRootStateIsLoggedByDefault() async throws {
         var output = ""
         let logger = ModelLogger { output.append($0) }
-        let store = Store(model: Component1(), middleware: [logger])
+        let store = try await Store(model: Component1(), middleware: [logger])
         try await store.dispatch(Action1())
         XCTAssert(output.contains("Component1"))
     }
@@ -57,7 +57,7 @@ import SubstateMiddleware
     func testRootStateIsLoggedWhenFilterIsInactive() async throws {
         var output = ""
         let logger = ModelLogger(filter: false) { output.append($0) }
-        let store = Store(model: Component1(), middleware: [logger])
+        let store = try await Store(model: Component1(), middleware: [logger])
         try await store.dispatch(Action1())
         XCTAssert(output.contains("Component1"))
     }
@@ -65,7 +65,7 @@ import SubstateMiddleware
     func testTaggedStatesAreLoggedWhenFilterIsActive() async throws {
         var output = ""
         let logger = ModelLogger(filter: true) { output.append($0) }
-        let store = Store(model: Component1(), middleware: [logger])
+        let store = try await Store(model: Component1(), middleware: [logger])
         try await store.dispatch(Action1())
         XCTAssert(output.contains("Component2"))
         XCTAssert(output.contains("Component3"))
@@ -74,7 +74,7 @@ import SubstateMiddleware
     func testUntaggedStateIsNotLoggedWhenFilterIsActive() async throws {
         var output = ""
         let logger = ModelLogger(filter: true) { output.append($0) }
-        let store = Store(model: Component1(), middleware: [logger])
+        let store = try await Store(model: Component1(), middleware: [logger])
         try await store.dispatch(Action1())
         XCTAssertFalse(output.contains("Component1"))
     }
@@ -82,13 +82,13 @@ import SubstateMiddleware
     func testPropertiesAreLogged() async throws {
         var output = ""
         let logger = ModelLogger { output.append($0) }
-        let store = Store(model: Component1(), middleware: [logger])
+        let store = try await Store(model: Component1(), middleware: [logger])
         try await store.dispatch(Action1())
         XCTAssert(output.contains("property: 123"))
     }
 
     func testRealConsoleOutput() async throws {
-        let store = Store(model: Component1(), middleware: [ModelLogger()])
+        let store = try await Store(model: Component1(), middleware: [ModelLogger()])
         try await store.dispatch(Action1())
     }
 

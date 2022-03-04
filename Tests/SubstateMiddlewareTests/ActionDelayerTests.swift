@@ -24,21 +24,22 @@ import SubstateMiddleware
     }
 
     func testNonDelayedActionIsReceivedImmediately() async throws {
-        let store = Store(model: Component(), middleware: [ActionDelayer()])
+        let store = try await Store(model: Component(), middleware: [ActionDelayer()])
         try await store.dispatch(Action1())
         XCTAssertTrue(try XCTUnwrap(store.find(Component.self)).action1Received)
     }
 
-    func testDelayedActionIsNotReceivedImmediately() async throws {
+    /// TODO: Rework this test in light of the async store implementation.
+    func testDelayedActionIsNotReceivedImmediately() throws {
         let store = Store(model: Component(), middleware: [ActionDelayer()])
-        try await store.dispatch(Action2())
+        store.dispatch(Action2())
         XCTAssertFalse(try XCTUnwrap(store.find(Component.self)).action2Received)
     }
 
     func testDelayedActionIsReceivedOnTime() async throws {
         let delayer = ActionDelayer()
         let publisher = ActionPublisher()
-        let store = Store(model: Component(), middleware: [delayer, publisher])
+        let store = try await Store(model: Component(), middleware: [delayer, publisher])
         let expectation = XCTestExpectation()
         expectation.assertForOverFulfill = true
         let start = Date()

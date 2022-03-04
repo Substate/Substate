@@ -15,14 +15,14 @@ import SubstateMiddleware
     func testStartActionIsLoggedDuringSetup() async throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        _ = Store(model: Component(), middleware: [logger])
+        _ = try await Store(model: Component(), middleware: [logger])
         XCTAssert(output.contains("ActionLogger.Start"))
     }
 
     func testAllActionsAreLoggedByDefault() async throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        let store = Store(model: Component(), middleware: [logger])
+        let store = try await Store(model: Component(), middleware: [logger])
         try await store.dispatch(Action1())
         XCTAssert(output.contains("Action1"))
         try await store.dispatch(Action2(property: 1))
@@ -34,7 +34,7 @@ import SubstateMiddleware
     func testAllActionsAreLoggedWhenFilterIsInactive() async throws {
         var output = ""
         let logger = ActionLogger(filter: false) { output.append($0) }
-        let store = Store(model: Component(), middleware: [logger])
+        let store = try await Store(model: Component(), middleware: [logger])
         try await store.dispatch(Action1())
         XCTAssert(output.contains("Action1"))
         try await store.dispatch(Action2(property: 1))
@@ -46,7 +46,7 @@ import SubstateMiddleware
     func testTaggedActionsAreLoggedWhenFilterIsActive() async throws {
         var output = ""
         let logger = ActionLogger(filter: true) { output.append($0) }
-        let store = Store(model: Component(), middleware: [logger])
+        let store = try await Store(model: Component(), middleware: [logger])
         try await store.dispatch(Action2(property: 1))
         XCTAssert(output.contains("Action2"))
         try await store.dispatch(Action3(property: 2))
@@ -56,7 +56,7 @@ import SubstateMiddleware
     func testUntaggedActionsAreNotLoggedWhenFilterIsActive() async throws {
         var output = ""
         let logger = ActionLogger(filter: true) { output.append($0) }
-        let store = Store(model: Component(), middleware: [logger])
+        let store = try await Store(model: Component(), middleware: [logger])
         try await store.dispatch(Action1())
         XCTAssertFalse(output.contains("Action1"))
     }
@@ -64,7 +64,7 @@ import SubstateMiddleware
     func testActionPropertiesAreLogged() async throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        let store = Store(model: Component(), middleware: [logger])
+        let store = try await Store(model: Component(), middleware: [logger])
         try await store.dispatch(Action2(property: 1))
         XCTAssert(output.contains("property: 1"))
         try await store.dispatch(Action3(property: 2))
@@ -72,7 +72,7 @@ import SubstateMiddleware
     }
 
     func testRealConsoleOutput() async throws {
-        let store = Store(model: Component(), middleware: [ActionLogger()])
+        let store = try await Store(model: Component(), middleware: [ActionLogger()])
         try await store.dispatch(Action1())
         try await store.dispatch(Action2(property: 1))
         try await store.dispatch(Action3(property: 2))
@@ -81,7 +81,7 @@ import SubstateMiddleware
     func testStopActionDisablesOutput() async throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        let store = Store(model: Component(), middleware: [logger])
+        let store = try await Store(model: Component(), middleware: [logger])
         try await store.dispatch(ActionLogger.Stop())
         output = ""
         try await store.dispatch(Action1())
@@ -91,7 +91,7 @@ import SubstateMiddleware
     func testStartActionReenablesOutput() async throws {
         var output = ""
         let logger = ActionLogger { output.append($0) }
-        let store = Store(model: Component(), middleware: [logger])
+        let store = try await Store(model: Component(), middleware: [logger])
         try await store.dispatch(ActionLogger.Stop())
         output = ""
         try await store.dispatch(ActionLogger.Start())
@@ -99,18 +99,18 @@ import SubstateMiddleware
         XCTAssertNotEqual(output, "")
     }
 
-    func testLoggerStateIsAvailable() throws {
-        let store = Store(model: Component(), middleware: [ActionLogger()])
+    func testLoggerStateIsAvailable() async throws {
+        let store = try await Store(model: Component(), middleware: [ActionLogger()])
         XCTAssertNotNil(store.find(ActionLogger.Configuration.self))
     }
 
-    func testLoggerStateIsInitiallyActive() throws {
-        let store = Store(model: Component(), middleware: [ActionLogger()])
+    func testLoggerStateIsInitiallyActive() async throws {
+        let store = try await Store(model: Component(), middleware: [ActionLogger()])
         XCTAssertTrue(try XCTUnwrap(store.find(ActionLogger.Configuration.self)).isActive)
     }
 
     func testLoggerStateChangesWhenStartAndStopAreDispatched() async throws {
-        let store = Store(model: Component(), middleware: [ActionLogger()])
+        let store = try await Store(model: Component(), middleware: [ActionLogger()])
         try await store.dispatch(ActionLogger.Stop())
         XCTAssertFalse(try XCTUnwrap(store.find(ActionLogger.Configuration.self)).isActive)
         try await store.dispatch(ActionLogger.Start())

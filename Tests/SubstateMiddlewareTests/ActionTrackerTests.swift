@@ -18,7 +18,7 @@ import SubstateMiddleware
     func testTrackerProducesNoEventForUntrackedActions() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
-        let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
+        let store = try await Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
         try await store.dispatch(MyUntrackedAction())
 
@@ -30,7 +30,7 @@ import SubstateMiddleware
     func testTrackerProducesEventForTrackedActions() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
-        let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
+        let store = try await Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
         try await store.dispatch(MyTrackedAction())
 
@@ -44,7 +44,7 @@ import SubstateMiddleware
     func testTrackerProducesCorrectDefaultEventName() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
-        let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
+        let store = try await Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
         try await store.dispatch(MyTrackedAction())
 
@@ -57,7 +57,7 @@ import SubstateMiddleware
     func testTrackerProducesCorrectDefaultNestedEventName() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
-        let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
+        let store = try await Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
         try await store.dispatch(MyActions.MyTrackedAction())
 
@@ -72,7 +72,7 @@ import SubstateMiddleware
 
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
-        let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
+        let store = try await Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
         try await store.dispatch(MyCustomAction())
 
@@ -87,7 +87,7 @@ import SubstateMiddleware
     func testTrackerProducesEmptyDefaultPropertyList() async throws {
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
-        let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
+        let store = try await Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
         try await store.dispatch(MyTrackedAction())
 
@@ -106,7 +106,7 @@ import SubstateMiddleware
 
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
-        let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
+        let store = try await Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
         try await store.dispatch(MyCustomAction())
 
@@ -127,7 +127,7 @@ import SubstateMiddleware
 
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
-        let store = Store(model: MyEmptyModel(), middleware: [tracker, catcher])
+        let store = try await Store(model: MyEmptyModel(), middleware: [tracker, catcher])
 
         try await store.dispatch(MyCustomAction())
 
@@ -152,7 +152,7 @@ import SubstateMiddleware
 
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
-        let store = Store(model: MyModel(), middleware: [tracker, catcher])
+        let store = try await Store(model: MyModel(), middleware: [tracker, catcher])
 
         try await store.dispatch(MyCustomAction())
 

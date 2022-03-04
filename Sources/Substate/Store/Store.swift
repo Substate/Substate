@@ -9,22 +9,38 @@ import Foundation
 
     private lazy var _dispatch: DispatchFunction = reduce
 
-    /// Create a store with a primary model, and any required middleware.
+    // MARK: - Initialization
+
+    /// Create a store, and ignore its initial dispatch and any errors.
     ///
     public init(model: Model, middleware: [Middleware] = []) {
         addModel(model: model)
+        addMiddleware(middleware: middleware)
+        Task { try await dispatch(Start()) }
+    }
 
+    /// Create a store, and wait on its initial dispatch and any errors.
+    ///
+    public init(model: Model, middleware: [Middleware] = []) async throws {
+        addModel(model: model)
+        addMiddleware(middleware: middleware)
+        try await dispatch(Start())
+    }
+
+    private func addModel(model: Model) {
+        models.append(model)
+        modelKeyPaths = DynamicKeyPath<Model>
+            .all(on: models)
+            .sorted { $0.path.count > $1.path.count }
+    }
+
+    private func addMiddleware(middleware: [Middleware]) {
         for middleware in middleware.reversed() {
             _dispatch = middleware.configure(store: self)(_dispatch)
         }
-
-        // TODO: How does anything wait on any results of this dispatch (eg. for testing middleware
-        // that responds to this action)?
-
-        dispatch(Start())
     }
 
-    // MARK: - Actions
+    // MARK: - Action Dispatch
 
     /// Dispatch an action and ignore its execution and any errors.
     ///
@@ -58,14 +74,7 @@ import Foundation
         }
     }
 
-    // MARK: - Models
-
-    private func addModel(model: Model) {
-        models.append(model)
-        modelKeyPaths = DynamicKeyPath<Model>
-            .all(on: models)
-            .sorted { $0.path.count > $1.path.count }
-    }
+    // MARK: - Model Finding
 
     // TODO: Try and improve and simplify the find methods on offer here.
 

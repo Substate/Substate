@@ -47,17 +47,17 @@ import Substate
         XCTAssertEqual(store.find(Pager<ProductsScreen>.self)?.page, 1)
     }
 
-    func testFirstChildUpdates() throws {
-        let store = Store(model: AppModel())
-        store.dispatch(Pager<NewsScreen>.Next())
+    func testFirstChildUpdates() async throws {
+        let store = try await Store(model: AppModel())
+        try await store.dispatch(Pager<NewsScreen>.Next())
 
         XCTAssertEqual(store.find(Pager<NewsScreen>.self)?.page, 2)
         XCTAssertEqual(store.find(Pager<ProductsScreen>.self)?.page, 1)
     }
 
-    func testSecondChildUpdates() throws {
-        let store = Store(model: AppModel())
-        store.dispatch(Pager<ProductsScreen>.Next())
+    func testSecondChildUpdates() async throws {
+        let store = try await Store(model: AppModel())
+        try await store.dispatch(Pager<ProductsScreen>.Next())
 
         XCTAssertEqual(store.find(Pager<NewsScreen>.self)?.page, 1)
         XCTAssertEqual(store.find(Pager<ProductsScreen>.self)?.page, 2)

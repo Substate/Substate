@@ -74,10 +74,11 @@ import Substate
         let delayer = DelayerMiddlerware()
         let exceptionHandler = ExceptionHandlerMiddlerware()
         let catcher = ActionCatcher()
-        let store = Store(model: MyModel(), middleware: [exceptionHandler, logger, delayer, catcher])
+        let store = try await Store(model: MyModel(), middleware: [exceptionHandler, logger, delayer, catcher])
 
         try await store.dispatch(Action1())
-        XCTAssertEqual(catcher.actions.count, 3)
+        print(catcher.actions)
+        XCTAssertEqual(catcher.actions.count, 4)
         XCTAssertEqual(catcher.find(Action1.self), [Action1()])
     }
 
