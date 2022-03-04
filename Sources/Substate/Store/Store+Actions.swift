@@ -26,10 +26,11 @@ extension Store {
     ///
     /// This action is provided as an escape hatch when direct mutation of models is unavoidable. It
     /// is intended to be used sparingly, for example in the `ModelSaver` middleware to
-    /// automatically replace models wholesale when they are loaded from disk.
+    /// automatically replace models wholesale when they are loaded from disk, or to support model
+    /// mutation using `Binding`s in SwiftUI.
     ///
     /// ```swift
-    /// store.update(Store.Replace(model: Counter(value: 456))
+    /// store.dispatch(Store.Replace(model: Counter(value: 123))
     /// ```
     /// 
     /// > Warning: Bear in mind that this action has special baked-in store support, and is actioned

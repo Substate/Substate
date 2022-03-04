@@ -7,7 +7,7 @@ import Substate
 /// This setup has the advantage of providing multiple free instance-specific actions too, as long
 /// as the actions are nested within the model.
 ///
-@MainActor final class ReusableModelTests: XCTestCase {
+@MainActor final class ModelReuseTests: XCTestCase {
 
     struct Pager<ID>: Model {
         var page = 1

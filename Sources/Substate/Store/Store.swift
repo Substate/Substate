@@ -1,6 +1,6 @@
 import Foundation
 
-/// Stores all models and allows them to be mutated by actions.
+/// Stores all models and provides action dispatch.
 ///
 @MainActor public final class Store: ObservableObject {
 

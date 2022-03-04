@@ -1,8 +1,7 @@
 import XCTest
 @testable import Substate
-extension Model { func update(action: Action) {} }
 
-final class PropertyTests: XCTestCase {
+final class DynamicKeyPathTests: XCTestCase {
 
     // MARK: - Finding
 
