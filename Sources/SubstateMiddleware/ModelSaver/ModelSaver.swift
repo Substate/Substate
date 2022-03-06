@@ -62,7 +62,7 @@ public class ModelSaver: Middleware {
         return { next in
             { [self] action in
                 try await next(action)
-
+                
                 switch action {
 
                 case is Store.Start:

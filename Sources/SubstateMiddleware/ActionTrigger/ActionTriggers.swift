@@ -25,7 +25,7 @@ public struct ActionTriggers {
 
     func run(action: Action, find: @escaping (Model.Type) -> Model?) -> AsyncStream<Action> {
         AsyncStream { continuation in
-            Task {
+            Task.detached {
                 await withTaskGroup(of: Void.self) { group in
                     for trigger in triggers {
                         group.addTask {

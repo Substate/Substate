@@ -24,7 +24,7 @@ struct Notifications: Model {
 
     struct Changed: Action {}
 
-    struct DismissAfterDelay: Action, DelayedAction {
+    struct DismissAfterDelay: Action/*, DelayedAction */{
         let delay: TimeInterval = 2
     }
 

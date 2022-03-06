@@ -1,5 +1,6 @@
 import Substate
 import SubstateMiddleware
+import Foundation
 
 let appTriggers = ActionTriggers {
 
