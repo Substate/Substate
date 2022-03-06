@@ -23,4 +23,9 @@ let soundTriggers = ActionTriggers {
         toggle in Sound.Play(toggle.isActive ? .pop : .swish)
     }
 
+    let player = SoundPlayer()
+
+    Sound.Play
+        .perform { player.play($0.sound) }
+
 }

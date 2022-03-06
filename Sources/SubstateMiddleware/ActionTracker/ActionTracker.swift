@@ -41,7 +41,7 @@ public class ActionTracker: Middleware {
 
                     for (key, value) in properties {
                         if let value = value as? TrackedValue {
-                            properties[key] = value.resolve(action, store.uncheckedFind)
+                            properties[key] = value.resolve(action, store.find)
                         }
                     }
 

@@ -12,11 +12,18 @@ public class ActionDelayer: Middleware {
                     // TODO: Dispatch an action instead of printing here
                     self.output(message: self.description(for: delayedAction))
                     let nanoseconds = UInt64(delayedAction.delay * TimeInterval(NSEC_PER_SEC))
-                    try await Task.sleep(nanoseconds: nanoseconds)
-                    guard !Task.isCancelled else { return }
-                }
 
-                try await next(action)
+                    Task {
+                        try await Task.sleep(nanoseconds: nanoseconds)
+                        if !Task.isCancelled {
+                            // TODO: We’re losing the ability to test this action as it disappears into the task here
+                            // TODO: We also lose any resulting errors
+                            try await next(action)
+                        }
+                    }
+                } else {
+                    try await next(action)
+                }
             }
         }
     }

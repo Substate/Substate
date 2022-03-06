@@ -1,5 +1,6 @@
 import Foundation
 import Substate
+import SubstateMiddleware
 
 struct TodosAppModel: Model {
 
@@ -9,7 +10,7 @@ struct TodosAppModel: Model {
     var tasks = Tasks()
     var createTaskScreen = CreateTaskScreenModel()
 
-
+    var isLoaded = false
 
 
 
@@ -21,7 +22,11 @@ struct TodosAppModel: Model {
 
     var listViewModel = ListViewModel()
 
-    mutating func update(action: Action) {}
+    mutating func update(action: Action) {
+        if action is ModelSaver.LoadAllDidComplete {
+            isLoaded = true
+        }
+    }
 
 }
 

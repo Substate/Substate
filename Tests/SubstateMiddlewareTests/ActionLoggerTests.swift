@@ -14,8 +14,9 @@ import SubstateMiddleware
 
     func testStartActionIsLoggedDuringSetup() async throws {
         var output = ""
-        let logger = ActionLogger { output.append($0) }
+        let logger = ActionLogger { output.append($0 + "\n") }
         _ = try await Store(model: Component(), middleware: [logger])
+        print(output)
         XCTAssert(output.contains("ActionLogger.Start"))
     }
 

@@ -1,143 +1,188 @@
-//import XCTest
-//import Combine
-//import Substate
-//import SubstateMiddleware
-//
-//final class ModelSaverTests: XCTestCase {
-//
-//    // MARK: - Sample Data
-//
-//    struct Model1: Model, SavedModel, Equatable {
-//        var value = 123
-//        var model2 = Model2()
-//        mutating func update(action: Action) {
-//            if let a = action as? ModelSaver.LoadDidSucceed, let model = a.model as? Self {
-//                self = model
-//            }
-//        }
-//    }
-//
-//    struct Model2: Model, Codable, Equatable {
-//        var value = 456
-//        mutating func update(action: Action) {}
-//    }
-//
-//    struct Counter: Model, SavedModel {
-//        var value = 123
-//        var tracker = Tracker<Counter>()
-//        mutating func update(action: Action) {}
-//    }
-//
-//    struct Tracker<Parent>: Model, SavedModel {
-//        var count = 456
-//        mutating func update(action: Action) {}
-//    }
-//
-//    // MARK: - Loading
-//
-//    //    func testLoadAllModels() throws {
-//    //
-//    //    }
-//
-////    func testRestoreDidCompleteAction() async throws {
-////        struct MyModel: Model, SavedModel {
-////            mutating func update(action: Action) {}
-////        }
-////
-////        let model = MyModel()
-////
-////        let load: ModelSaver.Configuration.LoadFunction = { _ in
-////            Just(model)
-////                .setFailureType(to: ModelSaver.LoadError.self)
-////                .eraseToAnyPublisher()
-////        }
-////
-////        let logger = ActionLogger()
-////        let catcher = ActionCatcher()
-////        let saver = ModelSaver(configuration: .init(load: load, loadStrategy: .automatic))
-////        let store = Store(model: model, middleware: [logger, saver, catcher])
-////
-////        print(catcher.actions)
-////
-////        // TODO: Examine catcher.actions after store has finished dispatching...
-////
-////    }
-//
-//    // MARK: - Saving
-//
-//    // TODO: Check SaveDidSucceed is called
-//    // TODO: Some middleware to help us test more easily
-//    // eg. TestMiddleware().expectation(for: ModelSaver.SaveDidSucceed.self)
-//    // eg. TestMiddleware().expectation(for: ModelSaver.SaveDidSucceed(value: 123))
-//    // eg. TestMiddleware().expectation(notSeen: ModelSaver.SaveDidFail.self)
-//
-//    // Lots to tidy up here, but working!
-//    func testSuccessfulModelSave() throws {
-//        let saveFunctionExpectation = XCTestExpectation()
-//
-//        let save: ModelSaver.Configuration.SaveFunction = { model in
-//            guard let model = model as? Model1 else {
-//                XCTFail("Model provided to save function was not of the expected type")
-//                return Just(()).setFailureType(to: ModelSaver.SaveError.self).eraseToAnyPublisher()
-//            }
-//            XCTAssertEqual(model.value, 123)
-//            saveFunctionExpectation.fulfill()
-//            return Just(()).setFailureType(to: ModelSaver.SaveError.self).eraseToAnyPublisher()
-//        }
-//
-//        let saver = ModelSaver(configuration: .init(save: save, saveStrategy: .manual))
-//        let logger = ActionLogger()
-//        let store = Store(model: Model1(), middleware: [logger, saver])
-//
-//        store.send(ModelSaver.Save(Model1.self))
-//        // TODO: Test SaveDidSucceed is received
-//
-//        wait(for: [saveFunctionExpectation], timeout: 1)
-//    }
-//
-//    func testSuccessfulModelLoad() throws {
-//        let loadFunctionExpectation = XCTestExpectation()
-//
-//        let load: ModelSaver.Configuration.LoadFunction = { id in
-//            XCTAssert(id is Model1.Type)
-//            loadFunctionExpectation.fulfill()
-//            return Just(Model1()).setFailureType(to: ModelSaver.LoadError.self).eraseToAnyPublisher()
-//        }
-//
-//        let saver = ModelSaver(configuration: .init(load: load, loadStrategy: .manual))
-//        let logger = ActionLogger()
-//        let store = Store(model: Model1(), middleware: [logger, saver])
-//
-//        store.send(ModelSaver.Load(Model1.self))
-//        // TODO: Test LoadDidSucceed is received
-//
-//        wait(for: [loadFunctionExpectation], timeout: 1)
-//    }
-//
-//    func testFilesystemRoundtrip() throws {
-//        let model1 = Model1(value: .random(in: 1...100))
-//        let model2 = Model1(value: .random(in: 1...100))
-//
-//        let saver1 = ModelSaver()
-//        let actionLogger1 = ActionLogger()
-//        let store1 = Store(model: model1, middleware: [actionLogger1, saver1])
-//        store1.send(ModelSaver.Save(Model1.self))
-//
-//        let saver2 = ModelSaver()
-//        let actionLogger2 = ActionLogger()
-//        let store2 = Store(model: model2, middleware: [actionLogger2, saver2])
-//        store2.send(ModelSaver.Load(Model1.self))
-//
-//        let expectation = XCTestExpectation()
-//
-//        DispatchQueue.main.async {
-//            // Just wait until next tick so that save/load calls
-//            // have run and store2’s mode has been updated.
-//            expectation.fulfill()
-//            XCTAssertEqual(store2.find(Model1.self)?.value, model1.value)
-//        }
-//
-//        wait(for: [expectation], timeout: 1)
-//    }
-//
-//}
+import XCTest
+import Substate
+import SubstateMiddleware
+
+@MainActor final class ModelSaverTests: XCTestCase {
+
+    struct TestModel: Model, SavedModel {
+        var value = 100
+    }
+
+    struct UnexpectedModel: Model, SavedModel {
+        var value = 200
+    }
+
+    struct ParentModel: Model {
+        var child1 = ChildModel1()
+        var child2 = ChildModel2()
+    }
+
+    struct ChildModel1: Model, SavedModel {
+        var value = 300
+    }
+
+    struct ChildModel2: Model, SavedModel {
+        var value = 400
+    }
+
+    // MARK: - Configuration
+
+    func testConfigurationIsRegisteredOnStoreStart() async throws {
+        let saver = ModelSaver()
+        let store = try await Store(model: TestModel(), middleware: [saver])
+
+        XCTAssertNotNil(store.find(ModelSaver.Configuration.self))
+    }
+
+    // MARK: - Loading
+
+    func testManualLoad() async throws {
+        let load: ModelSaver.Configuration.LoadFunction = { type in
+            return TestModel(value: 101)
+        }
+
+        let catcher = ActionCatcher()
+        let saver = ModelSaver(configuration: .init(load: load, loadStrategy: .manual))
+        let store = try await Store(model: TestModel(), middleware: [catcher, saver])
+
+        try await store.dispatch(ModelSaver.Load(TestModel.self))
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidSucceed.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidComplete.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidFail.self), 0)
+        XCTAssertEqual(store.find(TestModel.self)?.value, 101)
+    }
+
+    func testFailingManualLoad() async throws {
+        let load: ModelSaver.Configuration.LoadFunction = { type in
+            return UnexpectedModel()
+        }
+
+        let catcher = ActionCatcher()
+
+        let saver = ModelSaver(configuration: .init(load: load, loadStrategy: .manual))
+        let store = try await Store(model: TestModel(), middleware: [catcher, saver])
+
+        try await store.dispatch(ModelSaver.Load(TestModel.self))
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidFail.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidComplete.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidSucceed.self), 0)
+    }
+
+    func testManualLoadAll() async throws {
+        let load: ModelSaver.Configuration.LoadFunction = { type in
+            switch type {
+            case is ChildModel1.Type: return ChildModel1(value: 101)
+            case is ChildModel2.Type: return ChildModel2(value: 202)
+            default: XCTFail("Unexpected model type load requested"); fatalError()
+            }
+        }
+
+        let catcher = ActionCatcher()
+        let saver = ModelSaver(configuration: .init(load: load, loadStrategy: .manual))
+        let store = try await Store(model: ParentModel(), middleware: [catcher, saver])
+
+        try await store.dispatch(ModelSaver.LoadAll())
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidSucceed.self), 2)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidComplete.self), 2)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadAllDidComplete.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidFail.self), 0)
+        XCTAssertEqual(store.find(ChildModel1.self)?.value, 101)
+        XCTAssertEqual(store.find(ChildModel2.self)?.value, 202)
+    }
+
+    func testAutomaticLoadAll() async throws {
+        let load: ModelSaver.Configuration.LoadFunction = { type in
+            switch type {
+            case is ChildModel1.Type: return ChildModel1(value: 101)
+            case is ChildModel2.Type: return ChildModel2(value: 202)
+            default: XCTFail("Unexpected model type load requested"); fatalError()
+            }
+        }
+
+        let catcher = ActionCatcher()
+        let saver = ModelSaver(configuration: .init(load: load, loadStrategy: .automatic))
+        let store = try await Store(model: ParentModel(), middleware: [catcher, saver])
+
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidSucceed.self), 2)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidComplete.self), 2)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadAllDidComplete.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.LoadDidFail.self), 0)
+        XCTAssertEqual(store.find(ChildModel1.self)?.value, 101)
+        XCTAssertEqual(store.find(ChildModel2.self)?.value, 202)
+    }
+
+    // MARK: - Saving
+
+    func testManualSave() async throws {
+        let expectation = expectation(description: "Save function called")
+
+        let save: ModelSaver.Configuration.SaveFunction = { model in
+            XCTAssertTrue(model is TestModel)
+            expectation.fulfill()
+        }
+
+        let catcher = ActionCatcher()
+        let saver = ModelSaver(configuration: .init(save: save, saveStrategy: .manual))
+        let store = try await Store(model: TestModel(), middleware: [catcher, saver])
+
+        try await store.dispatch(ModelSaver.Save(TestModel.self))
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidSucceed.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidComplete.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidFail.self), 0)
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    func testFailingManualSave() async throws {
+        let save: ModelSaver.Configuration.SaveFunction = { model in
+            throw ModelSaver.SaveError.noDataProduced
+        }
+
+        let catcher = ActionCatcher()
+        let saver = ModelSaver(configuration: .init(save: save, saveStrategy: .manual))
+        let store = try await Store(model: TestModel(), middleware: [catcher, saver])
+
+        try await store.dispatch(ModelSaver.Save(TestModel.self))
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidFail.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidComplete.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidSucceed.self), 0)
+    }
+
+    func testManualSaveAll() async throws {
+        let expectation1 = expectation(description: "Save function called for Child 1")
+        let expectation2 = expectation(description: "Save function called for Child 2")
+
+        let save: ModelSaver.Configuration.SaveFunction = { model in
+            if model is ChildModel1 { expectation1.fulfill() }
+            if model is ChildModel2 { expectation2.fulfill() }
+        }
+
+        let catcher = ActionCatcher()
+        let saver = ModelSaver(configuration: .init(save: save, saveStrategy: .manual))
+        let store = try await Store(model: ParentModel(), middleware: [catcher, saver])
+
+        try await store.dispatch(ModelSaver.SaveAll())
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidSucceed.self), 2)
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidComplete.self), 2)
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveAllDidComplete.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidFail.self), 0)
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    // MARK: - Integration
+
+    func testSaveAndLoadRoundtrip() async throws {
+        let model1 = TestModel(value: .random(in: 1...100))
+        let model2 = TestModel(value: .random(in: 2...200))
+
+        let saver1 = ModelSaver(configuration: .init(loadStrategy: .manual, saveStrategy: .manual))
+        let store1 = try await Store(model: model1, middleware: [saver1])
+
+        let saver2 = ModelSaver(configuration: .init(loadStrategy: .manual, saveStrategy: .manual))
+        let store2 = try await Store(model: model2, middleware: [saver2])
+
+        try await store1.dispatch(ModelSaver.Save(TestModel.self))
+        try await store2.dispatch(ModelSaver.Load(TestModel.self))
+        XCTAssertEqual(store2.find(TestModel.self)?.value, model1.value)
+    }
+
+}

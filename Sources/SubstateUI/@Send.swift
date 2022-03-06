@@ -7,8 +7,8 @@ import Substate
 
     public init() {}
 
-    public var wrappedValue: Substate.DispatchFunction {
-        get { store.dispatch }
+    public var wrappedValue: (Action) -> Void {
+        get { { action in Task { try await store.dispatch(action) } } }
     }
 
 }

@@ -10,6 +10,10 @@ public class ActionCatcher: Middleware {
         actions.compactMap { $0 as? A }
     }
 
+    @MainActor public func count<A:Action>(for _: A.Type) -> Int {
+        actions.compactMap { $0 as? A }.count
+    }
+
     public init() {}
 
     public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {

@@ -78,13 +78,19 @@ import Foundation
 
     // TODO: Try and improve and simplify the find methods on offer here.
 
-    public func find<ModelType:Model>(_ type: ModelType.Type) -> ModelType? {
+    public func find<T:Model>(_ type: T.Type) -> T? {
         modelKeyPaths
-            .first(where: { $0.type == ModelType.self })?
-            .get(on: models) as? ModelType
+            .first(where: { $0.type == T.self })?
+            .get(on: models) as? T
     }
 
-    public func uncheckedFind(_ modelType: Model.Type? = nil) -> [Model] {
+    public func find<T>(_ supertype: T.Type) -> [Model] {
+        modelKeyPaths
+            .compactMap { $0.get(on: models) }
+            .filter { $0 is T }
+    }
+
+    public func find(_ modelType: Model.Type? = nil) -> [Model] {
         if let modelType = modelType {
             return modelKeyPaths
                 .filter { $0.type == modelType }

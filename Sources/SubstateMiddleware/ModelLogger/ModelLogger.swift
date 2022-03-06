@@ -17,7 +17,7 @@ public class ModelLogger: Middleware {
         { next in
             { [self] action in
                 try await next(action)
-                fire(find: store.uncheckedFind)
+                fire(find: store.find)
             }
         }
     }

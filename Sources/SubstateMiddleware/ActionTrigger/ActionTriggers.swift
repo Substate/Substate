@@ -53,7 +53,7 @@ extension ActionTriggers: Middleware {
             { action in
                 try await next(action)
 
-                for await action in run(action: action, find: { store.uncheckedFind($0).first }) {
+                for await action in run(action: action, find: { store.find($0).first }) {
                     try await store.dispatch(action)
                 }
             }

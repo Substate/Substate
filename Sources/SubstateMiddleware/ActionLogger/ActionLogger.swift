@@ -16,15 +16,16 @@ public class ActionLogger: Middleware {
     public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
         { next in
             { [self] action in
+                let isActive = store.find(ActionLogger.Configuration.self)?.isActive ?? true
+                let shouldLogAction = isActive && (!filter || (filter && action is LoggedAction))
+
+                if shouldLogAction {
+                    output(format(action: action))
+                }
+
                 if action is Store.Start {
                     try await store.dispatch(Store.Register(model: ActionLogger.Configuration()))
                     try await store.dispatch(Start())
-                }
-
-                let isActive = store.find(ActionLogger.Configuration.self)?.isActive ?? true
-
-                if isActive && (!filter || (filter && action is LoggedAction)) {
-                    output(format(action: action))
                 }
 
                 try await next(action)
