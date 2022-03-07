@@ -25,7 +25,7 @@ public struct ActionTriggers {
 
     func run(action: Action, find: @escaping (Model.Type) -> Model?) -> AsyncStream<Action> {
         AsyncStream { continuation in
-            Task.detached {
+            Task {
                 await withTaskGroup(of: Void.self) { group in
                     for trigger in triggers {
                         group.addTask {
@@ -53,8 +53,10 @@ extension ActionTriggers: Middleware {
             { action in
                 try await next(action)
 
-                for await action in run(action: action, find: { store.find($0).first }) {
-                    try await store.dispatch(action)
+                Task {
+                    for await action in run(action: action, find: { store.find($0).first }) {
+                        try await store.dispatch(action)
+                    }
                 }
             }
         }
