@@ -4,7 +4,7 @@ import Foundation
 ///
 @MainActor public final class Store: ObservableObject {
 
-    private var models: [Model] = []
+    private var models: [any Model] = []
     private var modelKeyPaths: [DynamicKeyPath<Model>] = []
 
     private lazy var _dispatch: DispatchFunction = reduce
@@ -13,7 +13,7 @@ import Foundation
 
     /// Create a store, and ignore its initial dispatch and any errors.
     ///
-    public init(model: Model, middleware: [Middleware] = []) {
+    public init(model: any Model, middleware: [any Middleware] = []) {
         addModel(model: model)
         addMiddleware(middleware: middleware)
         Task { try await dispatch(Start()) }
@@ -21,20 +21,20 @@ import Foundation
 
     /// Create a store, and wait on its initial dispatch and any errors.
     ///
-    public init(model: Model, middleware: [Middleware] = []) async throws {
+    public init(model: any Model, middleware: [any Middleware] = []) async throws {
         addModel(model: model)
         addMiddleware(middleware: middleware)
         try await dispatch(Start())
     }
 
-    private func addModel(model: Model) {
+    private func addModel(model: any Model) {
         models.append(model)
         modelKeyPaths = DynamicKeyPath<Model>
             .all(on: models)
             .sorted { $0.path.count > $1.path.count }
     }
 
-    private func addMiddleware(middleware: [Middleware]) {
+    private func addMiddleware(middleware: [any Middleware]) {
         for middleware in middleware.reversed() {
             _dispatch = middleware.configure(store: self)(_dispatch)
         }
@@ -44,17 +44,17 @@ import Foundation
 
     /// Dispatch an action and ignore its execution and any errors.
     ///
-    public func dispatch(_ action: Action)  {
+    public func dispatch(_ action: any Action)  {
         Task { try await dispatch(action) }
     }
 
     /// Dispatch an action and wait on its execution and any errors.
     ///
-    public func dispatch(_ action: Action) async throws {
+    public func dispatch(_ action: any Action) async throws {
         try await _dispatch(action)
     }
 
-    private func reduce(action: Action) {
+    private func reduce(action: any Action) {
         objectWillChange.send()
 
         if let register = action as? Register {
