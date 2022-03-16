@@ -122,7 +122,7 @@ import SubstateMiddleware
         }
 
         let catcher = ActionCatcher()
-        let saver = ModelSaver(configuration: .init(save: save, saveStrategy: .manual))
+        let saver = ModelSaver(configuration: .init(save: save, loadStrategy: .manual, saveStrategy: .manual))
         let store = try await Store(model: TestModel(), middleware: [catcher, saver])
 
         try await store.dispatch(ModelSaver.Save(TestModel.self))
@@ -138,7 +138,7 @@ import SubstateMiddleware
         }
 
         let catcher = ActionCatcher()
-        let saver = ModelSaver(configuration: .init(save: save, saveStrategy: .manual))
+        let saver = ModelSaver(configuration: .init(save: save, loadStrategy: .manual, saveStrategy: .manual))
         let store = try await Store(model: TestModel(), middleware: [catcher, saver])
 
         try await store.dispatch(ModelSaver.Save(TestModel.self))
@@ -157,7 +157,7 @@ import SubstateMiddleware
         }
 
         let catcher = ActionCatcher()
-        let saver = ModelSaver(configuration: .init(save: save, saveStrategy: .manual))
+        let saver = ModelSaver(configuration: .init(save: save, loadStrategy: .manual, saveStrategy: .manual))
         let store = try await Store(model: ParentModel(), middleware: [catcher, saver])
 
         try await store.dispatch(ModelSaver.SaveAll())
@@ -183,6 +183,32 @@ import SubstateMiddleware
         try await store1.dispatch(ModelSaver.Save(TestModel.self))
         try await store2.dispatch(ModelSaver.Load(TestModel.self))
         XCTAssertEqual(store2.find(TestModel.self)?.value, model1.value)
+    }
+
+    // MARK: - Save De-Duplication
+
+    func testModelsAreOnlySavedWhenModified() async throws {
+        var modelSaveCount = 0
+
+        let save: ModelSaver.Configuration.SaveFunction = { model in
+            modelSaveCount += 1
+        }
+
+        let saver = ModelSaver(configuration: .init(save: save, loadStrategy: .manual, saveStrategy: .manual))
+        let store = try await Store(model: TestModel(), middleware: [saver])
+        XCTAssertEqual(modelSaveCount, 0)
+
+        try await store.dispatch(ModelSaver.Save(TestModel.self))
+        XCTAssertEqual(modelSaveCount, 1)
+
+        try await store.dispatch(ModelSaver.Save(TestModel.self))
+        try await store.dispatch(ModelSaver.Save(TestModel.self))
+        try await store.dispatch(ModelSaver.Save(TestModel.self))
+        XCTAssertEqual(modelSaveCount, 1)
+
+        try await store.dispatch(Store.Replace(model: TestModel(value: 101)))
+        try await store.dispatch(ModelSaver.Save(TestModel.self))
+        XCTAssertEqual(modelSaveCount, 2)
     }
 
 }

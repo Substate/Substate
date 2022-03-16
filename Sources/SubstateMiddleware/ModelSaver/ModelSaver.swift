@@ -15,6 +15,7 @@ public class ModelSaver: Middleware {
 
     private var store: Store!
     private var initialConfiguration: Configuration
+    private var modelCache: [String:Data] = [:]
 
     /// Create a new `ModelSaver` with the given configuration.
     ///
@@ -152,6 +153,10 @@ public class ModelSaver: Middleware {
             throw LoadError.wrongModelTypeReturned
         }
 
+        // TODO: Work more on this caching mechanism
+        let id = String(reflecting: model)
+        modelCache[id] = (model as? SavedModel)?.data
+
         return model
     }
 
@@ -168,6 +173,20 @@ public class ModelSaver: Middleware {
             throw SaveError.modelIsNotASavedModel
         }
 
+        // TODO: Make this much more efficient! Don’t need to store whole models!
+        // TODO: Also fill the cache on store init to prevent redundant initial save under autosave
+        // TODO: Use an ID mechanism better than String(reflecting:)
+        // TODO: Either go for a hashing approach, or at least limit the size of the cache
+
+        // TODO: Actually skip all the actions and other behaviour, not only the save function.
+
+        let id = String(reflecting: model)
+
+        if let cachedModel = modelCache[id], cachedModel == model.data {
+            return
+        }
+
+        modelCache[id] = model.data
         try await configuration.save(model)
     }
 

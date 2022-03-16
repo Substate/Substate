@@ -36,4 +36,18 @@ import Substate
         XCTAssertLessThan(average, 0.000050)
     }
 
+//    TODO: Get this working
+//    func testStoreDispatchPerformance() async throws {
+//        let store = try await Store(model: TestModel())
+//
+//        self.measureMetrics([.wallClockTime], automaticallyStartMeasuring: true) {
+//            Task {
+//                try await store.dispatch(TestAction())
+//                Task { @MainActor [weak self] in
+//                    self?.stopMeasuring() // EXC_BAD_ACCESS
+//                }
+//            }
+//        }
+//    }
+
 }
