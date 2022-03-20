@@ -37,15 +37,13 @@ public class ActionTracker: Middleware {
         { next in
             { action in
                 if let trackedAction = action as? TrackedAction {
-                    var properties = trackedAction.trackingProperties
+                    var values: [String:Any] = [:]
 
-                    for (key, value) in properties {
-                        if let value = value as? TrackedValue {
-                            properties[key] = value.resolve(action, store.find)
-                        }
+                    for (key, value) in type(of: trackedAction).trackedValues {
+                        values[key] = await value.resolve(action, store.find)
                     }
 
-                    try await store.dispatch(Event(name: trackedAction.trackingName, properties: properties))
+                    try await store.dispatch(Event(name: type(of: trackedAction).trackedName, values: values))
                 }
 
                 try await next(action)

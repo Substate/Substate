@@ -6,7 +6,7 @@ extension ActionTracker {
     ///
     public struct Event: Action {
         public var name: String
-        public var properties: [String:Any]
+        public var values: [String:Any]
     }
 
 }

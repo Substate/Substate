@@ -51,7 +51,7 @@ import SubstateMiddleware
         let events = catcher.find(ActionTracker.Event.self)
         let name = try XCTUnwrap(events.first).name
 
-        XCTAssertEqual(name, "SubstateMiddlewareTests.ActionTrackerTests.MyTrackedAction")
+        XCTAssertEqual(name, "ActionTrackerTests.MyTrackedAction")
     }
 
     func testTrackerProducesCorrectDefaultNestedEventName() async throws {
@@ -64,11 +64,11 @@ import SubstateMiddleware
         let events = catcher.find(ActionTracker.Event.self)
         let name = try XCTUnwrap(events.first).name
 
-        XCTAssertEqual(name, "SubstateMiddlewareTests.ActionTrackerTests.MyActions.MyTrackedAction")
+        XCTAssertEqual(name, "ActionTrackerTests.MyActions.MyTrackedAction")
     }
 
     func testTrackerProducesCorrectCustomEventName() async throws {
-        struct MyCustomAction: Action, TrackedAction { let trackingName = "custom-name" }
+        struct MyCustomAction: Action, TrackedAction { static let trackedName = "custom-name" }
 
         let tracker = ActionTracker()
         let catcher = ActionCatcher()
@@ -92,15 +92,15 @@ import SubstateMiddleware
         try await store.dispatch(MyTrackedAction())
 
         let events = catcher.find(ActionTracker.Event.self)
-        let properties = try XCTUnwrap(events.first).properties
+        let values = try XCTUnwrap(events.first).values
 
-        XCTAssertEqual(properties.count, 0)
+        XCTAssertEqual(values.count, 0)
     }
 
     func testTrackerProducesConstantPropertyValues() async throws {
         struct MyCustomAction: Action, TrackedAction {
-            let trackingProperties: [String : Any] = [
-                "custom-property": "custom-property-value"
+            static let trackedValues: TrackedValues = [
+                "custom-property": .constant("custom-property-value")
             ]
         }
 
@@ -111,17 +111,17 @@ import SubstateMiddleware
         try await store.dispatch(MyCustomAction())
 
         let events = catcher.find(ActionTracker.Event.self)
-        let properties = try XCTUnwrap(events.first).properties
-        let value = try XCTUnwrap(properties["custom-property"] as? String)
+        let values = try XCTUnwrap(events.first).values
+        let value = try XCTUnwrap(values["custom-property"] as? String)
 
         XCTAssertEqual(value, "custom-property-value")
     }
 
     func testTrackerProducesActionPropertyValues() async throws {
-        @MainActor struct MyCustomAction: Action, TrackedAction {
+        struct MyCustomAction: Action, TrackedAction {
             let myValue = 123
-            let trackingProperties: [String : Any] = [
-                "custom-property": TrackedValue(\Self.myValue)
+            static let trackedValues: TrackedValues = [
+                "custom-value": .action(\Self.myValue)
             ]
         }
 
@@ -132,8 +132,8 @@ import SubstateMiddleware
         try await store.dispatch(MyCustomAction())
 
         let events = catcher.find(ActionTracker.Event.self)
-        let properties = try XCTUnwrap(events.first).properties
-        let value = try XCTUnwrap(properties["custom-property"] as? Int)
+        let values = try XCTUnwrap(events.first).values
+        let value = try XCTUnwrap(values["custom-value"] as? Int)
 
         XCTAssertEqual(value, 123)
     }
@@ -144,9 +144,9 @@ import SubstateMiddleware
             mutating func update(action: Action) {}
         }
 
-        @MainActor struct MyCustomAction: Action, TrackedAction {
-            let trackingProperties: [String : Any] = [
-                "custom-property": TrackedValue(\MyModel.myValue)
+        struct MyCustomAction: Action, TrackedAction {
+            static let trackedValues: TrackedValues = [
+                "custom-value": .model(\MyModel.myValue)
             ]
         }
 
@@ -157,8 +157,8 @@ import SubstateMiddleware
         try await store.dispatch(MyCustomAction())
 
         let events = catcher.find(ActionTracker.Event.self)
-        let properties = try XCTUnwrap(events.first).properties
-        let value = try XCTUnwrap(properties["custom-property"] as? Int)
+        let values = try XCTUnwrap(events.first).values
+        let value = try XCTUnwrap(values["custom-value"] as? Int)
 
         XCTAssertEqual(value, 456)
     }

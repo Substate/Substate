@@ -1,12 +1,12 @@
 public protocol TrackedAction {
 
-    /// An name suitable for sending to an analytics backend.
+    /// A name suitable for sending to an analytics backend.
     ///
-    var trackingName: String { get }
+    static var trackedName: String { get }
 
-    /// A metadata payload suitable for sending to an analytics backend.
+    /// A metadata payload of values suitable for sending to an analytics backend.
     ///
-    var trackingProperties: [String:Any] { get }
+    static var trackedValues: TrackedValues { get }
 
 }
 
@@ -14,18 +14,19 @@ public extension TrackedAction {
 
     /// Provides a default tracking name for the action based on type information.
     ///
-    /// - Eg. MyApp.OnboardingScreen.NextButtonWasTapped
+    /// - Eg. OnboardingScreen.NextButtonWasTapped
     ///
-    var trackingName: String {
-        String(reflecting: Self.self)
+    static var trackedName: String {
+        String(reflecting: self)
             .split(separator: ".")
             .filter { !$0.contains("unknown context at $") }
+            .dropFirst()
             .joined(separator: ".")
     }
 
-    /// Provides a default empty tracking property list.
+    /// Provides a default empty list of associated tracked values.
     ///
-    var trackingProperties: [String:Any] {
+    static var trackedValues: TrackedValues {
         [:]
     }
 
