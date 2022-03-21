@@ -1,5 +1,4 @@
 import XCTest
-import Combine
 
 import Substate
 import SubstateMiddleware
@@ -100,7 +99,7 @@ import SubstateMiddleware
     func testTrackerProducesConstantPropertyValues() async throws {
         struct MyCustomAction: Action, TrackedAction {
             static let trackedValues: TrackedValues = [
-                "custom-property": .constant("custom-property-value")
+                "custom-value": .constant("custom-value-1")
             ]
         }
 
@@ -112,9 +111,9 @@ import SubstateMiddleware
 
         let events = catcher.find(ActionTracker.Event.self)
         let values = try XCTUnwrap(events.first).values
-        let value = try XCTUnwrap(values["custom-property"] as? String)
+        let value = try XCTUnwrap(values["custom-value"] as? String)
 
-        XCTAssertEqual(value, "custom-property-value")
+        XCTAssertEqual(value, "custom-value-1")
     }
 
     func testTrackerProducesActionPropertyValues() async throws {

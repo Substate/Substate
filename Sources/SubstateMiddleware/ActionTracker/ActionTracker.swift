@@ -25,7 +25,7 @@ import Substate
 ///     let analytics = AnalyticsService()
 ///
 ///     ActionTracker.Event
-///         .perform { analytics.trackEvent(name: $0.name, properties: $0.properties) }
+///         .perform { analytics.track(event: $0.name, properties: $0.properties) }
 /// }
 /// ```
 ///

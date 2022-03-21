@@ -5,21 +5,21 @@ import Substate
 ///
 public struct TrackedValue {
 
-    let resolve: (Action, Find) async -> Any?
+    let resolve: (Action, Find) async -> AnyHashable?
 
-    public static func action<A:Action, V>(_ actionKeyPath: KeyPath<A, V>) -> TrackedValue {
+    public static func action<A:Action, V:Hashable>(_ actionKeyPath: KeyPath<A, V>) -> TrackedValue {
         .init { action, find in
             (action as? A)?[keyPath: actionKeyPath]
         }
     }
 
-    public static func model<M:Model, V>(_ modelKeyPath: KeyPath<M, V>) -> TrackedValue {
+    public static func model<M:Model, V:Hashable>(_ modelKeyPath: KeyPath<M, V>) -> TrackedValue {
         .init { action, find in
             (await find(M.self).first as? M)?[keyPath: modelKeyPath]
         }
     }
 
-    public static func constant<V>(_ constant: V) -> TrackedValue {
+    public static func constant<V:Hashable>(_ constant: V) -> TrackedValue {
         .init { action, find in
             constant
         }
