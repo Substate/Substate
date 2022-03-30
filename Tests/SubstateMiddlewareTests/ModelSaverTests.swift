@@ -168,11 +168,45 @@ import SubstateMiddleware
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    func testMultipleThrashingSaves() async throws {
+        // Saves multiple times including a previously-saved value, to make sure the save de-dupe
+        // cache isn’t misbehaving and missing saves that look the same as some previous save state.
+
+        let model = TestModel(value: .random(in: 1...100))
+        var savedModel: TestModel? = nil
+
+        let load: ModelSaver.Configuration.LoadFunction = { type in
+            return try XCTUnwrap(savedModel)
+        }
+
+        let save: ModelSaver.Configuration.SaveFunction = { model in
+            savedModel = (model as! TestModel)
+        }
+
+        let saver1 = ModelSaver(configuration: .init(load: load, save: save, loadStrategy: .manual, saveStrategy: .manual))
+        let store1 = try await Store(model: model, middleware: [saver1])
+
+        let saver2 = ModelSaver(configuration: .init(load: load, save: save, loadStrategy: .manual, saveStrategy: .manual))
+        let store2 = try await Store(model: model, middleware: [saver2])
+
+        try await store1.dispatch(Store.Replace(model: TestModel(value: model.value + 1)))
+        try await store1.dispatch(ModelSaver.Save(TestModel.self))
+
+        try await store1.dispatch(Store.Replace(model: TestModel(value: model.value - 1)))
+        try await store1.dispatch(ModelSaver.Save(TestModel.self))
+
+        try await store1.dispatch(Store.Replace(model: TestModel(value: model.value + 1)))
+        try await store1.dispatch(ModelSaver.Save(TestModel.self))
+
+        try await store2.dispatch(ModelSaver.Load(TestModel.self))
+        XCTAssertEqual(store2.find(TestModel.self)?.value, model.value + 1)
+    }
+
     // MARK: - Integration
 
     func testSaveAndLoadRoundtrip() async throws {
-        let model1 = TestModel(value: .random(in: 1...100))
-        let model2 = TestModel(value: .random(in: 2...200))
+        let model1 = TestModel(value: .random(in: Int.min...0))
+        let model2 = TestModel(value: .random(in: 1...Int.max))
 
         let saver1 = ModelSaver(configuration: .init(loadStrategy: .manual, saveStrategy: .manual))
         let store1 = try await Store(model: model1, middleware: [saver1])
@@ -188,6 +222,7 @@ import SubstateMiddleware
     // MARK: - Save De-Duplication
 
     func testModelsAreOnlySavedWhenModified() async throws {
+        let model = TestModel(value: .random(in: Int.min...Int.max))
         var modelSaveCount = 0
 
         let save: ModelSaver.Configuration.SaveFunction = { model in
@@ -195,7 +230,7 @@ import SubstateMiddleware
         }
 
         let saver = ModelSaver(configuration: .init(save: save, loadStrategy: .manual, saveStrategy: .manual))
-        let store = try await Store(model: TestModel(), middleware: [saver])
+        let store = try await Store(model: model, middleware: [saver])
         XCTAssertEqual(modelSaveCount, 0)
 
         try await store.dispatch(ModelSaver.Save(TestModel.self))

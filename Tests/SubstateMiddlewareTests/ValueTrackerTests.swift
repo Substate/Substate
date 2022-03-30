@@ -110,7 +110,7 @@ import SubstateMiddleware
 
         let catcher = ActionCatcher()
         let tracker = ValueTracker(values: values)
-        let store = try await Store(model: MyModel(), middleware: [tracker, catcher])
+        _ = try await Store(model: MyModel(), middleware: [tracker, catcher])
 
         let events = catcher.find(ValueTracker.Event.self)
         XCTAssertEqual(events.count, 2)

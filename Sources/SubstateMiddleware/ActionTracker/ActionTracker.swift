@@ -46,7 +46,7 @@ public class ActionTracker: Middleware {
                     try await store.dispatch(Event(name: type(of: trackedAction).trackedName, values: values))
                 }
 
-                try await next(action)
+                try await next(action) // TODO: Run before dispatching event so model values are updated?
             }
         }
     }

@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 
 /// Helpers for marshalling a saved model to and from data.
 ///
@@ -6,13 +7,13 @@ import Foundation
 /// - Think this issue is due to Swift not being able to 'open existentials' for generic use.
 /// - See: https://forums.swift.org/t/pitch-implicitly-opening-existentials/55412/5
 ///
-public extension SavedModel {
+extension SavedModel {
 
     /// Default implementation of `data` getter.
     ///
     /// - Uses JSON
     ///
-    var data: Data? {
+    public var data: Data? {
         try? JSONEncoder().encode(self)
     }
 
@@ -20,8 +21,20 @@ public extension SavedModel {
     ///
     /// - Uses JSON
     ///
-    init(from data: Data) throws {
+    public init(from data: Data) throws {
         self = try JSONDecoder().decode(Self.self, from: data)
+    }
+
+    /// An internal ID used for the save de-duplication cache.
+    ///
+    internal var saveCacheId: String {
+        String(describing: Self.self)
+    }
+
+    /// An internal content hash used for the save de-duplication cache.
+    ///
+    internal var saveCacheHash: SHA256Digest? {
+        data.map(SHA256.hash)
     }
 
 }

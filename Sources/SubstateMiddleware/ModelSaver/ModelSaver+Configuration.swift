@@ -34,7 +34,7 @@ extension ModelSaver {
         public var save: SaveFunction = defaultSaveFunction
 
         public var loadStrategy: LoadStrategy = .automatic
-        public var saveStrategy: SaveStrategy = .debounced(1)
+        public var saveStrategy: SaveStrategy = .debounced(0.25)
 
         // MARK: - Types
 

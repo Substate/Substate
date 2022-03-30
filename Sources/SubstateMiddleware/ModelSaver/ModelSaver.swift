@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 import Combine
 import Substate
 
@@ -15,7 +16,7 @@ public class ModelSaver: Middleware {
 
     private var store: Store!
     private var initialConfiguration: Configuration
-    private var modelCache: [String:Data] = [:]
+    private var modelCache: [String:SHA256Digest] = [:]
 
     /// Create a new `ModelSaver` with the given configuration.
     ///
@@ -106,6 +107,8 @@ public class ModelSaver: Middleware {
                         try await save(type: action.type)
                         try await store.dispatch(SaveDidSucceed(for: action.type))
                         try await store.dispatch(SaveDidComplete(for: action.type))
+                    } catch SaveError.saveNotNeeded {
+                        // Don’t need to dispatch any new actions
                     } catch {
                         try await store.dispatch(SaveDidFail(for: action.type, with: error))
                         try await store.dispatch(SaveDidComplete(for: action.type))
@@ -118,6 +121,8 @@ public class ModelSaver: Middleware {
                             try await save(type: type)
                             try await store.dispatch(SaveDidSucceed(for: type))
                             try await store.dispatch(SaveDidComplete(for: type))
+                        } catch SaveError.saveNotNeeded {
+                            // Don’t need to dispatch any new actions
                         } catch {
                             try await store.dispatch(SaveDidFail(for: type, with: error))
                             try await store.dispatch(SaveDidComplete(for: type))
@@ -153,9 +158,9 @@ public class ModelSaver: Middleware {
             throw LoadError.wrongModelTypeReturned
         }
 
-        // TODO: Work more on this caching mechanism
-        let id = String(reflecting: model)
-        modelCache[id] = (model as? SavedModel)?.data
+        if let savedModel = model as? SavedModel {
+            modelCache[savedModel.saveCacheId] = savedModel.saveCacheHash
+        }
 
         return model
     }
@@ -173,20 +178,11 @@ public class ModelSaver: Middleware {
             throw SaveError.modelIsNotASavedModel
         }
 
-        // TODO: Make this much more efficient! Don’t need to store whole models!
-        // TODO: Also fill the cache on store init to prevent redundant initial save under autosave
-        // TODO: Use an ID mechanism better than String(reflecting:)
-        // TODO: Either go for a hashing approach, or at least limit the size of the cache
-
-        // TODO: Actually skip all the actions and other behaviour, not only the save function.
-
-        let id = String(reflecting: model)
-
-        if let cachedModel = modelCache[id], cachedModel == model.data {
-            return
+        if let hash = modelCache[model.saveCacheId], hash == model.saveCacheHash {
+            throw SaveError.saveNotNeeded
         }
 
-        modelCache[id] = model.data
+        modelCache[model.saveCacheId] = model.saveCacheHash
         try await configuration.save(model)
     }
 

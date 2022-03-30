@@ -13,6 +13,7 @@ extension ModelSaver {
     }
 
     public enum SaveError: Error {
+        case saveNotNeeded
         case missingConfiguration
         case modelNotFound
         case modelIsNotASavedModel
