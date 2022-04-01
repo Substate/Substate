@@ -26,9 +26,9 @@ public struct ActionTriggers {
     func run(action: Action, find: @escaping (Model.Type) -> Model?) -> AsyncStream<Action> {
         AsyncStream { continuation in
             Task {
-                await withTaskGroup(of: Void.self) { group in
+                await withTaskGroup(of: Void.self) { @MainActor group in
                     for trigger in triggers {
-                        group.addTask {
+                        group.addTask { @MainActor in
                             for await result in trigger(action, find) {
                                 if result is VoidAction { continue }
                                 continuation.yield(result)
