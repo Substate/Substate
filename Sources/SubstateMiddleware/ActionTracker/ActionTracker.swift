@@ -36,6 +36,8 @@ public class ActionTracker: Middleware {
     public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
         { next in
             { action in
+                try await next(action)
+
                 if let trackedAction = action as? TrackedAction {
                     var values: [String:Any] = [:]
 
@@ -45,8 +47,6 @@ public class ActionTracker: Middleware {
 
                     try await store.dispatch(Event(name: type(of: trackedAction).trackedName, values: values))
                 }
-
-                try await next(action) // TODO: Run before dispatching event so model values are updated?
             }
         }
     }

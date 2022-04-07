@@ -162,4 +162,34 @@ import SubstateMiddleware
         XCTAssertEqual(value, 456)
     }
 
+    func testTrackerReceivesLatestModelValue() async throws {
+        struct MyModel: Model {
+            var myValue = 123
+
+            mutating func update(action: Action) {
+                if action is MyMutatingAction {
+                    myValue = 456
+                }
+            }
+        }
+
+        struct MyMutatingAction: Action, TrackedAction {
+            static let trackedValues: TrackedValues = [
+                "custom-value": .model(\MyModel.myValue)
+            ]
+        }
+
+        let tracker = ActionTracker()
+        let catcher = ActionCatcher()
+        let store = try await Store(model: MyModel(), middleware: [tracker, catcher])
+
+        try await store.dispatch(MyMutatingAction())
+
+        let events = catcher.find(ActionTracker.Event.self)
+        let values = try XCTUnwrap(events.first).values
+        let value = try XCTUnwrap(values["custom-value"] as? Int)
+
+        XCTAssertEqual(value, 456)
+    }
+
 }
