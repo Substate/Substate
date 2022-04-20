@@ -5,6 +5,7 @@ struct SettingsScreen: View {
 
     @Value(\Settings.theme, Settings.SetTheme.init) var theme
     @Value(\Settings.sounds, Settings.SetSounds.init) var sounds
+    @Value(\Settings.volume, Settings.VolumeSliderDidChange.init) var volume
     @Value(\Settings.colourScheme, Settings.SetColourScheme.init) var colourScheme
 
     @Value(\Settings.autoDismissNotifications, Settings.SetAutoDismissNotifications.init)
@@ -56,8 +57,12 @@ struct SettingsScreen: View {
     }
 
     var soundsToggle: some View {
-        Toggle("Sounds", isOn: $sounds)
-            .tint(theme.primaryColour)
+        Group {
+            Toggle("Sounds", isOn: $sounds)
+                .tint(theme.primaryColour)
+
+            Slider(value: $volume, in: 0...1)
+        }
     }
 
     var notificationsSection: some View {

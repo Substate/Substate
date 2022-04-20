@@ -1,3 +1,3 @@
 import Substate
 
-public typealias ActionTrigger = (Action, @escaping (Model.Type) -> Model?) -> AsyncStream<Action>
+public typealias ActionTrigger = @Sendable @MainActor (Action, Store) -> AsyncStream<Action>

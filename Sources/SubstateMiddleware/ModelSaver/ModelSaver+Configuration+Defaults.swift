@@ -6,7 +6,7 @@ extension ModelSaver.Configuration {
 
     // MARK: - Default Implementations
 
-    static func defaultSaveFunction(model: SavedModel) async throws {
+    @Sendable static func defaultSaveFunction(model: SavedModel) async throws {
         do { try manager.createDirectory(at: folder, withIntermediateDirectories: true) } catch {
             throw ModelSaver.SaveError.folderCouldNotBeCreated(error)
         }
@@ -20,7 +20,7 @@ extension ModelSaver.Configuration {
         }
     }
 
-    static func defaultLoadFunction(type: SavedModel.Type) async throws -> Model {
+    @Sendable static func defaultLoadFunction(type: SavedModel.Type) async throws -> Model {
         let data: Data
         let model: SavedModel
 
@@ -56,4 +56,5 @@ extension ModelSaver.Configuration {
     }
 
     private static var manager: FileManager { .default }
+    
 }

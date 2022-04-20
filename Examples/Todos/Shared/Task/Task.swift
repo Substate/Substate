@@ -1,6 +1,6 @@
 import Foundation
 
-struct Task: Identifiable, Codable {
+struct Task: Identifiable, Codable, Sendable {
     let id: UUID
     let date: Date
     var body: String

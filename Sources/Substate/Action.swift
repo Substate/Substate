@@ -1,3 +1,3 @@
 /// Actions cause models to be updated.
 ///
-public protocol Action {}
+public protocol Action: Sendable {}

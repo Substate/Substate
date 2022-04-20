@@ -286,7 +286,7 @@ final class DynamicKeyPathTests: XCTestCase {
         struct Child2: Model, Equatable {}
         struct Child3 { let child4 = Child4() }
         struct Child4 { let child5 = Child5() }
-        struct Child5: Model { let items: [Any] = [Child6(), Child7()] }
+        struct Child5: Model { let items: [any Sendable] = [Child6(), Child7()] }
         struct Child6: Model {}
         struct Child7: Model, Equatable {}
 

@@ -14,10 +14,15 @@ import SubstateMiddleware
     var middleware: [Middleware] {[
         ActionLogger(),
         appTriggers,
-        // ActionFunneller(funnels: taskToggledFunnel, threeTasksCreatedFunnel, taskDeletedFunnel),
+        appStream,
         ActionFollower(),
         ActionDelayer(),
         ModelSaver(configuration: .init(saveStrategy: .manual))
     ]}
 
 }
+
+// Ignore some sendable warnings that are _probably_ fine given this is just a demo app.
+
+extension UUID: @unchecked Sendable {}
+extension Date: @unchecked Sendable {}

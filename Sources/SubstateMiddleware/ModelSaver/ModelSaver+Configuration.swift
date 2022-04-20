@@ -38,15 +38,15 @@ extension ModelSaver {
 
         // MARK: - Types
 
-        public typealias LoadFunction = (SavedModel.Type) async throws -> Model
-        public typealias SaveFunction = (SavedModel) async throws -> Void
+        public typealias LoadFunction = @Sendable (SavedModel.Type) async throws -> Model
+        public typealias SaveFunction = @Sendable (SavedModel) async throws -> Void
 
-        public enum LoadStrategy {
+        public enum LoadStrategy: Sendable {
             case manual
             case automatic
         }
 
-        public enum SaveStrategy {
+        public enum SaveStrategy: Sendable {
             case manual
             case periodic(TimeInterval)
             case debounced(TimeInterval)

@@ -8,7 +8,7 @@ import Substate
     public init() {}
 
     public var wrappedValue: (Action) -> Void {
-        get { { action in Task { try await store.dispatch(action) } } }
+        { action in store.dispatch(action) }
     }
 
 }

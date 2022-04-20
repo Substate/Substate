@@ -20,7 +20,7 @@ struct NotificationsView: View {
                     .onTapGesture { send(Notifications.Dismiss(id: model.notifications[index].id)) }
                     .id(model.notifications[index].id)
                     .transition(.move(edge: .bottom).animation(.default))
-                    .animation(.default)
+                    .animation(.default, value: model.notifications.count)
             }
         }
         .padding(.top)

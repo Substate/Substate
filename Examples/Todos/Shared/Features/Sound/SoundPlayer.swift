@@ -3,6 +3,7 @@ import AVFoundation
 class SoundPlayer {
 
     var ids: [SystemSoundID]
+    var isEnabled = false
 
     init() {
         ids = .init(repeating: SystemSoundID(), count: Sound.allCases.count)
@@ -17,6 +18,8 @@ class SoundPlayer {
     }
 
     func play(_ sound: Sound) {
+        guard isEnabled else { return }
+
         Sound.allCases.firstIndex(of: sound).map {
             AudioServicesPlaySystemSound(ids[$0])
         }

@@ -4,7 +4,13 @@ import Combine
 @testable import Substate
 @testable import SubstateMiddleware
 
-final class ActionTriggerAsyncTests: XCTestCase {
+@MainActor class ActionTriggerAsyncTests: XCTestCase {
+
+    var store: Store!
+
+    @MainActor override func setUp() {
+        store = Store(model: Model1())
+    }
 
     struct Action1: Action, Equatable {
         let int: Int = 1
@@ -25,10 +31,6 @@ final class ActionTriggerAsyncTests: XCTestCase {
         mutating func update(action: Action) {}
     }
 
-    let find: (Model.Type) -> Model? = {
-        $0 == Model1.self ? Model1() : nil
-    }
-
     // MARK: - Async Effects
 
     func testPerformAsyncClosure() async throws {
@@ -37,7 +39,7 @@ final class ActionTriggerAsyncTests: XCTestCase {
                 .perform { try await Task.sleep(nanoseconds: 1) }
                 .trigger(Action2())
 
-        let result = await step.run(action: Action1(), find: find).reduce([]) { $0 + [$1] }
+        let result = await step.run(action: Action1(), store: store).reduce([]) { $0 + [$1] }
         XCTAssertEqual(result[0], Action2())
     }
 
@@ -83,7 +85,7 @@ final class ActionTriggerAsyncTests: XCTestCase {
                 .trigger(Action2())
         }
 
-        let result = await triggers.run(action: Action1(), find: find).reduce([]) { $0 + [$1] }
+        let result = await triggers.run(action: Action1(), store: store).reduce([]) { $0 + [$1] }
 
         XCTAssertEqual(try XCTUnwrap(result[0] as? Action2), Action2())
         XCTAssertEqual(try XCTUnwrap(result[1] as? Action2), Action2())
@@ -114,7 +116,7 @@ final class ActionTriggerAsyncTests: XCTestCase {
                 .trigger(Action2())
         }
 
-        let result = await triggers.run(action: Store.Start(), find: find).reduce([]) { $0 + [$1] }
+        let result = await triggers.run(action: Store.Start(), store: store).reduce([]) { $0 + [$1] }
         XCTAssertEqual(try XCTUnwrap(result[0] as? Action2), Action2())
     }
 
@@ -123,10 +125,10 @@ final class ActionTriggerAsyncTests: XCTestCase {
             let service = NumberService()
 
             service.numbers
-                .trigger(NumberAction.init(number:))
+                .trigger { NumberAction.init(number: $0) }
         }
 
-        let result = await triggers.run(action: Store.Start(), find: find).reduce([]) { $0 + [$1] }
+        let result = await triggers.run(action: Store.Start(), store: store).reduce([]) { $0 + [$1] }
         XCTAssertEqual(try XCTUnwrap(result[0] as? NumberAction), NumberAction(number: 0))
         XCTAssertEqual(try XCTUnwrap(result[9] as? NumberAction), NumberAction(number: 9))
     }
@@ -139,7 +141,7 @@ final class ActionTriggerAsyncTests: XCTestCase {
                 .trigger(Action2())
         }
 
-        let result = await triggers.run(action: Store.Start(), find: find).prefix(1).reduce([]) { $0 + [$1] }
+        let result = await triggers.run(action: Store.Start(), store: store).prefix(1).reduce([]) { $0 + [$1] }
         XCTAssertEqual(try XCTUnwrap(result[0] as? Action2), Action2())
     }
 
@@ -148,11 +150,11 @@ final class ActionTriggerAsyncTests: XCTestCase {
 
         let triggers = ActionTriggers {
             service.$currentNumber
-                .trigger(NumberAction.init(number:))
+                .trigger { NumberAction.init(number: $0) }
         }
 
         service.currentNumber = 5
-        let result = await triggers.run(action: Store.Start(), find: find).prefix(1).reduce([]) { $0 + [$1] }
+        let result = await triggers.run(action: Store.Start(), store: store).prefix(1).reduce([]) { $0 + [$1] }
         XCTAssertEqual(try XCTUnwrap(result[0] as? NumberAction), NumberAction(number: 5))
     }
 

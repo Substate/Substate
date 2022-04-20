@@ -2,7 +2,7 @@ import Substate
 import SubstateMiddleware
 import Foundation
 
-let appTriggers = ActionTriggers {
+@MainActor let appTriggers = ActionTriggers {
 
     soundTriggers
     notificationTriggers
@@ -12,11 +12,11 @@ let appTriggers = ActionTriggers {
 
     ModelSaver.LoadDidComplete
         .replace(with: \Tasks.all.count)
-        .trigger(Titlebar.UpdateCount.init)
+        .trigger { Titlebar.UpdateCount(count: $0) }
 
     Tasks.Changed
         .replace(with: \Tasks.all.count)
-        .trigger(Titlebar.UpdateCount.init)
+        .trigger { Titlebar.UpdateCount(count: $0) }
 
     // Toolbar
 
@@ -25,7 +25,7 @@ let appTriggers = ActionTriggers {
 
     Toolbar.SaveButtonWasPressed
         .replace(with: \Toolbar.newTaskBody)
-        .trigger(Tasks.Create.init(body:))
+        .trigger { Tasks.Create.init(body: $0) }
 
     Tasks.Toggle
         .map(\.id)

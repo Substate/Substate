@@ -1,15 +1,9 @@
 import Foundation
 import Substate
 
-public struct ActionTriggers {
+@MainActor public class ActionTriggers {
 
     public let triggers: [ActionTrigger]
-
-    public init(triggers: [ActionTriggerProvider]) {
-        self.triggers = triggers.flatMap(\.triggers)
-    }
-
-    #if compiler(>=5.4)
 
     public init(@ActionTriggersBuilder triggers: () -> [ActionTriggerProvider]) {
         self.triggers = triggers().flatMap(\.triggers)
@@ -21,15 +15,13 @@ public struct ActionTriggers {
         }
     }
 
-    #endif
-
-    func run(action: Action, find: @escaping (Model.Type) -> Model?) -> AsyncStream<Action> {
+    func run(action: Action, store: Store) -> AsyncStream<Action> {
         AsyncStream { continuation in
             Task {
                 await withTaskGroup(of: Void.self) { @MainActor group in
                     for trigger in triggers {
                         group.addTask { @MainActor in
-                            for await result in trigger(action, find) {
+                            for await result in trigger(action, store) {
                                 if result is VoidAction { continue }
                                 continuation.yield(result)
                             }
@@ -54,7 +46,7 @@ extension ActionTriggers: Middleware {
                 try await next(action)
 
                 Task {
-                    for await action in run(action: action, find: { store.find($0).first }) {
+                    for await action in self.run(action: action, store: store) {
                         try await store.dispatch(action)
                     }
                 }

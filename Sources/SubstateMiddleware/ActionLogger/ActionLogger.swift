@@ -1,3 +1,4 @@
+import os.log
 import Substate
 
 /// Log actions to the standard output.
@@ -40,7 +41,9 @@ public class ActionLogger: Middleware {
     }
 
     public static func output(message: String) {
-        print(message)
+        logger.debug("\(message, privacy: .public)")
     }
+
+    private  static let logger = Logger(subsystem: "Substate", category: "ActionLogger")
 
 }

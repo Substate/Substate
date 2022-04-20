@@ -17,13 +17,43 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/wickwirew/Runtime", from: "2.2.4")
+        .package(url: "https://github.com/wickwirew/Runtime", from: "2.2.4"),
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0")
     ],
 
     targets: [
-        .target(name: "Substate", dependencies: ["Runtime"]),
-        .target(name: "SubstateUI", dependencies: ["Substate"]),
-        .target(name: "SubstateMiddleware", dependencies: ["Substate"]),
+        .target (
+            name: "Substate",
+            dependencies: ["Runtime"],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend", "-warn-concurrency",
+                    "-Xfrontend", "-enable-actor-data-race-checks"
+                ])
+            ]
+        ),
+
+        .target (
+            name: "SubstateUI",
+            dependencies: ["Substate"],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend", "-warn-concurrency",
+                    "-Xfrontend", "-enable-actor-data-race-checks"
+                ])
+            ]
+        ),
+
+        .target (
+            name: "SubstateMiddleware",
+            dependencies: ["Substate"],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend", "-warn-concurrency",
+                    "-Xfrontend", "-enable-actor-data-race-checks"
+                ])
+            ]
+        ),
 
         .testTarget(name: "SubstateTests", dependencies: ["Substate", "SubstateMiddleware"]),
         .testTarget(name: "SubstateUITests", dependencies: ["Substate", "SubstateUI"]),

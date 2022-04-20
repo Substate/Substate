@@ -8,8 +8,8 @@ extension Action {
     /// - Action1.peform { await service.doSomething() }
     /// - Action1.peform { try await service.doSomething() }
     ///
-    public static func perform<V1>(_ effect: @escaping () async throws -> V1) -> ActionTriggerStep1<V1> {
-        ActionTriggerStep1 { action, find in
+    @MainActor public static func perform<V1>(_ effect: @escaping @Sendable () async throws -> V1) -> ActionTriggerStep1<V1> {
+        ActionTriggerStep1 { action, _ in
             AsyncStream { continuation in
                 Task {
                     if action is Self {
@@ -24,8 +24,8 @@ extension Action {
         }
     }
 
-    public static func perform(_ effect: @escaping () async throws -> Void) -> ActionTriggerStepFinal<VoidAction> {
-        ActionTriggerStepFinal { action, find in
+    @MainActor public static func perform(_ effect: @escaping @Sendable () async throws -> Void) -> ActionTriggerStepFinal<VoidAction> {
+        ActionTriggerStepFinal { action, _ in
             AsyncStream { continuation in
                 Task {
                     if action is Self {
@@ -39,8 +39,8 @@ extension Action {
         }
     }
 
-    public static func perform<V1>(_ effect: @escaping (Self) async throws -> V1) -> ActionTriggerStep1<V1> {
-        ActionTriggerStep1 { action, find in
+    @MainActor public static func perform<V1>(_ effect: @escaping @Sendable (Self) async throws -> V1) -> ActionTriggerStep1<V1> {
+        ActionTriggerStep1 { action, _ in
             AsyncStream { continuation in
                 Task {
                     if let action = action as? Self {
@@ -55,8 +55,8 @@ extension Action {
         }
     }
 
-    public static func perform(_ effect: @escaping (Self) async throws -> Void) -> ActionTriggerStepFinal<VoidAction> {
-        ActionTriggerStepFinal { action, find in
+    @MainActor public static func perform(_ effect: @escaping @Sendable (Self) async throws -> Void) -> ActionTriggerStepFinal<VoidAction> {
+        ActionTriggerStepFinal { action, _ in
             AsyncStream { continuation in
                 Task {
                     if let action = action as? Self {
@@ -71,4 +71,5 @@ extension Action {
     }
 
 }
-public struct VoidAction:Action{}
+
+public struct VoidAction: Action{}

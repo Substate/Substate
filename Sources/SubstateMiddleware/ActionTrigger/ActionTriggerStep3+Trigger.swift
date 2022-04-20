@@ -9,11 +9,11 @@ extension ActionTriggerStep3 {
 
     /// Trigger from an action step with a constant action.
     ///
-    public func trigger<A1:Action>(_ result: @autoclosure @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
-        ActionTriggerStepFinal { action, find in
+    public func trigger<A1:Action>(_ result: @autoclosure @escaping @Sendable () -> A1?) -> ActionTriggerStepFinal<A1> {
+        ActionTriggerStepFinal { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
+                    for await _ in run(action: action, store: store) {
                         if let value = result() {
                             continuation.yield(value)
                         }
@@ -27,11 +27,11 @@ extension ActionTriggerStep3 {
 
     /// Trigger from an action step with a function.
     ///
-    public func trigger<A1:Action>(_ result: @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
-        ActionTriggerStepFinal { action, find in
+    public func trigger<A1:Action>(_ result: @escaping @Sendable () -> A1?) -> ActionTriggerStepFinal<A1> {
+        ActionTriggerStepFinal { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
+                    for await _ in run(action: action, store: store) {
                         if let value = result() {
                             continuation.yield(value)
                         }
@@ -45,11 +45,11 @@ extension ActionTriggerStep3 {
 
     /// trigger from an action step with a transform.
     ///
-    public func trigger<A1:Action>(_ transform: @escaping (Output1, Output2, Output3) -> A1?) -> ActionTriggerStepFinal<A1> {
-        ActionTriggerStepFinal { action, find in
+    public func trigger<A1:Action>(_ transform: @escaping @Sendable (Output1, Output2, Output3) -> A1?) -> ActionTriggerStepFinal<A1> {
+        ActionTriggerStepFinal { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await value in run(action: action, find: find) {
+                    for await value in run(action: action, store: store) {
                         if let result = transform(value.0, value.1, value.2) {
                             continuation.yield(result)
                         }

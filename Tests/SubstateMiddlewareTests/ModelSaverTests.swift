@@ -25,6 +25,13 @@ import SubstateMiddleware
         var value = 400
     }
 
+    struct MutatingModel: Model, SavedModel {
+        var value = 1
+        mutating func update(action: Action) { value += 1 }
+    }
+
+    struct TestAction: Action {}
+
     // MARK: - Configuration
 
     func testConfigurationIsRegisteredOnStoreStart() async throws {
@@ -147,6 +154,27 @@ import SubstateMiddleware
         XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidSucceed.self), 0)
     }
 
+    func testAutomaticDebouncedSave() async throws {
+        let save: ModelSaver.Configuration.SaveFunction = { model in
+            XCTAssertTrue(model is MutatingModel)
+        }
+
+        let catcher = ActionCatcher()
+        let saver = ModelSaver(configuration: .init(save: save, loadStrategy: .manual, saveStrategy: .debounced(0.1)))
+        let store = try await Store(model: MutatingModel(), middleware: [catcher, saver])
+
+        try await store.dispatch(TestAction())
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveAll.self), 0) // t = 0
+
+        try await Task.sleep(nanoseconds: 75_000_000) // t = 0.075s
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveAll.self), 0)
+
+        try await Task.sleep(nanoseconds: 150_000_000) // t = 0.125s
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveAll.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidSucceed.self), 1)
+        XCTAssertEqual(catcher.count(for: ModelSaver.SaveDidComplete.self), 1)
+    }
+
     func testManualSaveAll() async throws {
         let expectation1 = expectation(description: "Save function called for Child 1")
         let expectation2 = expectation(description: "Save function called for Child 2")
@@ -168,19 +196,21 @@ import SubstateMiddleware
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    @MainActor var savedModel: TestModel? = nil
+
     func testMultipleThrashingSaves() async throws {
         // Saves multiple times including a previously-saved value, to make sure the save de-dupe
         // cache isn’t misbehaving and missing saves that look the same as some previous save state.
 
         let model = TestModel(value: .random(in: 1...100))
-        var savedModel: TestModel? = nil
+        savedModel = nil
 
-        let load: ModelSaver.Configuration.LoadFunction = { type in
-            return try XCTUnwrap(savedModel)
+        let load: ModelSaver.Configuration.LoadFunction = { @MainActor type in
+            return try XCTUnwrap(self.savedModel)
         }
 
-        let save: ModelSaver.Configuration.SaveFunction = { model in
-            savedModel = (model as! TestModel)
+        let save: ModelSaver.Configuration.SaveFunction = { @MainActor model in
+            self.savedModel = (model as! TestModel)
         }
 
         let saver1 = ModelSaver(configuration: .init(load: load, save: save, loadStrategy: .manual, saveStrategy: .manual))
@@ -221,12 +251,14 @@ import SubstateMiddleware
 
     // MARK: - Save De-Duplication
 
+    @MainActor var modelSaveCount = 0
+
     func testModelsAreOnlySavedWhenModified() async throws {
         let model = TestModel(value: .random(in: Int.min...Int.max))
-        var modelSaveCount = 0
+        self.modelSaveCount = 0
 
-        let save: ModelSaver.Configuration.SaveFunction = { model in
-            modelSaveCount += 1
+        let save: ModelSaver.Configuration.SaveFunction = { @MainActor model in
+            self.modelSaveCount += 1
         }
 
         let saver = ModelSaver(configuration: .init(save: save, loadStrategy: .manual, saveStrategy: .manual))

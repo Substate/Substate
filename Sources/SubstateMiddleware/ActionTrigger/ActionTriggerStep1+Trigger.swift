@@ -9,11 +9,11 @@ extension ActionTriggerStep1 {
 
     /// Trigger from an action step with a constant action.
     ///
-    public func trigger<A1:Action>(_ result: @autoclosure @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
-        ActionTriggerStepFinal { action, find in
+    public func trigger<A1:Action>(_ result: @autoclosure @escaping @Sendable () -> A1?) -> ActionTriggerStepFinal<A1> {
+        ActionTriggerStepFinal { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
+                    for await _ in run(action: action, store: store) {
                         if let output = result() {
                             continuation.yield(output)
                         }
@@ -27,11 +27,11 @@ extension ActionTriggerStep1 {
 
     /// Trigger from an action step with a function.
     ///
-    public func trigger<A1:Action>(_ result: @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
-        ActionTriggerStepFinal { action, find in
+    public func trigger<A1:Action>(_ result: @escaping @Sendable () -> A1?) -> ActionTriggerStepFinal<A1> {
+        ActionTriggerStepFinal { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
+                    for await _ in run(action: action, store: store) {
                         if let output = result() {
                             continuation.yield(output)
                         }
@@ -45,11 +45,11 @@ extension ActionTriggerStep1 {
 
     /// Trigger from an action step with a transform.
     ///
-    public func trigger<A1:Action>(_ transform: @escaping (Output) -> A1?) -> ActionTriggerStepFinal<A1> {
-        ActionTriggerStepFinal { action, find in
+    public func trigger<A1:Action>(_ transform: @escaping @Sendable (Output) -> A1?) -> ActionTriggerStepFinal<A1> {
+        ActionTriggerStepFinal { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await value in run(action: action, find: find) {
+                    for await value in run(action: action, store: store) {
                         if let output = transform(value) {
                             continuation.yield(output)
                         }
@@ -66,8 +66,8 @@ extension ActionTriggerStep1 {
 extension ActionTriggerStep1 where Output: Action {
 
     public func trigger() -> ActionTriggerStepFinal<Output> {
-        ActionTriggerStepFinal { action, find in
-            run(action: action, find: find)
+        ActionTriggerStepFinal { action, store in
+            run(action: action, store: store)
         }
     }
 

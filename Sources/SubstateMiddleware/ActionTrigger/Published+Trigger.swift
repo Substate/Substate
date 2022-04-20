@@ -1,11 +1,11 @@
 import Combine
 import Substate
 
-extension Publisher where Self.Failure == Never {
+extension Publisher where Self : Sendable, Self.Failure == Never {
 
-    public func trigger<A1:Action>(_ result: @autoclosure @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
-        ActionTriggerStepFinal { action, find in
-            return AsyncStream { continuation in
+    @MainActor public func trigger<A1:Action>(_ result: @autoclosure @escaping @Sendable () -> A1?) -> ActionTriggerStepFinal<A1> {
+        ActionTriggerStepFinal { action, _ in
+            AsyncStream { continuation in
                 guard action is Store.Start else {
                     // Only run this subscription setup at launch.
                     continuation.finish()
@@ -25,9 +25,9 @@ extension Publisher where Self.Failure == Never {
         }
     }
 
-    public func trigger<A1:Action>(_ result: @escaping () -> A1?) -> ActionTriggerStepFinal<A1> {
-        ActionTriggerStepFinal { action, find in
-            return AsyncStream { continuation in
+    @MainActor public func trigger<A1:Action>(_ result: @escaping @Sendable () -> A1?) -> ActionTriggerStepFinal<A1> {
+        ActionTriggerStepFinal { action, _ in
+            AsyncStream { continuation in
                 guard action is Store.Start else {
                     // Only run this subscription setup at launch.
                     continuation.finish()
@@ -47,9 +47,9 @@ extension Publisher where Self.Failure == Never {
         }
     }
 
-    public func trigger<A1:Action>(_ transform: @escaping (Output) -> A1?) -> ActionTriggerStepFinal<A1> {
-        ActionTriggerStepFinal { action, find in
-            return AsyncStream { continuation in
+    @MainActor public func trigger<A1:Action>(_ transform: @escaping @Sendable (Output) -> A1?) -> ActionTriggerStepFinal<A1> {
+        ActionTriggerStepFinal { action, _ in
+            AsyncStream { continuation in
                 guard action is Store.Start else {
                     // Only run this subscription setup at launch.
                     continuation.finish()

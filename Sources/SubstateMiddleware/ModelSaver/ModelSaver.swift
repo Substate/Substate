@@ -50,16 +50,16 @@ public class ModelSaver: Middleware {
                 .map { _ in }
                 .eraseToAnyPublisher()
         }
-
-        saveTrigger
-            .sink { Task { try await self.store?.dispatch(SaveAll()) } }
-            .store(in: &subscriptions)
     }
 
     // MARK: - Middleware API
 
     public func configure(store: Store) -> (@escaping DispatchFunction) -> DispatchFunction {
         self.store = store
+
+        saveTrigger
+            .sink { store.dispatch(SaveAll()) }
+            .store(in: &subscriptions)
 
         return { next in
             { [self] action in

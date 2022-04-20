@@ -11,10 +11,8 @@ import SubstateMiddleware
     }
 
     var middleware: [Middleware] {[
-        // ModelLogger(),
         ActionLogger(),
         ModelSaver()
-        // Inspector()
     ]}
 
 }

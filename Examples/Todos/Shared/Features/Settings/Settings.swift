@@ -1,7 +1,7 @@
 import Substate
 import SubstateMiddleware
 
-struct Settings: Model, SavedModel {
+struct Settings: Model, SavedModel, Equatable {
 
     struct Update: Action, FollowupAction {
         let settings: Settings
@@ -9,6 +9,7 @@ struct Settings: Model, SavedModel {
     }
 
     var sounds = true
+    var volume = 1.0
     var theme: Theme = .sunrise
     var colourScheme: ColourSchemeOverride = .system
     var autoDismissNotifications = true
@@ -22,6 +23,15 @@ struct Settings: Model, SavedModel {
 
     struct SetSounds: Action, FollowupAction {
         let sounds: Bool
+        let followup: Action = Changed()
+    }
+
+    struct VolumeSliderDidChange: Action {
+        let volume: Double
+    }
+
+    struct SetVolume: Action, FollowupAction {
+        let volume: Double
         let followup: Action = Changed()
     }
 
@@ -52,6 +62,9 @@ struct Settings: Model, SavedModel {
 
         case let setSounds as SetSounds:
             sounds = setSounds.sounds
+
+        case let setVolume as SetVolume:
+            volume = setVolume.volume
 
         case let setColourScheme as SetColourScheme:
             colourScheme = setColourScheme.scheme

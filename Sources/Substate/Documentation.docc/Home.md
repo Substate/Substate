@@ -268,16 +268,7 @@ let appTriggers = ActionTriggerList {
 }
 ```
 
-```swift 
-let threeTasksCreatedFunnel = ActionFunnel(for: Milestones.ThreeTasksCreated()) {
-    TaskList.Create.occurred()
-    TaskList.Create.occurred()
-    TaskList.Create.occurred()
-}
-```
-
 - [`ActionTrigger`](https://substate.dev/documentation/substatemiddleware/actiontrigger)
-- [`ActionFunnel`](https://substate.dev/documentation/substatemiddleware/actionfunnel)
 
 ### Debugging
 

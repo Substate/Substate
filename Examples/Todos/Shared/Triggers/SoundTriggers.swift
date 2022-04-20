@@ -1,9 +1,9 @@
 import Substate
 import SubstateMiddleware
 
-let soundTriggers = ActionTriggers {
+@MainActor let soundTriggers = ActionTriggers {
 
-    Tabs.Select.trigger(Sound.Play(.click))
+//    Tabs.Select.trigger(Sound.Play(.click))
 
     Settings.SetTheme.trigger(Sound.Play(.click))
     Settings.SetSounds.trigger(Sound.Play(.click))
@@ -16,16 +16,5 @@ let soundTriggers = ActionTriggers {
     Toolbar.AddButtonWasPressed.trigger(Sound.Play(.pop))
 
     Notifications.Dismiss.trigger(Sound.Play(.swish))
-
-    // This is not well factored! Should be more like add button pressed on TasksScreen
-    // and dismissed on add screen.
-    CreateTaskScreenModel.Toggle.trigger {
-        toggle in Sound.Play(toggle.isActive ? .pop : .swish)
-    }
-
-    let player = SoundPlayer()
-
-    Sound.Play
-        .perform { player.play($0.sound) }
 
 }

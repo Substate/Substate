@@ -1,10 +1,10 @@
 extension ActionTriggerStep1 {
 
-    public func reject(when constant: @autoclosure @escaping () -> Bool?) -> ActionTriggerStep1<Output> {
-        ActionTriggerStep1 { action, find in
+    public func reject(when constant: @autoclosure @escaping @Sendable () -> Bool?) -> ActionTriggerStep1<Output> {
+        ActionTriggerStep1 { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await output in run(action: action, find: find) {
+                    for await output in run(action: action, store: store) {
                         if constant() != true {
                             continuation.yield(output)
                         }
@@ -16,11 +16,11 @@ extension ActionTriggerStep1 {
         }
     }
 
-    public func reject(when condition: @escaping (Output) -> Bool) -> ActionTriggerStep1<Output> {
-        ActionTriggerStep1 { action, find in
+    public func reject(when condition: @escaping @Sendable (Output) -> Bool) -> ActionTriggerStep1<Output> {
+        ActionTriggerStep1 { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await output in run(action: action, find: find) {
+                    for await output in run(action: action, store: store) {
                         if condition(output) != true {
                             continuation.yield(output)
                         }
@@ -32,11 +32,11 @@ extension ActionTriggerStep1 {
         }
     }
 
-    public func reject(when condition: @escaping (Output) -> Bool?) -> ActionTriggerStep1<Output> {
-        ActionTriggerStep1 { action, find in
+    public func reject(when condition: @escaping @Sendable (Output) -> Bool?) -> ActionTriggerStep1<Output> {
+        ActionTriggerStep1 { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await output in run(action: action, find: find) {
+                    for await output in run(action: action, store: store) {
                         if condition(output) != true {
                             continuation.yield(output)
                         }

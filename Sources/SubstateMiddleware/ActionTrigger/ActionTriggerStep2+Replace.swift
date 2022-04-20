@@ -4,11 +4,11 @@ extension ActionTriggerStep2 {
 
     /// Replace action step with 1 constant value.
     ///
-    public func replace<V1>(with value: @autoclosure @escaping () -> V1) -> ActionTriggerStep1<V1> {
-        ActionTriggerStep1<V1> { action, find in
+    public func replace<V1>(with value: @autoclosure @escaping @Sendable () -> V1) -> ActionTriggerStep1<V1> {
+        ActionTriggerStep1<V1> { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
+                    for await _ in run(action: action, store: store) {
                         continuation.yield(value())
                     }
 
@@ -20,11 +20,11 @@ extension ActionTriggerStep2 {
 
     /// Replace action step with 2 constant values.
     ///
-    public func replace<V1, V2>(with value1: @autoclosure @escaping () -> V1, _ value2: @autoclosure @escaping () -> V2) -> ActionTriggerStep2<V1, V2> {
-        ActionTriggerStep2<V1, V2> { action, find in
+    public func replace<V1, V2>(with value1: @autoclosure @escaping @Sendable () -> V1, _ value2: @autoclosure @escaping @Sendable () -> V2) -> ActionTriggerStep2<V1, V2> {
+        ActionTriggerStep2<V1, V2> { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
+                    for await _ in run(action: action, store: store) {
                         continuation.yield((value1(), value2()))
                     }
 
@@ -36,11 +36,11 @@ extension ActionTriggerStep2 {
 
     /// Replace action step with 3 constant values.
     ///
-    public func replace<V1, V2, V3>(with value1: @autoclosure @escaping () -> V1, _ value2: @autoclosure @escaping () -> V2, _ value3: @autoclosure @escaping () -> V3) -> ActionTriggerStep3<V1, V2, V3> {
-        ActionTriggerStep3 { action, find in
+    public func replace<V1, V2, V3>(with value1: @autoclosure @escaping @Sendable () -> V1, _ value2: @autoclosure @escaping @Sendable () -> V2, _ value3: @autoclosure @escaping @Sendable () -> V3) -> ActionTriggerStep3<V1, V2, V3> {
+        ActionTriggerStep3 { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
+                    for await _ in run(action: action, store: store) {
                         continuation.yield((value1(), value2(), value3()))
                     }
 
@@ -53,11 +53,11 @@ extension ActionTriggerStep2 {
     /// Replace action step with 1 model.
     ///
     public func replace<M1:Model>(with model: M1.Type) -> ActionTriggerStep1<M1> {
-        ActionTriggerStep1 { action, find in
+        ActionTriggerStep1 { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
-                        if let m1 = find(model) as? M1 {
+                    for await _ in run(action: action, store: store) {
+                        if let m1 = store.find(M1.self) {
                             continuation.yield(m1)
                         }
                     }
@@ -71,12 +71,12 @@ extension ActionTriggerStep2 {
     /// Replace action step with 2 models.
     ///
     public func replace<M1:Model, M2:Model>(with model1: M1.Type, _ model2: M2.Type) -> ActionTriggerStep2<M1, M2> {
-        ActionTriggerStep2<M1, M2> { action, find in
+        ActionTriggerStep2<M1, M2> { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
-                        if let m1 = find(model1) as? M1,
-                           let m2 = find(model2) as? M2 {
+                    for await _ in run(action: action, store: store) {
+                        if let m1 = store.find(M1.self),
+                           let m2 = store.find(M2.self) {
                             continuation.yield((m1, m2))
                         }
                     }
@@ -90,13 +90,13 @@ extension ActionTriggerStep2 {
     /// Replace action step with 3 models.
     ///
     public func replace<M1:Model, M2:Model, M3:Model>(with model1: M1.Type, _ model2: M2.Type, _ model3: M3.Type) -> ActionTriggerStep3<M1, M2, M3> {
-        ActionTriggerStep3 { action, find in
+        ActionTriggerStep3 { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
-                        if let m1 = find(model1) as? M1,
-                           let m2 = find(model2) as? M2,
-                           let m3 = find(model3) as? M3 {
+                    for await _ in run(action: action, store: store) {
+                        if let m1 = store.find(M1.self),
+                           let m2 = store.find(M2.self),
+                           let m3 = store.find(M3.self) {
                             continuation.yield((m1, m2, m3))
                         }
                     }
@@ -109,12 +109,12 @@ extension ActionTriggerStep2 {
 
     /// Replace action step with 1 model value.
     ///
-    public func replace<M1:Model, V1>(with modelValue: KeyPath<M1, V1>) -> ActionTriggerStep1<V1> {
-        ActionTriggerStep1<V1> { action, find in
+    public func replace<M1:Model, V1>(with modelValue: KeyPath<M1, V1>) -> ActionTriggerStep1<V1> where V1 : Sendable {
+        ActionTriggerStep1<V1> { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
-                        if let m1 = find(M1.self) as? M1 {
+                    for await _ in run(action: action, store: store) {
+                        if let m1 = store.find(M1.self) {
                             let v1 = m1[keyPath: modelValue]
                             continuation.yield(v1)
                         }
@@ -128,13 +128,13 @@ extension ActionTriggerStep2 {
 
     /// Replace action step with 2 model values.
     ///
-    public func replace<M1:Model, V1, M2:Model, V2>(with modelValue1: KeyPath<M1, V1>, _ modelValue2: KeyPath<M2, V2>) -> ActionTriggerStep2<V1, V2> {
-        ActionTriggerStep2<V1, V2> { action, find in
+    public func replace<M1:Model, V1, M2:Model, V2>(with modelValue1: KeyPath<M1, V1>, _ modelValue2: KeyPath<M2, V2>) -> ActionTriggerStep2<V1, V2> where V1 : Sendable, V2 : Sendable {
+        ActionTriggerStep2<V1, V2> { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
-                        if let m1 = find(M1.self) as? M1,
-                           let m2 = find(M2.self) as? M2 {
+                    for await _ in run(action: action, store: store) {
+                        if let m1 = store.find(M1.self),
+                           let m2 = store.find(M2.self) {
                             let v1 = m1[keyPath: modelValue1]
                             let v2 = m2[keyPath: modelValue2]
                             continuation.yield((v1, v2))
@@ -149,14 +149,14 @@ extension ActionTriggerStep2 {
 
     /// Replace action step with 3 model values.
     ///
-    public func replace<M1:Model, V1, M2:Model, V2, M3:Model, V3>(with modelValue1: KeyPath<M1, V1>, _ modelValue2: KeyPath<M2, V2>, _ modelValue3: KeyPath<M3, V3>) -> ActionTriggerStep3<V1, V2, V3> {
-        ActionTriggerStep3 { action, find in
+    public func replace<M1:Model, V1, M2:Model, V2, M3:Model, V3>(with modelValue1: KeyPath<M1, V1>, _ modelValue2: KeyPath<M2, V2>, _ modelValue3: KeyPath<M3, V3>) -> ActionTriggerStep3<V1, V2, V3> where V1 : Sendable, V2 : Sendable, V3 : Sendable {
+        ActionTriggerStep3 { action, store in
             AsyncStream { continuation in
                 Task {
-                    for await _ in run(action: action, find: find) {
-                        if let m1 = find(M1.self) as? M1,
-                           let m2 = find(M2.self) as? M2,
-                           let m3 = find(M3.self) as? M3{
+                    for await _ in run(action: action, store: store) {
+                        if let m1 = store.find(M1.self),
+                           let m2 = store.find(M2.self),
+                           let m3 = store.find(M3.self) {
                             let v1 = m1[keyPath: modelValue1]
                             let v2 = m2[keyPath: modelValue2]
                             let v3 = m3[keyPath: modelValue3]

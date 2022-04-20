@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3716C81B26B2308D005B9ACA /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763BBE026AB84EF001BEE76 /* ListRowView.swift */; };
+		372BCDEE280DFA7100DFA243 /* AppStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372BCDED280DFA7100DFA243 /* AppStream.swift */; };
+		372BCDF1280DFE6300DFA243 /* CombineExt in Frameworks */ = {isa = PBXBuildFile; productRef = 372BCDF0280DFE6300DFA243 /* CombineExt */; };
 		3730CA8E26BD863F001B1558 /* CreateTaskScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3730CA8D26BD863F001B1558 /* CreateTaskScreen.swift */; };
 		3730CA9026BD86D7001B1558 /* CreateTaskScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3730CA8F26BD86D7001B1558 /* CreateTaskScreenModel.swift */; };
 		3730CA9226BD8D41001B1558 /* swish.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3730CA9126BD8D41001B1558 /* swish.wav */; };
@@ -69,8 +71,6 @@
 		37752A5F26BCAA5500730E7D /* Settings+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37752A5E26BCAA5500730E7D /* Settings+UI.swift */; };
 		37C428EC26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */; };
 		37C428ED26B97AAD00C26503 /* Notifications+ShowForTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */; };
-		37C428EF26B9936200C26503 /* TodosAppFunnels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EE26B9936200C26503 /* TodosAppFunnels.swift */; };
-		37C428F026B9936200C26503 /* TodosAppFunnels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428EE26B9936200C26503 /* TodosAppFunnels.swift */; };
 		37C428F326B9E3D000C26503 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428F226B9E3D000C26503 /* SoundPlayer.swift */; };
 		37C428F426B9E3D000C26503 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C428F226B9E3D000C26503 /* SoundPlayer.swift */; };
 		37D99C5F26B60D390015FEEE /* AppTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D99C5E26B60D390015FEEE /* AppTriggers.swift */; };
@@ -105,6 +105,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		372BCDED280DFA7100DFA243 /* AppStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStream.swift; sourceTree = "<group>"; };
 		3730CA8D26BD863F001B1558 /* CreateTaskScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTaskScreen.swift; sourceTree = "<group>"; };
 		3730CA8F26BD86D7001B1558 /* CreateTaskScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTaskScreenModel.swift; sourceTree = "<group>"; };
 		3730CA9126BD8D41001B1558 /* swish.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = swish.wav; sourceTree = "<group>"; };
@@ -146,7 +147,6 @@
 		37752A5C26BCA7B600730E7D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		37752A5E26BCAA5500730E7D /* Settings+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+UI.swift"; sourceTree = "<group>"; };
 		37C428EB26B97AAD00C26503 /* Notifications+ShowForTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notifications+ShowForTask.swift"; sourceTree = "<group>"; };
-		37C428EE26B9936200C26503 /* TodosAppFunnels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosAppFunnels.swift; sourceTree = "<group>"; };
 		37C428F226B9E3D000C26503 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		37D99C5E26B60D390015FEEE /* AppTriggers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTriggers.swift; sourceTree = "<group>"; };
 		37D99C6126B616FB0015FEEE /* Toolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
@@ -161,6 +161,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				372BCDF1280DFE6300DFA243 /* CombineExt in Frameworks */,
 				3763BBB026AA1F19001BEE76 /* Substate in Frameworks */,
 				3763BBB226AA1F19001BEE76 /* SubstateMiddleware in Frameworks */,
 				3763BBB426AA1F19001BEE76 /* SubstateUI in Frameworks */,
@@ -201,6 +202,7 @@
 				373DA23226BA8FEF008E77BA /* SoundTriggers.swift */,
 				373DA23526BA8FF6008E77BA /* NotificationTriggers.swift */,
 				37752A5626BCA48A00730E7D /* SaveTriggers.swift */,
+				372BCDED280DFA7100DFA243 /* AppStream.swift */,
 			);
 			path = Triggers;
 			sourceTree = "<group>";
@@ -222,7 +224,6 @@
 				3763BB6B26AA1E98001BEE76 /* TodosApp.swift */,
 				3763BBD026AAB805001BEE76 /* TodosAppView.swift */,
 				3763BBBF26AA3B04001BEE76 /* TodosAppModel.swift */,
-				37C428EE26B9936200C26503 /* TodosAppFunnels.swift */,
 				373DA23126BA8FD9008E77BA /* Triggers */,
 				37752A4526BC90B400730E7D /* Features */,
 				37D99C6A26B7D8110015FEEE /* Task */,
@@ -405,6 +406,7 @@
 				3763BBAF26AA1F19001BEE76 /* Substate */,
 				3763BBB126AA1F19001BEE76 /* SubstateMiddleware */,
 				3763BBB326AA1F19001BEE76 /* SubstateUI */,
+				372BCDF0280DFE6300DFA243 /* CombineExt */,
 			);
 			productName = "Todos (iOS)";
 			productReference = 3763BB7226AA1E99001BEE76 /* Todos.app */;
@@ -503,6 +505,9 @@
 				Base,
 			);
 			mainGroup = 3763BB6526AA1E98001BEE76;
+			packageReferences = (
+				372BCDEF280DFE6300DFA243 /* XCRemoteSwiftPackageReference "CombineExt" */,
+			);
 			productRefGroup = 3763BB7326AA1E99001BEE76 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -579,13 +584,13 @@
 				37D99C6D26B81AAD0015FEEE /* Notifications.swift in Sources */,
 				37D99C6526B617B20015FEEE /* Sound.swift in Sources */,
 				373DA23326BA8FEF008E77BA /* SoundTriggers.swift in Sources */,
-				37C428EF26B9936200C26503 /* TodosAppFunnels.swift in Sources */,
 				3763BBCF26AA411F001BEE76 /* TaskList.swift in Sources */,
 				3763BB8D26AA1E99001BEE76 /* TodosApp.swift in Sources */,
 				37752A4B26BCA15E00730E7D /* SettingsScreen.swift in Sources */,
 				37752A5526BCA3A900730E7D /* Settings.swift in Sources */,
 				3763BBC326AA4090001BEE76 /* ToolbarView.swift in Sources */,
 				376FEA6426B36A23004BD597 /* Filter.swift in Sources */,
+				372BCDEE280DFA7100DFA243 /* AppStream.swift in Sources */,
 				3730CA8E26BD863F001B1558 /* CreateTaskScreen.swift in Sources */,
 				37C428F326B9E3D000C26503 /* SoundPlayer.swift in Sources */,
 				37752A5726BCA48A00730E7D /* SaveTriggers.swift in Sources */,
@@ -619,7 +624,6 @@
 				37D99C6E26B81AAD0015FEEE /* Notifications.swift in Sources */,
 				3763BBDE26AB8350001BEE76 /* ToolbarView.swift in Sources */,
 				373DA23426BA8FEF008E77BA /* SoundTriggers.swift in Sources */,
-				37C428F026B9936200C26503 /* TodosAppFunnels.swift in Sources */,
 				37D99C6626B617B20015FEEE /* Sound.swift in Sources */,
 				37D99C6326B616FB0015FEEE /* Toolbar.swift in Sources */,
 				3763BBDC26AB834B001BEE76 /* ListViewModel.swift in Sources */,
@@ -795,6 +799,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-concurrency -Xfrontend -enable-actor-data-race-checks";
 				PRODUCT_BUNDLE_IDENTIFIER = studio.soundry.Todos;
 				PRODUCT_NAME = Todos;
 				SDKROOT = iphoneos;
@@ -825,6 +830,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-concurrency -Xfrontend -enable-actor-data-race-checks";
 				PRODUCT_BUNDLE_IDENTIFIER = studio.soundry.Todos;
 				PRODUCT_NAME = Todos;
 				SDKROOT = iphoneos;
@@ -1046,7 +1052,23 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		372BCDEF280DFE6300DFA243 /* XCRemoteSwiftPackageReference "CombineExt" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CombineCommunity/CombineExt";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		372BCDF0280DFE6300DFA243 /* CombineExt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 372BCDEF280DFE6300DFA243 /* XCRemoteSwiftPackageReference "CombineExt" */;
+			productName = CombineExt;
+		};
 		3763BBAF26AA1F19001BEE76 /* Substate */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Substate;

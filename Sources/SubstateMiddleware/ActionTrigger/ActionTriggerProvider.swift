@@ -1,3 +1,3 @@
 public protocol ActionTriggerProvider {
-    var triggers: [ActionTrigger] { get }
+    @MainActor var triggers: [ActionTrigger] { get }
 }

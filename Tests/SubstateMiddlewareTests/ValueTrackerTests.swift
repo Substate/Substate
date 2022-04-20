@@ -113,13 +113,10 @@ import SubstateMiddleware
         _ = try await Store(model: MyModel(), middleware: [tracker, catcher])
 
         let events = catcher.find(ValueTracker.Event.self)
+
         XCTAssertEqual(events.count, 2)
-
-        let event1 = try XCTUnwrap(events.first)
-        let event2 = try XCTUnwrap(events.last)
-
-        XCTAssertEqual(event1.name, "model-value-1")
-        XCTAssertEqual(event2.name, "model-value-2")
+        XCTAssertTrue(events.contains { $0.name == "model-value-1" })
+        XCTAssertTrue(events.contains { $0.name == "model-value-2" })
     }
 
 }

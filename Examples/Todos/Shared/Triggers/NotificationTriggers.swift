@@ -1,13 +1,9 @@
 import SubstateMiddleware
 
-let notificationTriggers = ActionTriggers {
+@MainActor let notificationTriggers = ActionTriggers {
 
     Tasks.Create.trigger(Notifications.Show(message: .taskCreated))
     Tasks.Delete.trigger(Notifications.Show(message: .taskDeleted))
-
-    Milestones.TaskToggled.trigger(Notifications.Show(message: "You toggled your first task!"))
-    Milestones.ThreeTasksCreated.trigger(Notifications.Show(message: "You created three tasks!"))
-    Milestones.TaskDeleted.trigger(Notifications.Show(message: "You deleted your first task!"))
 
     ModelSaver.LoadDidSucceed.trigger(Notifications.Show(message: "Tasks loaded from disk"))
     // Load/Save of tasks only? May be able to preserve type info on this one and provide a
