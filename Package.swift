@@ -24,35 +24,35 @@ let package = Package(
     targets: [
         .target (
             name: "Substate",
-            dependencies: ["Runtime"],
-            swiftSettings: [
-                .unsafeFlags([
-                    "-Xfrontend", "-warn-concurrency",
-                    "-Xfrontend", "-enable-actor-data-race-checks"
-                ])
-            ]
+            dependencies: ["Runtime"]//,
+//            swiftSettings: [
+//                .unsafeFlags([
+//                    "-Xfrontend", "-warn-concurrency",
+//                    "-Xfrontend", "-enable-actor-data-race-checks"
+//                ])
+//            ]
         ),
 
         .target (
             name: "SubstateUI",
-            dependencies: ["Substate"],
-            swiftSettings: [
-                .unsafeFlags([
-                    "-Xfrontend", "-warn-concurrency",
-                    "-Xfrontend", "-enable-actor-data-race-checks"
-                ])
-            ]
+            dependencies: ["Substate"]//,
+//            swiftSettings: [
+//                .unsafeFlags([
+//                    "-Xfrontend", "-warn-concurrency",
+//                    "-Xfrontend", "-enable-actor-data-race-checks"
+//                ])
+//            ]
         ),
 
         .target (
             name: "SubstateMiddleware",
-            dependencies: ["Substate"],
-            swiftSettings: [
-                .unsafeFlags([
-                    "-Xfrontend", "-warn-concurrency",
-                    "-Xfrontend", "-enable-actor-data-race-checks"
-                ])
-            ]
+            dependencies: ["Substate"]//,
+//            swiftSettings: [
+//                .unsafeFlags([
+//                    "-Xfrontend", "-warn-concurrency",
+//                    "-Xfrontend", "-enable-actor-data-race-checks"
+//                ])
+//            ]
         ),
 
         .testTarget(name: "SubstateTests", dependencies: ["Substate", "SubstateMiddleware"]),
