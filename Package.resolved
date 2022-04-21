@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Runtime",
+        "repositoryURL": "https://github.com/wickwirew/Runtime",
+        "state": {
+          "branch": null,
+          "revision": "dad03135d7701a4e7b3a4051e75d6b37bd8e178e",
+          "version": "2.2.4"
+        }
+      },
+      {
+        "package": "SwiftDocCPlugin",
+        "repositoryURL": "https://github.com/apple/swift-docc-plugin",
+        "state": {
+          "branch": null,
+          "revision": "3303b164430d9a7055ba484c8ead67a52f7b74f6",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

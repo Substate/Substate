@@ -27,7 +27,7 @@
 //                let entry = LogEntry(date: .init(), type: "Action", components: components)
 //                let data = try! JSONEncoder().encode(entry)
 //
-//                let url = URL(string: "http://lucy.local:3000")!
+//                let url = URL(string: "http://localhost:3000")!
 //                var request = URLRequest(url: url)
 //                request.httpMethod = "POST"
 //                request.httpBody = data
