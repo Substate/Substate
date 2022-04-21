@@ -22,9 +22,9 @@ import Substate
         var durations: [TimeInterval] = []
 
         for _ in 0..<iterations {
-            let start = Date.now
+            let start = Date()
             try await store.dispatch(TestAction())
-            let end = Date.now
+            let end = Date()
             let duration = end.timeIntervalSince(start)
             durations.append(duration)
         }

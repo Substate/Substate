@@ -133,6 +133,7 @@ import Combine
         XCTAssertEqual(try XCTUnwrap(result[9] as? NumberAction), NumberAction(number: 9))
     }
 
+    @available(iOS 15, macOS 12.0, *)
     func testPublishedTriggerWithoutValue() async throws {
         let service = NumberService()
 
@@ -144,7 +145,8 @@ import Combine
         let result = await triggers.run(action: Store.Start(), store: store).prefix(1).reduce([]) { $0 + [$1] }
         XCTAssertEqual(try XCTUnwrap(result[0] as? Action2), Action2())
     }
-
+    
+    @available(iOS 15, macOS 12.0, *)
     func testPublishedTriggerWithValue() async throws {
         let service = NumberService()
 
