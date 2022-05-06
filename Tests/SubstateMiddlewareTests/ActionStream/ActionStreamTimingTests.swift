@@ -15,7 +15,6 @@ import Combine
             stream.publisher(for: TestAction1.self)
                 .debounce(for: 0.1, scheduler: RunLoop.main)
                 .map { _ in TestAction2() }
-                .eraseToAnyPublisher()
         }
 
         let catcher = ActionCatcher()
@@ -40,7 +39,6 @@ import Combine
             stream.publisher(for: TestAction1.self)
                 .delay(for: 0.1, scheduler: RunLoop.main)
                 .map { _ in TestAction2() }
-                .eraseToAnyPublisher()
         }
 
         let catcher = ActionCatcher()

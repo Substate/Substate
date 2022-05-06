@@ -12,7 +12,7 @@ extension ActionStream {
         ///
         /// ```
         /// publisher(for: MyAction.self)
-        ///     .map { ... }
+        ///     .map { _ in MyOtherAction() }
         ///     .eraseToAnyPublisher()
         /// ```
         ///
@@ -22,6 +22,17 @@ extension ActionStream {
                     .receive(on: DispatchQueue.main)
                     .sink { stream.store?.dispatch($0) }
             }
+        }
+
+        /// Catch publishers of actions, allowing ommission of the `eraseToAnyPublisher()`.
+        ///
+        /// ```
+        /// publisher(for: MyAction.self)
+        ///     .map { _ in MyOtherAction() }
+        /// ```
+        ///
+        public static func buildExpression(_ publisher: any AnyActionPublisherErasable) -> Item {
+            buildExpression(publisher.eraseToAnyActionPublisher())
         }
 
         /// Catch any already-subscribed publishers to enable side effects.

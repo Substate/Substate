@@ -16,7 +16,6 @@ import Combine
         let stream = ActionStream { stream in
             publisher
                 .map { _ in TestAction2() }
-                .eraseToAnyPublisher()
         }
 
         let catcher = ActionCatcher()
@@ -33,7 +32,6 @@ import Combine
             TestAction1
                 .subscribe(on: stream)
                 .map { TestAction2() }
-                .eraseToAnyPublisher()
         }
 
         let catcher = ActionCatcher()

@@ -50,13 +50,11 @@ import Combine
                 .tryMap { _ in try dependency(shouldThrow: false) }
                 .map(TestActionSuccess.init)
                 .replaceError(with: TestActionFailure())
-                .eraseToAnyPublisher()
 
             stream.publisher(for: TestAction2.self)
                 .tryMap { _ in try dependency(shouldThrow: true) }
                 .map(TestActionSuccess.init)
                 .replaceError(with: TestActionFailure())
-                .eraseToAnyPublisher()
         }
 
         let catcher1 = ActionCatcher()
