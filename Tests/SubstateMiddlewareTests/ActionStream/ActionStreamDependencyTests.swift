@@ -27,7 +27,7 @@ import Combine
 
             TestAction1
                 .subscribe(on: stream)
-                .sink { dependency.value += 1 }
+                .sink { _ in dependency.value += 1 }
 
             dependency.$value
                 .sink { value = $0 }

@@ -26,7 +26,7 @@ import Combine
         let stream = ActionStream { stream in
             TestAction
                 .subscribe(on: stream)
-                .sink { count += 1 }
+                .sink { _ in count += 1 }
         }
 
         let store = try await Store(model: TestModel(), middleware: [stream])

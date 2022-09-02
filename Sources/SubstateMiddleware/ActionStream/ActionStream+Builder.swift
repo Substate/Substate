@@ -11,7 +11,7 @@ extension ActionStream {
         /// Catch type-erased publishers of actions.
         ///
         /// ```
-        /// publisher(for: MyAction.self)
+        /// stream.publisher(for: MyAction.self)
         ///     .map { _ in MyOtherAction() }
         ///     .eraseToAnyPublisher()
         /// ```
@@ -27,7 +27,7 @@ extension ActionStream {
         /// Catch publishers of actions, allowing ommission of the `eraseToAnyPublisher()`.
         ///
         /// ```
-        /// publisher(for: MyAction.self)
+        /// stream.publisher(for: MyAction.self)
         ///     .map { _ in MyOtherAction() }
         /// ```
         ///
@@ -38,7 +38,7 @@ extension ActionStream {
         /// Catch any already-subscribed publishers to enable side effects.
         ///
         /// ```
-        /// publisher(for: \MyModel.value)
+        /// stream.publisher(for: \MyModel.value)
         ///     .sink { ... }
         /// ```
         public static func buildExpression(_ cancellable: AnyCancellable) -> Item {

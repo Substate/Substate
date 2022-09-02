@@ -14,17 +14,6 @@ extension Action {
         stream.publisher(for: Self.self)
     }
 
-    /// Subscribe to an action, ignoring its value.
-    ///
-    /// ```
-    /// MyAction.subscribe(on: stream)
-    /// ```
-    @MainActor public static func subscribe(on stream: ActionStream) -> AnyPublisher<Void, Never> {
-        stream.publisher(for: Self.self)
-            .map { _ in }
-            .eraseToAnyPublisher()
-    }
-
     // MARK: - Actions + Values
 
     /// Subscribe to an action and 1 model value.

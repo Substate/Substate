@@ -31,7 +31,7 @@ import Combine
         let stream = ActionStream { stream in
             TestAction1
                 .subscribe(on: stream)
-                .map { TestAction2() }
+                .map { _ in TestAction2() }
         }
 
         let catcher = ActionCatcher()

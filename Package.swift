@@ -28,7 +28,8 @@ let package = Package(
 //            swiftSettings: [
 //                .unsafeFlags([
 //                    "-Xfrontend", "-warn-concurrency",
-//                    "-Xfrontend", "-enable-actor-data-race-checks"
+//                    "-Xfrontend", "-enable-actor-data-race-checks",
+//                    // "-Xfrontend", "-strict-concurrency=complete" // For Swift 5.7
 //                ])
 //            ]
         ),
@@ -39,7 +40,8 @@ let package = Package(
 //            swiftSettings: [
 //                .unsafeFlags([
 //                    "-Xfrontend", "-warn-concurrency",
-//                    "-Xfrontend", "-enable-actor-data-race-checks"
+//                    "-Xfrontend", "-enable-actor-data-race-checks",
+//                    // "-Xfrontend", "-strict-concurrency=complete" // For Swift 5.7
 //                ])
 //            ]
         ),
@@ -50,7 +52,8 @@ let package = Package(
 //            swiftSettings: [
 //                .unsafeFlags([
 //                    "-Xfrontend", "-warn-concurrency",
-//                    "-Xfrontend", "-enable-actor-data-race-checks"
+//                    "-Xfrontend", "-enable-actor-data-race-checks",
+//                    // "-Xfrontend", "-strict-concurrency=complete" // For Swift 5.7
 //                ])
 //            ]
         ),
